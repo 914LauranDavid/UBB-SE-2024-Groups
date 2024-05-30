@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace GroupsApp.Models
 {
-    public class Review
+    public class MarketPlacePostReview
     {
         private Guid reviewId;
         private Guid userId;
@@ -16,7 +16,7 @@ namespace GroupsApp.Models
         private int rating;
         private DateOnly postTime;
 
-        public Review(Guid userId, Guid marketplacePostId, string content, int rating, DateOnly postTime)
+        public MarketPlacePostReview(Guid userId, Guid marketplacePostId, string content, int rating, DateOnly postTime)
         {
             this.userId = userId;
             this.marketplacePostId = marketplacePostId;
@@ -25,7 +25,7 @@ namespace GroupsApp.Models
             this.postTime = postTime;
         }
 
-        public Review()
+        public MarketPlacePostReview()
         {
             this.userId = Guid.NewGuid();
             this.marketplacePostId = Guid.NewGuid();
@@ -34,7 +34,7 @@ namespace GroupsApp.Models
             this.postTime = DateOnly.FromDateTime(DateTime.Now);
         }
 
-        public Review(Guid userId, Guid marketplacePostId)
+        public MarketPlacePostReview(Guid userId, Guid marketplacePostId)
         {
             this.userId = userId;
             this.marketplacePostId = marketplacePostId;

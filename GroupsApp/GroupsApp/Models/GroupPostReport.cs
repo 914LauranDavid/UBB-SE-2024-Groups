@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace GroupsApp.Models
 {
-    public class Report
+    public class GroupPostReport
     {
         private Guid reportId;
         private Guid userId;
@@ -14,7 +14,7 @@ namespace GroupsApp.Models
         private string reasonForReporting;
         private DateTime dateOfReport;
 
-        public Report(Guid userId, Guid postId, string reasonForReporting)
+        public GroupPostReport(Guid userId, Guid postId, string reasonForReporting)
         {
             this.reportId = Guid.NewGuid();
             this.userId = userId;
@@ -23,7 +23,7 @@ namespace GroupsApp.Models
             this.dateOfReport = DateTime.Now;
         }
 
-        public Report(Guid id, Guid userId, Guid postId, string reasonForReporting, DateTime dateOfReport)
+        public GroupPostReport(Guid id, Guid userId, Guid postId, string reasonForReporting, DateTime dateOfReport)
         {
             this.reportId = id;
             this.userId = userId;
@@ -32,7 +32,7 @@ namespace GroupsApp.Models
             this.dateOfReport = dateOfReport;
         }
 
-        public Report()
+        public GroupPostReport()
         {
             this.reportId = Guid.NewGuid();
             this.userId = Guid.NewGuid();
