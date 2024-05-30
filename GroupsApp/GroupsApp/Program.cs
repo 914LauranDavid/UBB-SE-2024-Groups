@@ -14,6 +14,7 @@ namespace GroupsApp
             builder.Services.AddDbContext<GroupsAppContext>(options =>
                 options.UseSqlServer(builder.Configuration.GetConnectionString("GroupsAppContext") ?? throw new InvalidOperationException("Connection string 'GroupsAppContext' not found.")));
 
+
             // Add services to the container.
             var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
             builder.Services.AddDbContext<ApplicationDbContext>(options =>
@@ -30,7 +31,7 @@ namespace GroupsApp
             {
                 var services = scope.ServiceProvider;
 
-                SeedData.Initialize(services);
+                //SeedData.Initialize(services);
             }
 
             // Configure the HTTP request pipeline.
