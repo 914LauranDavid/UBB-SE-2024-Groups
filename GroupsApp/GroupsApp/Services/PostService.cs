@@ -10,6 +10,7 @@ using BulldozerServer.Domain.MarketplacePosts;
 using BulldozerServer.Mapper;
 using BulldozerServer.Payloads.DTO;
 using GroupsApp.Data;
+using GroupsApp.Models.MarketplacePosts;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
