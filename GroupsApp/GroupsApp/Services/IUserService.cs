@@ -9,15 +9,15 @@ namespace GroupsApp.Services
     {
         void AddPostToCart(Guid postId, Guid userId);
         void AddPostToFavorites(Guid postId, Guid userId);
-        Task<UserDto> AddUser(UserDto userDto);
-        Task<List<MarketplacePostDTO>> GetFavoritePosts(Guid userId);
-        Task<User> GetUserById(Guid id);
-        Task<List<User>> GetUsers();
-        Task<bool> IsUserInGroup(Guid userId, Guid groupId);
+        UserDto AddUser(UserDto userDto);
+        List<MarketplacePostDTO> GetFavoritePosts(Guid userId);
+        User GetUserById(Guid id);
+        List<User> GetUsers();
+        bool IsUserInGroup(Guid userId, Guid groupId);
         void RemovePostFromCart(Guid postId, Guid userId);
         void RemovePostFromFavorites(Guid postId, Guid userId);
         void RemoveUser(Guid userId);
-        Task<User> UpdateUser(UserDto userDto);
-        Task<List<MarketplacePostDTO>> GetPostsFromCart(Guid userId);
+        User UpdateUser(UserDto userDto);
+        List<MarketplacePostDTO> GetPostsFromCart(Guid userId);
     }
 }

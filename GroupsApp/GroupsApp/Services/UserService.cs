@@ -9,6 +9,8 @@ using GroupsApp.Data;
 using GroupsApp.Models;
 using GroupsApp.Payload.DTO;
 using GroupsApp.Payloads.DTO;
+using GroupsApp.Repositories;
+using GroupsApp.Repository;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 
@@ -16,69 +18,74 @@ namespace GroupsApp.Services
 {
     public class UserService : IUserService
     {
-        private GroupsAppContext context;
+        private UserRepository _userRepository;
+        private MarketplacePostRepository _marketplacePostRepository;
+        private CartRepository _cartRepository;
+        private UsersFavoritePostsRepository _usersFavoritePostsRepository;
+        private GroupRepository _groupRepository;
 
-        public UserService(GroupsAppContext context)
+        public UserService(UserRepository userRepository, MarketplacePostRepository marketplacePostRepository, CartRepository cartRepository, UsersFavoritePostsRepository usersFavoritePostsRepository, GroupRepository groupRepository)
         {
-            this.context = context;
+            _userRepository = userRepository;
+            _marketplacePostRepository = marketplacePostRepository;
+            _cartRepository = cartRepository;
+            _usersFavoritePostsRepository = usersFavoritePostsRepository;
+            _groupRepository = groupRepository;
         }
 
         public void AddPostToCart(Guid postId, Guid userId)
         {
-            var foundUser = context.Users.Find(userId);
+            var foundUser = _userRepository.GetUserById(userId);
             if (foundUser == null)
             {
                 throw new Exception("User not found");
             }
-            var foundPost = context.MarketplacePosts.Find(postId);
+            var foundPost = _marketplacePostRepository.GetMarketplacePostById(postId);
             if (foundPost == null)
             {
                 throw new Exception("Post not found");
             }
             Cart cart = new Cart { UserId = userId, MarketplacePostId = postId };
-            context.Cart.Add(cart);
-            context.SaveChanges();
+            _cartRepository.AddCart(cart);
         }
 
         public void AddPostToFavorites(Guid postId, Guid userId)
         {
-            var foundUser = context.Users.Find(userId);
+            var foundUser = _userRepository.GetUserById(userId);
             if (foundUser == null)
             {
                 throw new Exception("User not found");
             }
-            var foundPost = context.MarketplacePosts.Find(postId);
+            var foundPost = _marketplacePostRepository.GetMarketplacePostById(postId);
             if (foundPost == null)
             {
                 throw new Exception("Post not found");
             }
             UsersFavoritePosts usersFavoritePosts = new UsersFavoritePosts { UserId = userId, MarketplacePostId = postId };
-            var result = context.UsersFavoritePosts.Add(usersFavoritePosts);
-            context.SaveChanges();
+            var result = _usersFavoritePostsRepository.AddUsersFavoritePosts(usersFavoritePosts);
         }
 
-        public async Task<UserDto> AddUser(UserDto userDto)
+        public UserDto AddUser(UserDto userDto)
         {
             // comments
-            var addedUser = await context.Users.AddAsync(UserMapper.MapUserDtoToUser(userDto));
-            await context.SaveChangesAsync();
-            return UserMapper.MapUserToUserDto(addedUser.Entity);
+            var addedUser = _userRepository.AddUser(UserMapper.MapUserDtoToUser(userDto));
+            return UserMapper.MapUserToUserDto(addedUser);
         }
 
-        public async Task<List<MarketplacePostDTO>> GetFavoritePosts(Guid userId)
+        public List<MarketplacePostDTO> GetFavoritePosts(Guid userId)
         {
-            var foundUser = await context.Users.FindAsync(userId);
+            var foundUser = _userRepository.GetUserById(userId);
             if (foundUser == null)
             {
                 throw new Exception("User not found");
             }
-            var favoritePosts = context.MarketplacePosts.Where(post => post.AuthorId == userId).ToList();
+            var favoritePosts = _marketplacePostRepository.GetMarketplacePostsByAuthorId(userId).ToList();
             return favoritePosts.Select(post => MarketplacePostMapper.MapMarketplacePostToMarketplacePostDTO(post)).ToList();
         }
 
-        public async Task<User> GetUserById(Guid id)
+        public User GetUserById(Guid id)
         {
-            var foundUser = await context.Users.FindAsync(id);
+            var foundUser = _userRepository.GetUserById(id);
             if (foundUser == null)
             {
                 throw new Exception("User not found");
@@ -86,9 +93,9 @@ namespace GroupsApp.Services
             return foundUser;
         }
 
-        public Task<List<User>> GetUsers()
+        public List<User> GetUsers()
         {
-            var users = context.Users.ToListAsync();
+            var users =_userRepository.GetAllUsers();
             // if (users == null)
             // {
             //    throw new Exception("No users found");
@@ -96,14 +103,14 @@ namespace GroupsApp.Services
             return users;
         }
 
-        public async Task<bool> IsUserInGroup(Guid userId, Guid groupId)
+        public bool IsUserInGroup(Guid userId, Guid groupId)
         {
-            var foundUser = await context.Users.FindAsync(userId);
+            var foundUser = _userRepository.GetUserById(userId);
             if (foundUser == null)
             {
                 throw new Exception("User not found");
             }
-            var foundGroup = await context.Groups.FindAsync(groupId);
+            var foundGroup = _groupRepository.GetGroupById(groupId);
             if (foundGroup == null)
             {
                 throw new Exception("Group not found");
@@ -111,52 +118,49 @@ namespace GroupsApp.Services
             return foundUser.GroupsPartOf.Contains(foundGroup);
         }
 
-        public async void RemovePostFromCart(Guid postId, Guid userId)
+        public void RemovePostFromCart(Guid postId, Guid userId)
         {
-            var foundUser = await context.Users.FindAsync(userId);
+            var foundUser = _userRepository.GetUserById(userId);
             if (foundUser == null)
             {
                 throw new Exception("User not found");
             }
-            var foundPost = await context.MarketplacePosts.FindAsync(postId);
+            var foundPost = _marketplacePostRepository.GetMarketplacePostById(postId);
             if (foundPost == null)
             {
                 throw new Exception("Post not found");
             }
             foundUser.PostsInCart.Remove(foundPost);
-            await context.SaveChangesAsync();
         }
 
-        public async void RemovePostFromFavorites(Guid postId, Guid userId)
+        public void RemovePostFromFavorites(Guid postId, Guid userId)
         {
-            var foundUser = await context.Users.FindAsync(userId);
+            var foundUser = _userRepository.GetUserById(userId);
             if (foundUser == null)
             {
                 throw new Exception("User not found");
             }
-            var foundPost = await context.MarketplacePosts.FindAsync(postId);
+            var foundPost = _marketplacePostRepository.GetMarketplacePostById(postId);
             if (foundPost == null)
             {
                 throw new Exception("Post not found");
             }
             foundUser.FavoritePosts.Remove(foundPost);
-            await context.SaveChangesAsync();
         }
 
         public void RemoveUser(Guid userId)
         {
-            var userToRemove = context.Users.Find(userId);
+            var userToRemove = _userRepository.GetUserById(userId);
             if (userToRemove == null)
             {
                 throw new Exception("User not found");
             }
-            context.Users.Remove(userToRemove);
-            context.SaveChanges();
+            _userRepository.DeleteUser(userToRemove);
         }
 
-        public async Task<User> UpdateUser(UserDto userDto)
+        public User UpdateUser(UserDto userDto)
         {
-            var foundUser = await context.Users.FindAsync(userDto.UserId);
+            var foundUser = _userRepository.GetUserById(userDto.UserId);
             if (foundUser == null)
             {
                 throw new Exception("User not found");
@@ -167,23 +171,23 @@ namespace GroupsApp.Services
             foundUser.PhoneNumber = userDto.PhoneNumber;
             foundUser.Password = userDto.Password;
             foundUser.BirthDay = userDto.BirthDay;
-            context.Users.Update(foundUser);
-            context.SaveChanges();
+            _userRepository.UpdateUser(foundUser);
             return foundUser;
         }
 
-        public async Task<List<MarketplacePostDTO>> GetPostsFromCart(Guid userId)
+        public List<MarketplacePostDTO> GetPostsFromCart(Guid userId)
         {
-            var foundUser = await context.Users.FindAsync(userId);
+            var foundUser = _userRepository.GetUserById(userId);
             if (foundUser == null)
             {
                 throw new Exception("User not found");
             }
-            List<Guid> postIds = context.Cart.Where(cart => cart.UserId == userId).Select(cart => cart.MarketplacePostId).ToList();
+            List<Guid> postIds = _cartRepository.GetMarketplacePostIdsByUserId(userId);
+        
             List<MarketplacePostDTO> posts = new List<MarketplacePostDTO>();
             foreach (Guid id in postIds)
             {
-                var post = await context.MarketplacePosts.FindAsync(id);
+                var post = _marketplacePostRepository.GetMarketplacePostById(id);
                 if (post != null)
                 {
                     posts.Add(MarketplacePostMapper.MapMarketplacePostToMarketplacePostDTO(post));

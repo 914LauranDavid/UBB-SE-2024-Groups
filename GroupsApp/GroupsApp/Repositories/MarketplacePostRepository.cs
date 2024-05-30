@@ -57,5 +57,12 @@ namespace GroupsApp.Repositories
             return updatedPost;
 
         }
+
+        public List<MarketplacePost> GetMarketplacePostsByAuthorId(Guid authorId)
+        {
+            return _context.MarketplacePosts
+                .Where(post => post.AuthorId == authorId)
+                .ToList();
+        }
     }
 }
