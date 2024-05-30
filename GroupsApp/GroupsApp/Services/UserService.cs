@@ -11,6 +11,7 @@ using GroupsApp.Payload.DTO;
 using GroupsApp.Payloads.DTO;
 using GroupsApp.Repositories;
 using GroupsApp.Repository;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 
@@ -65,14 +66,14 @@ namespace GroupsApp.Services
             var result = _usersFavoritePostsRepository.AddUsersFavoritePosts(usersFavoritePosts);
         }
 
-        public UserDto AddUser(UserDto userDto)
+        public ActionResult<UserDto> AddUser(UserDto userDto)
         {
             // comments
             var addedUser = _userRepository.AddUser(UserMapper.MapUserDtoToUser(userDto));
             return UserMapper.MapUserToUserDto(addedUser);
         }
 
-        public List<MarketplacePostDTO> GetFavoritePosts(Guid userId)
+        public ActionResult<List<MarketplacePostDTO>> GetFavoritePosts(Guid userId)
         {
             var foundUser = _userRepository.GetUserById(userId);
             if (foundUser == null)
@@ -83,7 +84,7 @@ namespace GroupsApp.Services
             return favoritePosts.Select(post => MarketplacePostMapper.MapMarketplacePostToMarketplacePostDTO(post)).ToList();
         }
 
-        public User GetUserById(Guid id)
+        public ActionResult<User> GetUserById(Guid id)
         {
             var foundUser = _userRepository.GetUserById(id);
             if (foundUser == null)
@@ -93,7 +94,7 @@ namespace GroupsApp.Services
             return foundUser;
         }
 
-        public List<User> GetUsers()
+        public ActionResult<List<User>> GetUsers()
         {
             var users =_userRepository.GetAllUsers();
             // if (users == null)
@@ -158,7 +159,7 @@ namespace GroupsApp.Services
             _userRepository.DeleteUser(userToRemove);
         }
 
-        public User UpdateUser(UserDto userDto)
+        public ActionResult<User> UpdateUser(UserDto userDto)
         {
             var foundUser = _userRepository.GetUserById(userDto.UserId);
             if (foundUser == null)
@@ -175,7 +176,7 @@ namespace GroupsApp.Services
             return foundUser;
         }
 
-        public List<MarketplacePostDTO> GetPostsFromCart(Guid userId)
+        public ActionResult<List<MarketplacePostDTO>> GetPostsFromCart(Guid userId)
         {
             var foundUser = _userRepository.GetUserById(userId);
             if (foundUser == null)

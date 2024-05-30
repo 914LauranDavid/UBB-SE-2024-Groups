@@ -19,9 +19,9 @@ namespace GroupsApp.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<User>>> GetUsers()
+        public ActionResult<IEnumerable<User>> GetUsers()
         {
-            return Ok(await userService.GetUsers());
+            return Ok( userService.GetUsers());
             // try
             // {
             // }
@@ -32,11 +32,11 @@ namespace GroupsApp.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<User>> GetUser(Guid id)
+        public ActionResult<User> GetUser(Guid id)
         {
             try
             {
-                var user = await userService.GetUserById(id);
+                var user =  userService.GetUserById(id);
                 return user;
             }
             catch (Exception e)
@@ -46,9 +46,9 @@ namespace GroupsApp.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<UserDto>> AddUser(UserDto userDto)
+        public ActionResult<UserDto> AddUser(UserDto userDto)
         {
-            var createdUser = await userService.AddUser(userDto);
+            var createdUser =  userService.AddUser(userDto);
             return Ok(createdUser);
         }
 
@@ -61,18 +61,18 @@ namespace GroupsApp.Controllers
         }
 
         [HttpPut]
-        public async Task<IActionResult> UpdateUser(UserDto userDto)
+        public IActionResult UpdateUser(UserDto userDto)
         {
-            await userService.UpdateUser(userDto);
+             userService.UpdateUser(userDto);
             return NoContent();
         }
 
         [HttpGet("{userId}/favoritePosts")]
-        public async Task<ActionResult<IEnumerable<MarketplacePostDTO>>> GetFavoritePosts(Guid userId)
+        public ActionResult<IEnumerable<MarketplacePostDTO>> GetFavoritePosts(Guid userId)
         {
             try
             {
-                List<MarketplacePostDTO> marketplacePosts = await userService.GetFavoritePosts(userId);
+                List<MarketplacePostDTO> marketplacePosts =  userService.GetFavoritePosts(userId).Value;
                 return Ok(marketplacePosts);
             }
             catch (Exception e)
@@ -82,11 +82,11 @@ namespace GroupsApp.Controllers
         }
 
         [HttpGet("{userId}/cart")]
-        public async Task<ActionResult<IEnumerable<MarketplacePostDTO>>> GetPostsFromCart(Guid userId)
+        public ActionResult<IEnumerable<MarketplacePostDTO>> GetPostsFromCart(Guid userId)
         {
             try
             {
-                return await userService.GetPostsFromCart(userId);
+                return userService.GetPostsFromCart(userId).Value;
             }
             catch (Exception e)
             {
@@ -102,7 +102,7 @@ namespace GroupsApp.Controllers
         }
 
         [HttpPost("{userId}/favoritePosts/{postId}")]
-        public async Task<ActionResult<User>> AddPostToFavorites(Guid userId, Guid postId)
+        public ActionResult<User> AddPostToFavorites(Guid userId, Guid postId)
         {
             try
             {
@@ -116,7 +116,7 @@ namespace GroupsApp.Controllers
         }
 
         [HttpDelete("{userId}/cart/{postId}")]
-        public async Task<ActionResult<User>> RemovePostFromCart(Guid userId, Guid postId)
+        public ActionResult<User> RemovePostFromCart(Guid userId, Guid postId)
         {
             try
             {
@@ -130,7 +130,7 @@ namespace GroupsApp.Controllers
         }
 
         [HttpDelete("{userId}/favoritePosts/{postId}")]
-        public async Task<ActionResult<User>> RemovePostFromFavorites(Guid userId, Guid postId)
+        public ActionResult<User> RemovePostFromFavorites(Guid userId, Guid postId)
         {
             try
             {
@@ -144,7 +144,7 @@ namespace GroupsApp.Controllers
         }
         private bool UserExists(Guid id)
         {
-            return userService.GetUsers().Result.Any(e => e.UserId == id);
+            return userService.GetUsers().Value.Any(e => e.UserId == id);
         }
     }
 }
