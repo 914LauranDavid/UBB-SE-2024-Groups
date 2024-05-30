@@ -14,8 +14,8 @@ namespace GroupsApp.Repositories
             return savedCart;
         }
 
-        public Cart GetCartById(Guid id) {
-            return _context.Cart.Find(id);
+        public Cart GetCartById(Guid userId, Guid marketplaceId) {
+            return _context.Cart.Find(userId, marketplaceId);
         }
 
         /*
