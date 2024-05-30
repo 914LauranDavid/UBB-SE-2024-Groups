@@ -13,7 +13,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 
-namespace BulldozerServer.Services
+namespace GroupsApp.Services
 {
     public class PostService : IPostService
     {

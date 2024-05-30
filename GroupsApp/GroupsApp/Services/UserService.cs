@@ -12,7 +12,7 @@ using BulldozerServer.Payloads.DTO;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 
-namespace BulldozerServer.Services
+namespace GroupsApp.Services
 {
     public class UserService : IUserService
     {

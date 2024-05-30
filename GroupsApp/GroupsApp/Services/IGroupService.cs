@@ -1,7 +1,7 @@
 ﻿using GroupsApp.Models;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 
-namespace UBB_SE_2024_Popsicles.Services
+namespace GroupsApp.Services
 {
     public interface IGroupService
     {

@@ -4,7 +4,7 @@ using BulldozerServer.Payload.DTO;
 using BulldozerServer.Payloads.DTO;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 
-namespace BulldozerServer.Services
+namespace GroupsApp.Services
 {
     public interface IUserService
     {
