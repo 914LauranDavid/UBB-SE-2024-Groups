@@ -50,7 +50,7 @@ namespace GroupsApp.Repository
 
         public List<User> GetAllUsers()
         {
-            return _context.Users.ToList();
+            return [.. _context.Users];
         }
 
 
