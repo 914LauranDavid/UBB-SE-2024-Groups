@@ -10,26 +10,31 @@ using GroupsApp.Models;
 using GroupsApp.Payload.DTO;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
+using GroupsApp.Repositories;
 
 namespace GroupsApp.Services
 {
     public class GroupService : IGroupService
     {
         private GroupsAppContext context;
+        private readonly GroupRepository _groupRepository;
 
-        public GroupService(GroupsAppContext context)
+        public GroupService(GroupRepository groupRepository)
         {
-            this.context = context;
+            this._groupRepository = groupRepository;
         }
 
         public async Task<EntityEntry<Group>> CreateGroup(GroupDTO groupDTO)
         {
-            if (context.Groups.Find(groupDTO.GroupId) != null)
-            {
-                throw new Exception("Group with this id already exists");
+            var group = GroupMapper.GroupDTOToGroup(groupDTO);
+            try {
+                var savedGroup = await _groupRepository.AddGroup(group);
             }
-            Group group = GroupMapper.GroupDTOToGroup(groupDTO);
-            var addResult = context.Groups.Add(group);
+            catch (Exception error)
+            {
+                throw new Exception(erorr);
+            }
+
             MembershipDTO membershipDTO = new MembershipDTO
             {
                 GroupId = group.GroupId,
@@ -41,33 +46,32 @@ namespace GroupsApp.Services
             };
             await AddMemberToGroup(membershipDTO);
 
-            await context.SaveChangesAsync();
             return addResult;
         }
 
         public async Task<EntityEntry<Group>> UpdateGroup(GroupDTO groupDTO)
         {
-            if (context.Groups.Find(groupDTO.GroupId) == null)
+            var group = GroupMapper.GroupDTOToGroup(groupDTO);
+            try {
+                var updatedGroup = await _groupRepository.UpdateGroup(group);
+            } catch(Exception error)
             {
-                throw new Exception("Group not found");
+                throw new Exception(error);
             }
-            Group group = GroupMapper.GroupDTOToGroup(groupDTO);
-            var updateResult = context.Groups.Update(group);
-
-            await context.SaveChangesAsync();
-            return updateResult;
+            
+            return updatedGroup;
         }
 
         public async void DeleteGroup(Guid groupId)
         {
-            Group group = context.Groups.Find(groupId);
-            if (group == null)
-            {
-                throw new Exception("Group not found");
+            try {
+                this._groupRepository.DeleteGroup(groupId);
             }
-            context.Groups.Remove(group);
-
-            await context.SaveChangesAsync();
+            catch (Exception error)
+            {
+                throw new Exception("Error deleting a group", error);
+            }
+           
         }
 
         public async Task<EntityEntry<Membership>> AddMemberToGroup(MembershipDTO membershipDTO)
@@ -75,36 +79,46 @@ namespace GroupsApp.Services
             Guid userId = membershipDTO.UserId;
             Guid groupId = membershipDTO.GroupId;
 
-            if (context.Memberships.Find(groupId, userId) != null)
+            if (this._groupRepository.CheckUserInGroup(groupId, userId)==true)
             {
                 throw new Exception("User is already in group");
             }
 
             Membership membership = MembershipMapper.MembershipDTOToMembership(membershipDTO);
-            var addResult = context.Memberships.Add(membership);
-            await context.SaveChangesAsync();
-            return addResult;
+
+            return this._groupRepository.AddMemberToGroup(membership);
         }
 
         public async void RemoveMemberFromGroup(Guid groupId, Guid userId)
         {
-            var membership = context.Memberships.Find(groupId, userId);
-            if (membership == null)
+            try
             {
-                throw new Exception("User doesn't belong to this group");
+                this._groupRepository.RemoveMemberFromGroup(groupId, userId);
             }
-            context.Memberships.Remove(membership);
-            await context.SaveChangesAsync();
+            catch (Exception error)
+            {
+                throw new Exception(error);
+            }
+
         }
 
+        //TODO 
+        public ICollection<GroupPostDTO> GetGroupPosts(Guid groupId)
+        {
+            var posts = context.GroupPosts.Where(post => post.GroupId == groupId).ToList();
+
+            return posts.Select(post => GroupPostMapper.GroupPostToGroupPostDTO(post)).ToList();
+        }
+        //TODO 
         public async Task<EntityEntry<Membership>> UpdateMembership(MembershipDTO membershipDTO)
         {
             Guid userId = membershipDTO.UserId;
             Guid groupId = membershipDTO.GroupId;
 
-            if (context.Memberships.Find(groupId, userId) == null)
+            if(this._groupRepository.CheckUserInGroup(groupId, userId) == false)
             {
                 throw new Exception("User doesn't belong to this group");
+
             }
 
             Membership membership = MembershipMapper.MembershipDTOToMembership(membershipDTO);
@@ -112,7 +126,7 @@ namespace GroupsApp.Services
             await context.SaveChangesAsync();
             return updateResult;
         }
-
+        //TODO
         public async Task<EntityEntry<JoinRequest>> AddNewRequestToJoinGroup(JoinRequestDTO joinRequestDTO)
         {
             JoinRequest joinRequest = JoinRequestMapper.JoinRequestDTOToJoinRequest(joinRequestDTO);
@@ -123,32 +137,33 @@ namespace GroupsApp.Services
 
         public async void AcceptRequestToJoinGroup(JoinRequestDTO joinRequestDTO)
         {
-            if (context.JoinRequests.Find(joinRequestDTO.JoinRequestId) == null)
-            {
-                throw new Exception("User didn't request to join this group");
-            }
             JoinRequest joinRequest = JoinRequestMapper.JoinRequestDTOToJoinRequest(joinRequestDTO);
-            context.Memberships.Add(new Membership(joinRequest.GroupId, joinRequest.UserId));
-            context.JoinRequests.Remove(joinRequest);
-            await context.SaveChangesAsync();
+            try
+            {
+                this._groupRepository.AcceptRequestToJoinGroup(joinRequest);
+            }catch(Exception error)
+            {
+                throw new Exception(error);
+            }
         }
 
         public async void RejectRequestToJoinGroup(Guid joinRequestId)
         {
-            var request = context.JoinRequests.Find(joinRequestId);
-            if (request == null)
+            try
             {
-                throw new Exception("User didn't request to join this group");
+                this._groupRepository.RejectRequestToJoinGroup(joinRequestId)
             }
-            context.JoinRequests.Remove(request);
-            await context.SaveChangesAsync();
+            catch(Exception error)
+            {
+                throw new Exception(error);
+            }
         }
-
+        //TODO
         public void CreateNewPostOnGroupChat(Guid groupId, Guid groupMemberId, string postContent, string postImage)
         {
             Guid postId = Guid.NewGuid();
             DateTime postDate = DateTime.Now;
-            Group? group = context.Groups.Find(groupId);
+            Group? group = this._groupRepository.GetGroupById(groupId);
             if (group == null)
             {
                 throw new Exception("Group not found");
@@ -167,74 +182,47 @@ namespace GroupsApp.Services
             }
         }
 
-        public ICollection<GroupPostDTO> GetGroupPosts(Guid groupId)
-        {
-            var posts = context.GroupPosts.Where(post => post.GroupId == groupId).ToList();
-
-            return posts.Select(post => GroupPostMapper.GroupPostToGroupPostDTO(post)).ToList();
-        }
-
         public List<User> GetGroupMembers(Guid groupId)
         {
             // Get the Group from the GroupRepository
-            var members = context.Users.Join(
-             context.Memberships,
-             user => user.UserId,
-             membership => membership.UserId,
-             (user, membership) => new { User = user, Membership = membership })
-         .Where(joined => joined.Membership.GroupId == groupId)
-         .Select(joined => joined.User)
-         .ToList();
+            var members = this._groupRepository.GetGroupMembers(Guid groupId);
 
             return members;
         }
 
         public bool IsUserInGroup(Guid groupId, Guid groupMemberId)
         {
-            var membership = context.Memberships.Find(groupId, groupMemberId);
-            if (membership == null)
-            {
-                return false;
-            }
-            return true;
+            return this._groupRepository.IsUserInGroup(groupId, groupMemberId);
         }
 
         public List<JoinRequest> GetRequestsToJoinFromGroup(Guid groupId)
         {
             // Get the Group from the GroupRepository
-            var allRequestsFromGroup = context.JoinRequests.Where(request => request.GroupId == groupId).ToList();
-            return allRequestsFromGroup;
+            return this._groupRepository.GetRequestsToJoinFromGroup(groupId);
         }
 
         public List<Group> GetAllGroupsUserBelongsTo(Guid groupMemberId)
         {
             // Get the GroupMember from the GroupMemberRepository
-            var groups = context.Groups.Join(
-             context.Memberships,
-             group => group.GroupId,
-             membership => membership.GroupId,
-             (group, membership) => new { Group = group, Membership = membership })
-         .Where(joined => joined.Membership.UserId == groupMemberId)
-         .Select(joined => joined.Group)
-         .ToList();
-
-            return groups;
+            this._groupRepository.GetAllGroupsUserBelongsTo(groupMemberId);
         }
 
-        public Group GetGroup(Guid groupId)
+        public Group GetGroupById(Guid groupId)
         {
-            var group = context.Groups.Find(groupId);
-            if (group == null)
+            try
             {
-                throw new Exception("Can't find group");
+                var group = this._groupRepository.GetGroupById(groupId)
+            }catch(Exception error)
+            {
+                throw new Exception(error);
             }
+       
             return group;
         }
 
-        public List<GroupDTO> GetGroups()
+        public List<GroupDTO> GetAllGroups()
         {
-            List<Group> groups = context.Groups.ToList();
-            return groups.Select(group => GroupMapper.GroupToGroupDTO(group)).ToList();
+            return this._groupRepository.GetAllGroups();
         }
     }
 }
