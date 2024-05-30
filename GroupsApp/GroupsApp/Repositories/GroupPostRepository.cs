@@ -37,7 +37,7 @@ namespace GroupsApp.Repositories
             return updatedGroupPost;
         }
 
-        public void DeleteGroupPost(int id)
+        public void DeleteGroupPost(Guid id)
         {
             var groupPost = _context.GroupPosts.Find(id);
             if (groupPost != null)
