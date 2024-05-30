@@ -44,7 +44,7 @@ namespace GroupsApp.Data
 
         public DbSet<EventDonation> EventDonations { get; set; }
 
-        public DbSet<MarketPlacePostReview> MarketPlacePostReviews { get; set; }
+        public DbSet<MarketplacePostReview> MarketplacePostReviews { get; set; }
 
         public DbSet<GroupPostReport> GroupPostReports { get; set; }
 
@@ -52,13 +52,36 @@ namespace GroupsApp.Data
 
         public DbSet<EventReview> EventReviews { get; set; }
 
+        public DbSet<Comment> Comments { get; set; }
+
+        public DbSet<InterestStatus> InterestStatuses { get; set; }
+
 
         #region Required
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<User>().HasKey(u => u.UserId);
             modelBuilder.Entity<Group>().HasKey(g => g.GroupId);
-            modelBuilder.Entity<MarketplacePost>().HasKey(mp => mp.MarketplacePostId);
+            modelBuilder.Entity<EventExpense>().HasKey(ee => ee.EventExpenseId);
+            modelBuilder.Entity<EventDonation>().HasKey(ed => ed.EventDonationId);
+            modelBuilder.Entity<MarketplacePostReview>().HasKey(mpr => mpr.ReviewId);
+            modelBuilder.Entity<GroupPostReport>().HasKey(gpr => gpr.ReportId);
+            modelBuilder.Entity<EventReport>().HasKey(er => new { er.EventId, er.UserId });
+            modelBuilder.Entity<EventReview>().HasKey(er => new { er.EventId, er.UserId });
+            modelBuilder.Entity<Membership>().HasKey(m => new { m.GroupId, m.UserId });
+            modelBuilder.Entity<JoinRequest>().HasKey(jr => jr.JoinRequestId);
+            modelBuilder.Entity<PollOption>().HasKey(po => po.PollOptionId);
+            modelBuilder.Entity<Poll>().HasKey(p => p.PollId);
+            modelBuilder.Entity<UserEvent>().HasKey(ue => new { ue.UserId, ue.EventId });
+            modelBuilder.Entity<PollAnswer>().HasKey(pa => new { pa.PollOptionId, pa.UserId });
+            modelBuilder.Entity<GroupPost>().HasKey(gp => gp.GroupPostId);
+            modelBuilder.Entity<Event>().HasKey(e => e.EventId);
+            modelBuilder.Entity<Cart>().HasKey(c => new { c.UserId, c.MarketplacePostId });
+            modelBuilder.Entity<UsersFavoritePosts>().HasKey(ufp => new { ufp.UserId, ufp.MarketplacePostId });
+            modelBuilder.Entity<Comment>().HasKey(c => c.CommentId);
+            modelBuilder.Entity<InterestStatus>().HasKey(i => i.InterestStatusId);
+
+
 
             modelBuilder.Entity<Group>()
                 .HasOne(g => g.Owner)
@@ -96,14 +119,11 @@ namespace GroupsApp.Data
                     l => l.HasOne<MarketplacePost>().WithMany().HasForeignKey(e => e.MarketplacePostId),
                     r => r.HasOne<User>().WithMany().HasForeignKey(e => e.UserId).OnDelete(DeleteBehavior.NoAction));
 
-            modelBuilder.Entity<Membership>().HasKey(m => new { m.GroupId, m.UserId });
 
             modelBuilder.Entity<User>()
                 .HasMany(u => u.GroupsPartOf)
                 .WithMany(g => g.Users)
                 .UsingEntity<Membership>();
-
-            modelBuilder.Entity<JoinRequest>().HasKey(jr => jr.JoinRequestId);
 
             modelBuilder.Entity<JoinRequest>()
                 .HasOne(jr => jr.User)
@@ -120,14 +140,10 @@ namespace GroupsApp.Data
                 .WithMany(u => u.GroupsTryingToJoin)
                 .UsingEntity<JoinRequest>();
 
-            modelBuilder.Entity<Poll>().HasKey(p => p.PollId);
-
             modelBuilder.Entity<Poll>()
                 .HasOne(p => p.Group)
                 .WithMany(g => g.GroupPolls)
                 .HasForeignKey(p => p.GroupId);
-
-            modelBuilder.Entity<PollOption>().HasKey(po => po.PollOptionId);
 
             modelBuilder.Entity<PollOption>()
                 .HasOne(po => po.Poll)
@@ -176,12 +192,10 @@ namespace GroupsApp.Data
                 .WithMany(u => u.Events)
                 .HasForeignKey(e => e.OrganizerId);
 
-            modelBuilder.Entity<UserEvent>().HasKey(ue => new { ue.UserId, ue.EventId });
-
-            modelBuilder.Entity<User>()
-                .HasMany(u => u.Events)
-                .WithMany(e => e.Users)
-                .UsingEntity<UserEvent>();
+            //modelBuilder.Entity<User>()
+            //    .HasMany(u => u.Events)
+            //    .WithMany(e => e.Users)
+            //    .UsingEntity<UserEvent>();
 
 
         }

@@ -1,9 +1,6 @@
-﻿using System.ComponentModel.DataAnnotations;
-using GroupsApp.Models.MarketplacePosts;
-
-namespace GroupsApp.Models
+﻿ namespace GroupsApp.Payload.DTO
 {
-    public class User
+    public class UserDto
     {
         private Guid userId;
         private string username;
@@ -13,8 +10,7 @@ namespace GroupsApp.Models
         private string phoneNumber;
         private DateOnly birthDay;
         private DateTime createdDate;
-
-        [Key]
+        // create public properties for each field
         public Guid UserId { get => userId; set => userId = value; }
         public string Username { get => username; set => username = value; }
         public string FullName { get => fullName; set => fullName = value; }
@@ -40,17 +36,5 @@ namespace GroupsApp.Models
         public ICollection<PollOption> SelectedPollOptions { get; set; } = new List<PollOption>();
         public ICollection<PollAnswer> PollAnswers { get; set; } = new List<PollAnswer>();
         public ICollection<GroupPost> GroupPosts { get; set; } = new List<GroupPost>();
-
-        public ICollection<Event> Events { get; set; } = new List<Event>();
-
-        public ICollection<Cart> Carts { get; set; } = new List<Cart>();
-
-        public ICollection<EventDonation> EventDonations { get; set; } = new List<EventDonation>();
-
-        public ICollection<EventReport> EventReports { get; set; } = new List<EventReport>();
-
-        public ICollection<EventReview> EventReviews { get; set; } = new List<EventReview>();
-
-
     }
 }

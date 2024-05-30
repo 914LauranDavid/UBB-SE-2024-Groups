@@ -12,6 +12,9 @@ namespace GroupsApp.Models
         public Guid EventId { get => eventId; set => eventId = value; }
         public ReportType ReportTypeValue { get => reportTypeValue; set => reportTypeValue = value; }
 
+        public Event Event { get; set; }
+        public User User { get; set; }
+
         public EventReport(DataRow row)
         {
             userId = (Guid)row["UserGUID"];

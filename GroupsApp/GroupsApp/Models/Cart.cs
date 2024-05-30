@@ -1,4 +1,5 @@
-﻿using System;
+﻿using GroupsApp.Models.MarketplacePosts;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics.Contracts;
 using System.Linq;
@@ -14,5 +15,21 @@ namespace GroupsApp.Models
 
         public Guid UserId { get => userId; set => userId = value; }
         public Guid MarketplacePostId { get => marketplacePostId; set => marketplacePostId = value; }
+
+        public User User { get; set; }
+
+        public MarketplacePost MarketplacePost { get; set; }
+
+        public Cart(Guid userId, Guid marketplacePostId)
+        {
+            this.userId = userId;
+            this.marketplacePostId = marketplacePostId;
+        }
+
+        public Cart()
+        {
+            this.userId = Guid.NewGuid();
+            this.marketplacePostId = Guid.NewGuid();
+        }
     }
 }

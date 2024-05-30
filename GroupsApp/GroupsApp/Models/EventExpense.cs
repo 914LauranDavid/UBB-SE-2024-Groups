@@ -20,6 +20,7 @@ namespace GroupsApp.Models
 
         public Event Event { get; set; }
 
+
         public EventExpense(Guid eventExpenseId, Guid eventGUID, string expenseName, float cost)
         {
             this.eventExpenseId = eventExpenseId;
