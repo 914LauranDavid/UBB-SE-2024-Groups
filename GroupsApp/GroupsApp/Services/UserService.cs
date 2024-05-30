@@ -10,6 +10,7 @@ using BulldozerServer.Mapper;
 using BulldozerServer.Payload.DTO;
 using BulldozerServer.Payloads.DTO;
 using GroupsApp.Data;
+using GroupsApp.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 
