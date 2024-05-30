@@ -40,5 +40,7 @@ namespace GroupsApp.Models
         public ICollection<PollOption> SelectedPollOptions { get; set; } = new List<PollOption>();
         public ICollection<PollAnswer> PollAnswers { get; set; } = new List<PollAnswer>();
         public ICollection<GroupPost> GroupPosts { get; set; } = new List<GroupPost>();
+
+        public ICollection<Event> Events { get; set; } = new List<Event>();
     }
 }

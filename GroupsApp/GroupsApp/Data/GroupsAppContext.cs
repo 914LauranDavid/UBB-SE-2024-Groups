@@ -15,9 +15,6 @@ namespace GroupsApp.Data
         {
         }
 
-        public DbSet<GroupsApp.Models.TestMarketplacePost> TestMarketplacePost { get; set; } = default!;
-        public DbSet<GroupsApp.Models.TestUser> TestUser { get; set; } = default!;
-
 
         public DbSet<User> Users { get; set; }
         public DbSet<Group> Groups { get; set; }
@@ -38,6 +35,22 @@ namespace GroupsApp.Data
         public DbSet<PollAnswer> PollAnswers { get; set; }
 
         public DbSet<GroupPost> GroupPosts { get; set; }
+
+        public DbSet<Event> Events { get; set; }
+
+        public DbSet<UserEvent> UserEvents { get; set; }
+
+        public DbSet<EventExpense> EventExpenses { get; set; }
+
+        public DbSet<EventDonation> EventDonations { get; set; }
+
+        public DbSet<MarketPlacePostReview> MarketPlacePostReviews { get; set; }
+
+        public DbSet<GroupPostReport> GroupPostReports { get; set; }
+
+        public DbSet<EventReport> EventReports { get; set; }
+
+        public DbSet<EventReview> EventReviews { get; set; }
 
 
         #region Required
@@ -157,6 +170,20 @@ namespace GroupsApp.Data
                 .WithMany(u => u.Memberships)
                 .HasForeignKey(m => m.UserId)
                 .OnDelete(DeleteBehavior.NoAction);
+
+            modelBuilder.Entity<Event>()
+                .HasOne(e => e.Organizer)
+                .WithMany(u => u.Events)
+                .HasForeignKey(e => e.OrganizerId);
+
+            modelBuilder.Entity<UserEvent>().HasKey(ue => new { ue.UserId, ue.EventId });
+
+            modelBuilder.Entity<User>()
+                .HasMany(u => u.Events)
+                .WithMany(e => e.Users)
+                .UsingEntity<UserEvent>();
+
+
         }
         #endregion
     }
