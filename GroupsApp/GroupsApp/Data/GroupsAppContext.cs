@@ -173,7 +173,7 @@ namespace GroupsApp.Data
 
             modelBuilder.Entity<Event>()
                 .HasOne(e => e.Organizer)
-                .WithMany(u => u.Events)
+                .WithMany(u => u.OriganizedEvents)
                 .HasForeignKey(e => e.OrganizerId);
 
             modelBuilder.Entity<UserEvent>().HasKey(ue => new { ue.UserId, ue.EventId });
@@ -183,7 +183,68 @@ namespace GroupsApp.Data
                 .WithMany(e => e.Users)
                 .UsingEntity<UserEvent>();
 
+            modelBuilder.Entity<EventReport>().HasKey(er => new { er.UserId, er.EventId});
 
+            modelBuilder.Entity<EventReview>().HasKey(er => new { er.UserId, er.EventId });
+
+            modelBuilder.Entity<GroupPostReport>().HasKey(gpr => gpr.ReportId);
+
+            modelBuilder.Entity<MarketPlacePostReview>().HasKey(mppr => mppr.ReviewId);
+
+            modelBuilder.Entity<MarketPlacePostReview>()
+                .HasOne(mppr => mppr.MarketplacePost)
+                .WithMany(mp => mp.Reviews)
+                .HasForeignKey(mppr => mppr.MarketplacePostId);
+
+            modelBuilder.Entity<MarketPlacePostReview>()
+                .HasOne(mppr => mppr.Reviewer)
+                .WithMany(u => u.MarketPlacePostReviewsMade)
+                .HasForeignKey(mppr => mppr.UserId);
+
+            modelBuilder.Entity<EventDonation>()
+                .HasOne(ed => ed.Event)
+                .WithMany(e => e.Donations)
+                .HasForeignKey(ed => ed.EventId);
+
+            modelBuilder.Entity<EventDonation>()
+                .HasOne(ed => ed.User)
+                .WithMany(u => u.EventDonationsMade)
+                .HasForeignKey(ed => ed.UserId);
+
+            modelBuilder.Entity<EventExpense>()
+                .HasOne(ee => ee.Event)
+                .WithMany(e => e.Expenses)
+                .HasForeignKey(ee => ee.EventId);
+
+            modelBuilder.Entity<EventReview>()
+                .HasOne(er => er.Event)
+                .WithMany(e => e.Reviews)
+                .HasForeignKey(er => er.EventId);
+
+            modelBuilder.Entity<EventReview>()
+                .HasOne(er => er.Reviewer)
+                .WithMany(u => u.EventReviewsMade)
+                .HasForeignKey(er => er.UserId);
+
+            modelBuilder.Entity<GroupPostReport>()
+                .HasOne(GroupPostReport => GroupPostReport.Reporter)
+                .WithMany(u => u.GroupPostReportsMade)
+                .HasForeignKey(GroupPostReport => GroupPostReport.UserId);
+
+            modelBuilder.Entity<GroupPostReport>()
+                .HasOne(GroupPostReport => GroupPostReport.ReportedPost)
+                .WithMany(gp => gp.Reports)
+                .HasForeignKey(GroupPostReport => GroupPostReport.PostId);
+
+            modelBuilder.Entity<EventReport>()
+                .HasOne(er => er.Reporter)
+                .WithMany(u => u.EventReportsMade)
+                .HasForeignKey(er => er.UserId);
+
+            modelBuilder.Entity<EventReport>()
+                .HasOne(er => er.Event)
+                .WithMany(e => e.Reports)
+                .HasForeignKey(er => er.EventId);
         }
         #endregion
     }

@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.Diagnostics.SymbolStore;
 using GroupsApp.Models.MarketplacePosts;
 
 namespace GroupsApp.Models
@@ -42,5 +43,17 @@ namespace GroupsApp.Models
         public ICollection<GroupPost> GroupPosts { get; set; } = new List<GroupPost>();
 
         public ICollection<Event> Events { get; set; } = new List<Event>();
+
+        public ICollection<Event> OriganizedEvents { get; set; } = new List<Event>();
+
+        public ICollection<MarketPlacePostReview> MarketPlacePostReviewsMade { get; set; } = new List<MarketPlacePostReview>();
+
+        public  ICollection<EventDonation> EventDonationsMade { get; set; } = new List<EventDonation>();
+
+        public ICollection<GroupPostReport> GroupPostReportsMade { get; set; } = new List<GroupPostReport>();
+
+        public ICollection<EventReview> EventReviewsMade { get; set; } = new List<EventReview>();
+
+        public ICollection<EventReport> EventReportsMade { get; set; } = new List<EventReport>();
     }
 }

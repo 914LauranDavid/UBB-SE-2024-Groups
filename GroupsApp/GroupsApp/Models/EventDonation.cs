@@ -17,6 +17,10 @@ namespace GroupsApp.Models
         public Guid UserId { get => userId; set => userId = value; }
         public float Amount { get => amount; set => amount = value; }
 
+        public User User { get; set; }
+
+        public Event Event { get; set; }
+
 
 
         public EventDonation(DataRow row)

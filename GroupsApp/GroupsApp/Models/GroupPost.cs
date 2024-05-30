@@ -56,5 +56,7 @@ namespace GroupsApp.Models
         public User? Author { get; set; }
 
         public Group Group { get; set; }
+
+        public ICollection<GroupPostReport> Reports { get; } = new List<GroupPostReport>();
     }
 }

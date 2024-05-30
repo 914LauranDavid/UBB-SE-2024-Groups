@@ -49,6 +49,14 @@ namespace GroupsApp.Models
 
         public ICollection<User> Users { get; set; } = new List<User>();
 
+        public ICollection<EventDonation> Donations { get; set; } = new List<EventDonation>();
+
+        public ICollection<EventReview> Reviews { get; set; } = new List<EventReview>();
+
+        public ICollection<EventExpense> Expenses { get; set; } = new List<EventExpense>();
+
+        public ICollection<EventReport> Reports { get; set; } = new List<EventReport>();
+
        
         public Event(DataRow row)
         {
