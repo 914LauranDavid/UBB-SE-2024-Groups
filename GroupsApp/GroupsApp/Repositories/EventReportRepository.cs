@@ -3,7 +3,7 @@ using GroupsApp.Models;
 
 namespace GroupsApp.Repositories
 {
-    public class EventReportRepository
+    public class EventReportRepository:IEventReportRepository
     {
         private readonly GroupsAppContext _context;
 

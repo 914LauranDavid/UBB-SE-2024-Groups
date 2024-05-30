@@ -1,6 +1,12 @@
-﻿namespace GroupsApp.Repositories
+﻿using GroupsApp.Models;
+
+namespace GroupsApp.Repositories
 {
-    public class ICartRepository
+    public interface ICartRepository
     {
+        public Cart AddCart(Cart cart);
+        public Cart GetCartById(Guid userId, Guid marketplaceId);
+        public void DeleteCart(Cart cart);
+        public List<Cart> GetAllCarts();
     }
 }

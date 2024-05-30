@@ -3,7 +3,7 @@ using GroupsApp.Models;
 
 namespace GroupsApp.Repositories
 {
-    public class EventExpenseRepository
+    public class EventExpenseRepository: IEventExpenseRepository
     {
         private readonly GroupsAppContext _context;
 

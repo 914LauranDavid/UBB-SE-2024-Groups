@@ -4,52 +4,52 @@ using System.Reflection.Metadata;
 
 namespace GroupsApp.Repositories
 {
-    public class DonationPostRepository(GroupsAppContext context) : IMarketplacePostRepository
+    public class DonationPostRepository(GroupsAppContext context) : IDonationPostRepository
     {
         private readonly GroupsAppContext _context = context;
 
-        public MarketplacePost AddMarketplacePost(MarketplacePost marketplacePost)
+        public DonationPost AddDonationPost(DonationPost donationPost)
         {
-            DonationPost savedDonationPost = _context.DonationPosts.Add((DonationPost) marketplacePost).Entity;
+            DonationPost savedDonationPost = _context.DonationPosts.Add((DonationPost)donationPost).Entity;
             _context.SaveChanges();
             return savedDonationPost;
         }
 
-        public void DeleteMarketplacePost(Guid id)
+        public void DeleteDonationPost(Guid donationPostId)
         {
-            DonationPost? oldPost = _context.DonationPosts.Find(id);
+            DonationPost? oldPost = _context.DonationPosts.Find(donationPostId);
             if(oldPost == null)
                 throw new Exception("Donation post not found");
             _context.DonationPosts.Remove(oldPost);
             _context.SaveChanges();
         }
 
-        public List<MarketplacePost> GetAllMarketplacePosts()
+        public List<DonationPost> GetAllDonationPosts()
         {
             return [.. _context.DonationPosts];
         }
 
-        public MarketplacePost? GetMarketplacePostById(Guid id)
+        public DonationPost? GetDonationPostById(Guid donationPostId)
         {
-            return _context.DonationPosts.Find(id);
+            return _context.DonationPosts.Find(donationPostId);
         }
 
-        public MarketplacePost UpdateMarketplacePost(MarketplacePost marketplacePost)
+        public DonationPost UpdateDonationPost(DonationPost donationPost)
         {
-            DonationPost donationPostCast = (DonationPost)marketplacePost;
+            DonationPost donationPostCast = (DonationPost)donationPost;
             DonationPost? oldPost = _context.DonationPosts.Find(donationPostCast.MarketplacePostId);
             if(oldPost == null)
                 throw new Exception("Donation post not found");
-            oldPost.AuthorId = marketplacePost.AuthorId;
-            oldPost.Description = marketplacePost.Description;
-            oldPost.Title = marketplacePost.Title;
-            oldPost.MediaContent = marketplacePost.MediaContent;
-            oldPost.IsPromoted = marketplacePost.IsPromoted;
-            oldPost.GroupId = marketplacePost.GroupId;
-            oldPost.IsActive = marketplacePost.IsActive;
-            oldPost.EndDate = marketplacePost.EndDate;
-            oldPost.Location = marketplacePost.Location;
-            oldPost.Type = marketplacePost.Type;
+            oldPost.AuthorId = donationPost.AuthorId;
+            oldPost.Description = donationPost.Description;
+            oldPost.Title = donationPost.Title;
+            oldPost.MediaContent = donationPost.MediaContent;
+            oldPost.IsPromoted = donationPost.IsPromoted;
+            oldPost.GroupId = donationPost.GroupId;
+            oldPost.IsActive = donationPost.IsActive;
+            oldPost.EndDate = donationPost.EndDate;
+            oldPost.Location = donationPost.Location;
+            oldPost.Type = donationPost.Type;
             oldPost.DonationLink = donationPostCast.DonationLink;
             oldPost.CurrentDonationAmount = donationPostCast.CurrentDonationAmount;
             DonationPost updatedDonationPost = _context.DonationPosts.Update(oldPost).Entity;

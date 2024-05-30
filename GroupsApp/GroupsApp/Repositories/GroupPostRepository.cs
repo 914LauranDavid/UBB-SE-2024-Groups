@@ -3,7 +3,7 @@ using GroupsApp.Models;
 
 namespace GroupsApp.Repositories
 {
-    public class GroupPostRepository(GroupsAppContext context)
+    public class GroupPostRepository(GroupsAppContext context) : IGroupPostReposiory
     {
         private readonly GroupsAppContext _context = context;
 
