@@ -4,13 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Schema;
-using BulldozerServer.Domain;
-using BulldozerServer.Domain.MarketplacePosts;
 using BulldozerServer.Mapper;
-using BulldozerServer.Payload.DTO;
-using BulldozerServer.Payloads.DTO;
 using GroupsApp.Data;
 using GroupsApp.Models;
+using GroupsApp.Payload.DTO;
+using GroupsApp.Payloads.DTO;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 

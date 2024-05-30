@@ -1,5 +1,5 @@
-﻿using BulldozerServer.Domain.MarketplacePosts;
-using BulldozerServer.Payloads.DTO;
+﻿using GroupsApp.Models.MarketplacePosts;
+using GroupsApp.Payloads.DTO;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 
