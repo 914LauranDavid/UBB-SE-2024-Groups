@@ -1,7 +1,7 @@
 ﻿using GroupsApp.Models.MarketplacePosts;
 using GroupsApp.Payloads.DTO;
 
-namespace BulldozerServer.Mapper
+namespace GroupsApp.Mapper
 {
     public class MarketplacePostMapper
     {

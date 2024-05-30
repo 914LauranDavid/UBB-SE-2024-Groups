@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Schema;
-using BulldozerServer.Mapper;
+using GroupsApp.Mapper;
 using GroupsApp.Data;
 using GroupsApp.Models;
 using GroupsApp.Payload.DTO;

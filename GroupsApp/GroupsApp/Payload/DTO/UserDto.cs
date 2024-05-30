@@ -1,4 +1,7 @@
-﻿ namespace GroupsApp.Payload.DTO
+﻿using GroupsApp.Models;
+using GroupsApp.Models.MarketplacePosts;
+
+namespace GroupsApp.Payload.DTO
 {
     public class UserDto
     {

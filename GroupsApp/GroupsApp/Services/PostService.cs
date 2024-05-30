@@ -5,7 +5,7 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
-using BulldozerServer.Mapper;
+using GroupsApp.Mapper;
 using GroupsApp.Data;
 using GroupsApp.Models.MarketplacePosts;
 using GroupsApp.Payloads.DTO;
