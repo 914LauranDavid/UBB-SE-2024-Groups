@@ -3,7 +3,7 @@ using BulldozerServer.Payloads.DTO;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 
-namespace BulldozerServer.Services
+namespace GroupsApp.Services
 {
     public interface IPostService
     {

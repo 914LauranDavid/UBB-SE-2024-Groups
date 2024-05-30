@@ -9,6 +9,7 @@ using BulldozerServer.Domain.MarketplacePosts;
 using BulldozerServer.Mapper;
 using BulldozerServer.Payload.DTO;
 using BulldozerServer.Payloads.DTO;
+using GroupsApp.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 
@@ -16,9 +17,9 @@ namespace GroupsApp.Services
 {
     public class UserService : IUserService
     {
-        private DatabaseContext context;
+        private GroupsAppContext context;
 
-        public UserService(DatabaseContext context)
+        public UserService(GroupsAppContext context)
         {
             this.context = context;
         }

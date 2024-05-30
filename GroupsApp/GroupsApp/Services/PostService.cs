@@ -9,6 +9,7 @@ using BulldozerServer.Domain;
 using BulldozerServer.Domain.MarketplacePosts;
 using BulldozerServer.Mapper;
 using BulldozerServer.Payloads.DTO;
+using GroupsApp.Data;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
@@ -17,9 +18,9 @@ namespace GroupsApp.Services
 {
     public class PostService : IPostService
     {
-        private DatabaseContext databaseContext;
+        private GroupsAppContext databaseContext;
 
-        public PostService(DatabaseContext posts)
+        public PostService(GroupsAppContext posts)
         {
             this.databaseContext = posts;
         }

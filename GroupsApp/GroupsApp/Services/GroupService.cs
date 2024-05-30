@@ -4,20 +4,17 @@ using System.Linq;
 using System.Reflection.Metadata.Ecma335;
 using System.Text;
 using System.Threading.Tasks;
-using BulldozerServer.Domain;
-using BulldozerServer.Domain.MarketplacePosts;
-using BulldozerServer.Mapper;
-using BulldozerServer.Payload.DTO;
+using GroupsApp.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 
-namespace UBB_SE_2024_Popsicles.Services
+namespace GroupsApp.Services
 {
     public class GroupService : IGroupService
     {
-        private DatabaseContext context;
+        private GroupsAppContext context;
 
-        public GroupService(DatabaseContext context)
+        public GroupService(GroupsAppContext context)
         {
             this.context = context;
         }
