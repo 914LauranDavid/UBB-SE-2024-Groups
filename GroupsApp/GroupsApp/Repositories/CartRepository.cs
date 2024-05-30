@@ -47,5 +47,12 @@ namespace GroupsApp.Repositories
         {
             return [.. _context.Cart];
         }
+        public List<Guid> GetMarketplacePostIdsByUserId(Guid userId)
+        {
+            return _context.Cart
+                .Where(cart => cart.UserId == userId)
+                .Select(cart => cart.MarketplacePostId)
+                .ToList();
+        }
     }
 }
