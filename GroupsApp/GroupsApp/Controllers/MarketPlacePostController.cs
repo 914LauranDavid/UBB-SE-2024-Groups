@@ -38,8 +38,8 @@ namespace BulldozerServer.Controllers
             try
             {
                 // MarketplacePostDTO marketplacePostDTO = MarketplacePostMapper.MapMarketplacePostToMarketplacePostDTO(post);
-                var context = this.postService.RemoveMarketplacePost(marketplacePostDTO);
-                return Ok(context);
+                this.postService.RemoveMarketplacePost(marketplacePostDTO);
+                return Ok();
             }
             catch (Exception ex)
             {

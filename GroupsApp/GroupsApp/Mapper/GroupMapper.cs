@@ -3,7 +3,7 @@
 using GroupsApp.Models;
 using GroupsApp.Payload.DTO;
 
-namespace BulldozerServer.Mapper
+namespace GroupsApp.Mapper
 {
     public class GroupMapper
     {

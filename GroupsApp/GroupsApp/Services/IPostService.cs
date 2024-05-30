@@ -12,4 +12,4 @@ namespace GroupsApp.Services
         IEnumerable<MarketplacePost> GetMarketplacePosts();
         void RemoveMarketplacePost(MarketplacePostDTO marketplacePostDTO);
     }
-}s
+}
