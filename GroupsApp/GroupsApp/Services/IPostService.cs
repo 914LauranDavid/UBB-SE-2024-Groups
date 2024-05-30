@@ -8,8 +8,8 @@ namespace GroupsApp.Services
     public interface IPostService
     {
         MarketplacePostDTO AddMarketplacePost(MarketplacePostDTO marketplacePostDTO);
-        Task<MarketplacePost> GetMarketplacePostById(Guid id);
-        Task<ActionResult<IEnumerable<MarketplacePost>>> GetMarketplacePosts();
-        Task<EntityEntry> RemoveMarketplacePost(MarketplacePostDTO marketplacePostDTO);
+        MarketplacePost GetMarketplacePostById(Guid id);
+        IEnumerable<MarketplacePost> GetMarketplacePosts();
+        void RemoveMarketplacePost(MarketplacePostDTO marketplacePostDTO);
     }
-}
+}s

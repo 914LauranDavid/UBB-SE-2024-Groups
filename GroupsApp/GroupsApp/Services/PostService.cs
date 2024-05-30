@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
@@ -9,48 +10,48 @@ using BulldozerServer.Mapper;
 using GroupsApp.Data;
 using GroupsApp.Models.MarketplacePosts;
 using GroupsApp.Payloads.DTO;
+using GroupsApp.Repositories;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
+using Microsoft.Extensions.Hosting;
 
 namespace GroupsApp.Services
 {
     public class PostService : IPostService
     {
-        private GroupsAppContext databaseContext;
+        private readonly MarketplacePostRepository _marketplacePostRepository;
 
-        public PostService(GroupsAppContext posts)
+        public PostService(MarketplacePostRepository marketplacePostRepository)
         {
-            this.databaseContext = posts;
+            _marketplacePostRepository = marketplacePostRepository;
         }
-
-        public async Task<ActionResult<IEnumerable<MarketplacePost>>> GetMarketplacePosts()
+        public IEnumerable<MarketplacePost> GetMarketplacePosts()
         {
-            return await databaseContext.MarketplacePosts.ToListAsync();
+            return _marketplacePostRepository.GetAllMarketplacePosts();
         }
 
         public MarketplacePostDTO AddMarketplacePost(MarketplacePostDTO marketplacePostDTO)
         {
             var marketplacePost = MarketplacePostMapper.MapMarketplacePostDTOToMarketplacePost(marketplacePostDTO);
-            var context = databaseContext.MarketplacePosts.Add(marketplacePost);
-            databaseContext.SaveChanges();
-            return MarketplacePostMapper.MapMarketplacePostToMarketplacePostDTO(context.Entity);
+            var context = _marketplacePostRepository.AddMarketplacePost(marketplacePost);
+            // _marketplacePostRepository.SaveChanges();
+            return MarketplacePostMapper.MapMarketplacePostToMarketplacePostDTO(context);
         }
-        public async Task<EntityEntry> RemoveMarketplacePost(MarketplacePostDTO marketplacePostDTO)
+        public  void RemoveMarketplacePost(MarketplacePostDTO marketplacePostDTO)
         {
             var marketplacePost = MarketplacePostMapper.MapMarketplacePostDTOToMarketplacePost(marketplacePostDTO);
-            var postToDelete = await databaseContext.MarketplacePosts.FindAsync(marketplacePost.MarketplacePostId);
+            var postToDelete = _marketplacePostRepository.GetMarketplacePostById(marketplacePost.MarketplacePostId);
             if (postToDelete == null)
             {
                 throw new Exception("Post doesn't exist!");
             }
-            var context = databaseContext.Remove(marketplacePost.MarketplacePostId);
-            await databaseContext.SaveChangesAsync();
-            return context;
+             _marketplacePostRepository.DeleteMarketplacePost(marketplacePost.MarketplacePostId);
+            // await _marketplacePostRepository.SaveChangesAsync();
         }
-        public async Task<MarketplacePost> GetMarketplacePostById(Guid id)
+        public MarketplacePost GetMarketplacePostById(Guid id)
         {
-            var postToDelete = await databaseContext.MarketplacePosts.FindAsync(id);
+            var postToDelete =  _marketplacePostRepository.GetMarketplacePostById(id);
             if (postToDelete == null)
             {
                 throw new Exception("Post doesn't exist!");
