@@ -3,7 +3,7 @@ using GroupsApp.Models;
 
 namespace GroupsApp.Repositories
 {
-    public class CartRepository(GroupsAppContext context)
+    public class CartRepository(GroupsAppContext context):ICartRepository
     {
         private readonly GroupsAppContext _context = context;
 

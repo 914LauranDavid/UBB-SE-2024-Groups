@@ -4,7 +4,7 @@ using Microsoft.CodeAnalysis.FlowAnalysis.DataFlow;
 
 namespace GroupsApp.Repositories
 {
-    public class AuctionPostRepository(GroupsAppContext context) : IMarketplacePostRepository
+    public class AuctionPostRepository(GroupsAppContext context) : IAuctionPostRepository
     {
         private readonly GroupsAppContext _context = context;
 
