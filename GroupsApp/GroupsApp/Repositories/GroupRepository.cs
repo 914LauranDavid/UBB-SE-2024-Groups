@@ -129,5 +129,21 @@ namespace GroupsApp.Repositories
             _context.JoinRequests.Remove(joinRequest);
             _context.SaveChanges();
         }
+
+        public bool CheckUserInGroup(Guid groupId, Guid userId)
+        {
+            if (_context.Memberships.Find(groupId, userId) != null)
+            {
+                return true;
+            }
+            return false;   
+        }
+
+        public Membership AddMemberToGroup(Membership membership)
+        {
+            Membership addedMembership = _context.Memberships.Add(membership).Entity;
+            _context.SaveChanges();
+            return addedMembership
+        }
     }
 }
