@@ -1,7 +1,25 @@
 ﻿
 @{
-    ViewData["Title"] = "ViewGroups";
+    ViewData["Title"] = "Groups";
 }
 
-<h1>ViewGroups</h1>
+<h1>Groups</h1>
+
+@model List<GroupsApp.Models.Group>
+
+<table>
+    <thead>
+        <tr>
+            <th>Group Name</th>
+            <th>Group Description</th>
+        </tr>
+    </thead>
+    <tr>
+        @foreach (var group in Model)
+        {
+            <td>@group.GroupName</td>
+            <td>@group.Description</td>
+        }
+    </tr>
+</table>
 

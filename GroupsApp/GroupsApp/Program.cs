@@ -20,6 +20,7 @@ namespace GroupsApp
             builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
                 .AddEntityFrameworkStores<GroupsAppContext>();
             builder.Services.AddControllersWithViews();
+            
 
             var app = builder.Build();
 

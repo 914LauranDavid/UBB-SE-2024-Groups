@@ -17,7 +17,7 @@ namespace GroupsApp.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<Group>> CreateGroup([FromBody] GroupDTO groupDTO)
+        public IActionResult CreateGroup([FromBody] GroupDTO groupDTO)
         {
             try
             {
@@ -234,9 +234,10 @@ namespace GroupsApp.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<List<GroupDTO>>> GetGroups()
+        public IActionResult GetGroups()
         {
-            return groupService.GetAllGroups();
+            var groups =  groupService.GetAllGroups();
+            return View(groups);
         }
     }
 }
