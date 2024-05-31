@@ -25,22 +25,30 @@ namespace GroupsApp.Services
     {
         private readonly EventRepository _eventRepository;
 
-        public Event CreateEvent(EventDTO eventDTO)
+        public void DeleteEventById(Guid id)
         {
-            throw new NotImplementedException();
-        }
-
-    public void DeleteEventById(Guid id)
-        {
-            throw new NotImplementedException();
+            try
+            {
+                this._eventRepository.DeleteEventById(id);
+            }
+            catch (Exception error)
+            {
+                throw new Exception("Error deleting event", error);
+            }
         }
 
         public List<Event> GetAllEvents()
         {
-            throw new NotImplementedException();
+            return this._eventRepository.GetAllEvents();
         }
 
-        public Event GetEventById(Guid id)
+        public Event? GetEventById(Guid id)
+        {
+            return _eventRepository.GetEventById(id);
+        }
+
+        //TODO WHAT IS BELOW ( YOU NEED THE MAPPER )
+        public Event CreateEvent(EventDTO eventDTO)
         {
             throw new NotImplementedException();
         }
