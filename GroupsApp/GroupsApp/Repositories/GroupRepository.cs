@@ -9,6 +9,9 @@ namespace GroupsApp.Repositories
 
         public Group AddGroup(Group group)
         {
+            if (_context.Groups.Find(group.GroupId)!=null) {
+                throw new Exception("Group with this id already exists!");
+            }
             Group savedGroup = _context.Groups.Add(group).Entity;
             _context.SaveChanges();
             return savedGroup;
@@ -51,5 +54,96 @@ namespace GroupsApp.Repositories
             return [.. _context.Groups];
         }
 
+        public List<Group> GetAllGroupsUserBelongsTo(Guid groupMemberId)
+        {
+            var groups = _context.Groups.Join(
+             _context.Memberships,
+             group => group.GroupId,
+             membership => membership.GroupId,
+             (group, membership) => new { Group = group, Membership = membership })
+         .Where(joined => joined.Membership.UserId == groupMemberId)
+         .Select(joined => joined.Group)
+         .ToList();
+
+            return groups;
+        }
+
+        public List<JoinRequest> GetRequestsToJoinFromGroup(Guid groupId)
+        {
+            // Get the Group from the GroupRepository
+            var allRequestsFromGroup = _context.JoinRequests.Where(request => request.GroupId == groupId).ToList();
+            return allRequestsFromGroup;
+        }
+
+        public void RemoveMemberFromGroup(Guid groupId, Guid userId)
+        {
+            var membership = context.Memberships.Find(groupId, userId);
+            if (membership == null)
+            {
+                throw new Exception("User doesn't belong to this group");
+            }
+            _context.Memberships.Remove(membership);
+            _context.SaveChanges();
+        }
+
+        public void RejectRequestToJoinGroup(Guid joinRequestId)
+        {
+            var request = _context.JoinRequests.Find(joinRequestId);
+            if (request == null)
+            {
+                throw new Exception("User didn't request to join this group");
+            }
+            _context.JoinRequests.Remove(request);
+            _context.SaveChanges();
+        }
+
+        public void List<User> GeGroupMembers(Guid groupId){
+            var members = _context.Users.Join(
+             _context.Memberships,
+             user => user.UserId,
+             membership => membership.UserId,
+             (user, membership) => new { User = user, Membership = membership })
+         .Where(joined => joined.Membership.GroupId == groupId)
+         .Select(joined => joined.User)
+         .ToList();
+            return members
+        }
+        
+        public bool IsUserInGroup(Guid groupId, Guid groupMemberId)
+        {
+            var membership = _context.Memberships.Find(groupId, groupMemberId);
+            if (membership == null)
+            {
+                return false;
+            }
+            return true;
+        }
+
+        public void AcceptRequestToJoinGroup(JoinRequest joinRequest)
+        {
+            if (_context.JoinRequests.Find(joinRequest.JoinRequestId) == null)
+            {
+                throw new Exception("User didn't request to join this group");
+            }
+            _context.Memberships.Add(new Membership(joinRequest.GroupId, joinRequest.UserId));
+            _context.JoinRequests.Remove(joinRequest);
+            _context.SaveChanges();
+        }
+
+        public bool CheckUserInGroup(Guid groupId, Guid userId)
+        {
+            if (_context.Memberships.Find(groupId, userId) != null)
+            {
+                return true;
+            }
+            return false;   
+        }
+
+        public Membership AddMemberToGroup(Membership membership)
+        {
+            Membership addedMembership = _context.Memberships.Add(membership).Entity;
+            _context.SaveChanges();
+            return addedMembership
+        }
     }
 }

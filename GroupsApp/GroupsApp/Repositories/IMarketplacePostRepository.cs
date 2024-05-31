@@ -9,5 +9,7 @@ namespace GroupsApp.Repositories
         public MarketplacePost UpdateMarketplacePost(MarketplacePost marketplacePost);
         public MarketplacePost? GetMarketplacePostById(Guid id);
         public List<MarketplacePost> GetAllMarketplacePosts();
+
+        public List<MarketplacePost> GetMarketplacePostsByAuthorId(Guid authorId);
     }
 }

@@ -1,6 +1,7 @@
 ﻿using GroupsApp.Models;
 using GroupsApp.Payload.DTO;
 using GroupsApp.Payloads.DTO;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 
 namespace GroupsApp.Services
@@ -9,15 +10,15 @@ namespace GroupsApp.Services
     {
         void AddPostToCart(Guid postId, Guid userId);
         void AddPostToFavorites(Guid postId, Guid userId);
-        Task<UserDto> AddUser(UserDto userDto);
-        Task<List<MarketplacePostDTO>> GetFavoritePosts(Guid userId);
-        Task<User> GetUserById(Guid id);
-        Task<List<User>> GetUsers();
-        Task<bool> IsUserInGroup(Guid userId, Guid groupId);
+        ActionResult<UserDto> AddUser(UserDto userDto);
+        ActionResult<List<MarketplacePostDTO>> GetFavoritePosts(Guid userId);
+        ActionResult<User> GetUserById(Guid id);
+        ActionResult<List<User>> GetUsers();
+        bool IsUserInGroup(Guid userId, Guid groupId);
         void RemovePostFromCart(Guid postId, Guid userId);
         void RemovePostFromFavorites(Guid postId, Guid userId);
         void RemoveUser(Guid userId);
-        Task<User> UpdateUser(UserDto userDto);
-        Task<List<MarketplacePostDTO>> GetPostsFromCart(Guid userId);
+        ActionResult<User> UpdateUser(UserDto userDto);
+        ActionResult<List<MarketplacePostDTO>> GetPostsFromCart(Guid userId);
     }
 }
