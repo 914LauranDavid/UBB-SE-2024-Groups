@@ -203,14 +203,14 @@ namespace GroupsApp.Data
 
             modelBuilder.Entity<GroupPostReport>().HasKey(gpr => gpr.ReportId);
 
-            modelBuilder.Entity<MarketPlacePostReview>().HasKey(mppr => mppr.ReviewId);
+            modelBuilder.Entity<MarketplacePostReview>().HasKey(mppr => mppr.ReviewId);
 
-            modelBuilder.Entity<MarketPlacePostReview>()
+            modelBuilder.Entity<MarketplacePostReview>()
                 .HasOne(mppr => mppr.MarketplacePost)
                 .WithMany(mp => mp.Reviews)
                 .HasForeignKey(mppr => mppr.MarketplacePostId);
 
-            modelBuilder.Entity<MarketPlacePostReview>()
+            modelBuilder.Entity<MarketplacePostReview>()
                 .HasOne(mppr => mppr.Reviewer)
                 .WithMany(u => u.MarketPlacePostReviewsMade)
                 .HasForeignKey(mppr => mppr.UserId);

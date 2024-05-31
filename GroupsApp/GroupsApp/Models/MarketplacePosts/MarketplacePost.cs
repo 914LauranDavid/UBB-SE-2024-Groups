@@ -45,7 +45,7 @@ namespace GroupsApp.Models.MarketplacePosts
         public ICollection<User> PeopleThatFavored { get; } = new List<User>();
 
         public ICollection<User> PeopleThatPlacedInCart { get; } = new List<User>();
-        public ICollection<MarketPlacePostReview> Reviews { get;  set; }
+        public ICollection<MarketplacePostReview> Reviews { get;  set; }
 
         public MarketplacePost(Guid marketplacePostId, Guid authorId, Guid groupId, string title, string description, string mediaContent,
             string location, DateTime creationDate, DateTime? endDate, bool isPromoted, bool isActive, string type)

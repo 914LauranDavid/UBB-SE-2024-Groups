@@ -46,7 +46,7 @@ namespace GroupsApp.Models
 
         public ICollection<Event> OriganizedEvents { get; set; } = new List<Event>();
 
-        public ICollection<MarketPlacePostReview> MarketPlacePostReviewsMade { get; set; } = new List<MarketPlacePostReview>();
+        public ICollection<MarketplacePostReview> MarketPlacePostReviewsMade { get; set; } = new List<MarketplacePostReview>();
 
         public  ICollection<EventDonation> EventDonationsMade { get; set; } = new List<EventDonation>();
 

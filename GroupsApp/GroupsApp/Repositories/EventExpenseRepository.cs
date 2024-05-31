@@ -31,7 +31,7 @@ namespace GroupsApp.Repositories
             {
                 throw new Exception("Event expense not found");
             }
-            foundEventExpense.EventGUID = eventExpense.EventGUID;
+            foundEventExpense.EventId = eventExpense.EventId;
             foundEventExpense.ExpenseName = eventExpense.ExpenseName;
             foundEventExpense.Cost = eventExpense.Cost;
             EventExpense updatedEventExpense = _context.EventExpenses.Update(foundEventExpense).Entity;

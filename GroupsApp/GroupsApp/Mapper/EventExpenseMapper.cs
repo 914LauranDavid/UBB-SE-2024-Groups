@@ -9,7 +9,7 @@ namespace GroupsApp.Mapper
         {
             EventExpensesDTO eventExpensesDTO = new EventExpensesDTO();
             eventExpensesDTO.EventExpenseId = eventExpense.EventExpenseId;
-            eventExpensesDTO.EventGUID = eventExpense.EventGUID;
+            eventExpensesDTO.EventGUID = eventExpense.EventId;
             eventExpensesDTO.ExpenseName = eventExpense.ExpenseName;
             eventExpensesDTO.Cost = eventExpense.Cost;
             return eventExpensesDTO;
