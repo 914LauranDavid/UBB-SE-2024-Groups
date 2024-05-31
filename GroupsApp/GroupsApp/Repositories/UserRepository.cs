@@ -1,9 +1,10 @@
 ﻿using GroupsApp.Data;
 using GroupsApp.Models;
+using GroupsApp.Repositories;
 
 namespace GroupsApp.Repository
 {
-    public class UserRepository(GroupsAppContext context)
+    public class UserRepository(GroupsAppContext context) : IUserRepository
     {
         private readonly GroupsAppContext _context = context;
 

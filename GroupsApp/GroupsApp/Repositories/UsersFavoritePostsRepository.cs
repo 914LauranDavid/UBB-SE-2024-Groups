@@ -3,7 +3,7 @@ using GroupsApp.Models;
 
 namespace GroupsApp.Repositories
 {
-    public class UsersFavoritePostsRepository(GroupsAppContext context)
+    public class UsersFavouritePostsRepository(GroupsAppContext context) : IUsersFavouritePostsRepository
     {
         private readonly GroupsAppContext _context = context;
 

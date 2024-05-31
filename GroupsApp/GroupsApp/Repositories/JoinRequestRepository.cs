@@ -3,7 +3,7 @@ using GroupsApp.Models;
 
 namespace GroupsApp.Repositories
 {
-    public class JoinRequestRepository(GroupsAppContext context)
+    public class JoinRequestRepository(GroupsAppContext context) : IJoinRequestRepository
     {
         private readonly GroupsAppContext _context;
 
