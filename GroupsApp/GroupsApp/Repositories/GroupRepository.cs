@@ -1,5 +1,7 @@
 ﻿using GroupsApp.Data;
+using GroupsApp.Mapper;
 using GroupsApp.Models;
+using GroupsApp.Payload.DTO;
 
 namespace GroupsApp.Repositories
 {
@@ -97,7 +99,8 @@ namespace GroupsApp.Repositories
             _context.SaveChanges();
         }
 
-        public void List<User> GeGroupMembers(Guid groupId){
+        public List<User> GetGroupMembers(Guid groupId)
+        {
             var members = _context.Users.Join(
              _context.Memberships,
              user => user.UserId,
@@ -106,7 +109,7 @@ namespace GroupsApp.Repositories
          .Where(joined => joined.Membership.GroupId == groupId)
          .Select(joined => joined.User)
          .ToList();
-            return members
+            return members;
         }
         
         public bool IsUserInGroup(Guid groupId, Guid groupMemberId)
@@ -143,10 +146,10 @@ namespace GroupsApp.Repositories
         {
             Membership addedMembership = _context.Memberships.Add(membership).Entity;
             _context.SaveChanges();
-            return addedMembership
+            return addedMembership;
         }
 
-        public List<GroupPost> GetGroupPosts(Guid groupId)
+        public List<GroupPostDTO> GetGroupPosts(Guid groupId)
         {
             var posts = _context.GroupPosts.Where(post => post.GroupId == groupId).ToList();
             return posts.Select(post => GroupPostMapper.GroupPostToGroupPostDTO(post)).ToList();

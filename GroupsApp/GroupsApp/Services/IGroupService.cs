@@ -26,7 +26,7 @@ namespace GroupsApp.Services
 
         List<JoinRequest> GetRequestsToJoinFromGroup(Guid groupId);
         List<Group> GetAllGroupsUserBelongsTo(Guid groupMemberId);
-        Group GetGroup(Guid groupId);
-        List<GroupDTO> GetGroups();
+        Group GetGroupById(Guid groupId);
+        List<GroupDTO> GetAllGroups();
     }
 }
