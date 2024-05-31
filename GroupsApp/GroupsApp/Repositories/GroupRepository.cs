@@ -1,7 +1,9 @@
-﻿using GroupsApp.Data;
+﻿using BulldozerServer.Mapper;
+using GroupsApp.Data;
 using GroupsApp.Mapper;
 using GroupsApp.Models;
 using GroupsApp.Payload.DTO;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 
 namespace GroupsApp.Repositories
 {
@@ -32,6 +34,17 @@ namespace GroupsApp.Repositories
                 throw new Exception("Group not found");
             }
             _context.Groups.Remove(group);
+            _context.SaveChanges();
+        }
+
+        public void DeleteGroupById(Guid groupId)
+        {
+            Group? foundGroup = _context.Groups.Find(groupId);
+            if (foundGroup == null)
+            {
+                throw new Exception("Group not found");
+            }
+            _context.Groups.Remove(foundGroup);
             _context.SaveChanges();
         }
 
@@ -172,6 +185,11 @@ namespace GroupsApp.Repositories
             JoinRequest addedJoinRequest = _context.JoinRequests.Add(joinRequest).Entity;
             _context.SaveChanges();
             return addedJoinRequest;
+        }
+
+        public JoinRequest CreateJoinRequest(JoinRequest joinRequest)
+        {
+            throw new NotImplementedException();
         }
     }
 }

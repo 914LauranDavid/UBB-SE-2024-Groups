@@ -6,15 +6,15 @@ namespace GroupsApp.Services
 {
     public interface IGroupService
     {
-        Task<EntityEntry<Group>> CreateGroup(GroupDTO groupDTO);
-        Task<EntityEntry<Group>> UpdateGroup(GroupDTO groupDTO);
+        Group CreateGroup(GroupDTO groupDTO);
+        Group UpdateGroup(GroupDTO groupDTO);
         void DeleteGroup(Guid groupId);
 
-        Task<EntityEntry<Membership>> AddMemberToGroup(MembershipDTO membershipDTO);
+        Membership AddMemberToGroup(MembershipDTO membershipDTO);
         void RemoveMemberFromGroup(Guid groupId, Guid userId);
-        Task<EntityEntry<Membership>> UpdateMembership(MembershipDTO membershipDTO);
+        Membership UpdateMembership(MembershipDTO membershipDTO);
 
-        Task<EntityEntry<JoinRequest>> AddNewRequestToJoinGroup(JoinRequestDTO joinRequestDTO);
+        JoinRequest AddNewRequestToJoinGroup(JoinRequestDTO joinRequestDTO);
         void AcceptRequestToJoinGroup(JoinRequestDTO joinRequestDTO);
         void RejectRequestToJoinGroup(Guid joinRequestId);
 
