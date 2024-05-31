@@ -27,7 +27,7 @@ namespace GroupsApp.Repositories
 
         public List<User> GetGroupMembers(Guid groupId);
 
-        public void AcceptRequestToJoinGroup(JoinRequest joinRequest)
+        public void AcceptRequestToJoinGroup(JoinRequest joinRequest);
 
 
 
