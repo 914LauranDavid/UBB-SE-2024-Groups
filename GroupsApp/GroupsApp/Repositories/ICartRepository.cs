@@ -8,5 +8,7 @@ namespace GroupsApp.Repositories
         public Cart GetCartById(Guid userId, Guid marketplaceId);
         public void DeleteCart(Cart cart);
         public List<Cart> GetAllCarts();
+        public List<Guid> GetMarketplacePostIdsByUserId(Guid userId);
+
     }
 }

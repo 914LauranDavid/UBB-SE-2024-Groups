@@ -2,7 +2,7 @@
 using GroupsApp.Models;
 using GroupsApp.Repositories;
 
-namespace GroupsApp.Repository
+namespace GroupsApp.Repositories
 {
     public class UserRepository(GroupsAppContext context) : IUserRepository
     {
