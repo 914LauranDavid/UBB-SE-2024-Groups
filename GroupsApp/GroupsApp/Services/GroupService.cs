@@ -20,6 +20,7 @@ namespace GroupsApp.Services
     {
         private GroupsAppContext context;
         private readonly IGroupRepository _groupRepository;
+        private readonly IMembershipRepository _membershipRepository;
 
         public GroupService(GroupRepository groupRepository)
         {
