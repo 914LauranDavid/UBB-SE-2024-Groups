@@ -54,6 +54,17 @@ namespace GroupsApp.Repositories
             _context.SaveChanges();
         }
 
+        public void DeleteEventById(Guid eventId)
+        {
+            Event? foundEvent = _context.Events.Find(eventId);
+            if (foundEvent == null)
+            {
+                throw new Exception("Event not found");
+            }
+            _context.Events.Remove(foundEvent);
+            _context.SaveChanges();
+        }
+
         public List<Event> GetAllEvents()
         {
             return _context.Events.ToList();
