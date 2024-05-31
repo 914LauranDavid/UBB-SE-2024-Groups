@@ -52,7 +52,7 @@ namespace BulldozerServer.Controllers
         {
             try
             {
-                var post = await this.postService.GetMarketplacePostById(id);
+                var post = this.postService.GetMarketplacePostById(id);
                 MarketplacePostDTO marketplacePostDTO = MarketplacePostMapper.MapMarketplacePostToMarketplacePostDTO(post);
                 return Ok(marketplacePostDTO);
             }
@@ -65,14 +65,14 @@ namespace BulldozerServer.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<MarketplacePostDTO>>> GetMarketplacePosts()
         {
-            var result = await postService.GetMarketplacePosts();
+            var result = postService.GetMarketplacePosts();
 
-            if (result == null || result.Value == null)
+            if (result == null)
             {
                 return NotFound();
             }
 
-            var posts = result.Value;
+            var posts = result;
 
             var marketplacePostDTOs = new List<MarketplacePostDTO>();
             foreach (var post in posts)
