@@ -105,34 +105,30 @@ namespace GroupsApp.Services
         //TODO 
         public ICollection<GroupPostDTO> GetGroupPosts(Guid groupId)
         {
-            var posts = context.GroupPosts.Where(post => post.GroupId == groupId).ToList();
-
-            return posts.Select(post => GroupPostMapper.GroupPostToGroupPostDTO(post)).ToList();
+            return this._groupRepository.GetGroupPosts(groupId);
         }
         //TODO 
         public async Task<EntityEntry<Membership>> UpdateMembership(MembershipDTO membershipDTO)
         {
             Guid userId = membershipDTO.UserId;
             Guid groupId = membershipDTO.GroupId;
-
-            if(this._groupRepository.CheckUserInGroup(groupId, userId) == false)
-            {
-                throw new Exception("User doesn't belong to this group");
-
-            }
-
+            
             Membership membership = MembershipMapper.MembershipDTOToMembership(membershipDTO);
-            var updateResult = context.Memberships.Update(membership);
-            await context.SaveChangesAsync();
-            return updateResult;
+            try
+            {
+                return this._groupRepository.UpdateMembership(membership);
+            }
+            catch (error)
+            {
+                throw new Exception(error);
+            }
+      
         }
         //TODO
         public async Task<EntityEntry<JoinRequest>> AddNewRequestToJoinGroup(JoinRequestDTO joinRequestDTO)
         {
             JoinRequest joinRequest = JoinRequestMapper.JoinRequestDTOToJoinRequest(joinRequestDTO);
-            var addResult = context.JoinRequests.Add(joinRequest);
-            await context.SaveChangesAsync();
-            return addResult;
+            return this._groupRepository.CreateJoinRequest(joinRequest);
         }
 
         public async void AcceptRequestToJoinGroup(JoinRequestDTO joinRequestDTO)

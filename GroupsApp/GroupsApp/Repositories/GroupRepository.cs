@@ -145,5 +145,30 @@ namespace GroupsApp.Repositories
             _context.SaveChanges();
             return addedMembership
         }
+
+        public List<GroupPost> GetGroupPosts(Guid groupId)
+        {
+            var posts = _context.GroupPosts.Where(post => post.GroupId == groupId).ToList();
+            return posts.Select(post => GroupPostMapper.GroupPostToGroupPostDTO(post)).ToList();
+        }
+
+        public Membership UpdateMembership(Membership membership)
+        {
+            if(this.CheckUserInGroup(membership.GroupId, membership.UserId) == false)
+            {
+                throw new Exception("User doesn't belong to this group");
+
+            }
+            var updatedMembership = _context.Memberships.Update(membership).Entity;
+            _context.SaveChanges();
+            return updatedMembership;
+        }
+
+        public JoinRequest AddNewRequestToJoinGroup(JoinRequest joinRequest)
+        {
+            JoinRequest addedJoinRequest = _context.JoinRequests.Add(joinRequest).Entity;
+            _context.SaveChanges();
+            return addedJoinRequest;
+        }
     }
 }
