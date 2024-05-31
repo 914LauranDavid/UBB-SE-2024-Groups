@@ -11,6 +11,8 @@ using GroupsApp.Payload.DTO;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using GroupsApp.Repositories;
+using GroupsApp.Mapper;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace GroupsApp.Services
 {
@@ -24,48 +26,50 @@ namespace GroupsApp.Services
             this._groupRepository = groupRepository;
         }
 
-        public async Task<EntityEntry<Group>> CreateGroup(GroupDTO groupDTO)
+        //TODO
+        public Group CreateGroup(GroupDTO groupDTO)
         {
             var group = GroupMapper.GroupDTOToGroup(groupDTO);
+  
             try {
-                var savedGroup = await _groupRepository.AddGroup(group);
+                var savedGroup = this._groupRepository.AddGroup(group);
+                MembershipDTO membershipDTO = new MembershipDTO
+                {
+                    GroupId = group.GroupId,
+                    UserId = group.OwnerId,
+                    JoinDate = DateOnly.FromDateTime(DateTime.Now),
+                    IsAdmin = true,
+                    IsTO = false,
+                    IsBanned = false
+                };
+                this.AddMemberToGroup(membershipDTO);
+
+                return savedGroup;
             }
             catch (Exception error)
             {
-                throw new Exception(erorr);
+                throw new Exception("Error", error);
             }
 
-            MembershipDTO membershipDTO = new MembershipDTO
-            {
-                GroupId = group.GroupId,
-                UserId = group.OwnerId,
-                JoinDate = DateOnly.FromDateTime(DateTime.Now),
-                IsAdmin = true,
-                IsTO = false,
-                IsBanned = false
-            };
-            await AddMemberToGroup(membershipDTO);
-
-            return addResult;
+            
         }
 
-        public async Task<EntityEntry<Group>> UpdateGroup(GroupDTO groupDTO)
+        //TODO
+        public Group UpdateGroup(GroupDTO groupDTO)
         {
             var group = GroupMapper.GroupDTOToGroup(groupDTO);
             try {
-                var updatedGroup = await _groupRepository.UpdateGroup(group);
+                return this._groupRepository.UpdateGroup(group);
             } catch(Exception error)
             {
-                throw new Exception(error);
+                throw new Exception("Error", error);
             }
-            
-            return updatedGroup;
         }
 
-        public async void DeleteGroup(Guid groupId)
+        public void DeleteGroup(Guid groupId)
         {
             try {
-                this._groupRepository.DeleteGroup(groupId);
+                this._groupRepository.DeleteGroupById(groupId);
             }
             catch (Exception error)
             {
@@ -74,7 +78,8 @@ namespace GroupsApp.Services
            
         }
 
-        public async Task<EntityEntry<Membership>> AddMemberToGroup(MembershipDTO membershipDTO)
+        //TODO
+        public Membership AddMemberToGroup(MembershipDTO membershipDTO)
         {
             Guid userId = membershipDTO.UserId;
             Guid groupId = membershipDTO.GroupId;
@@ -97,45 +102,40 @@ namespace GroupsApp.Services
             }
             catch (Exception error)
             {
-                throw new Exception(error);
+                throw new Exception("Error", error);
             }
 
         }
 
-        //TODO 
         public ICollection<GroupPostDTO> GetGroupPosts(Guid groupId)
         {
-            var posts = context.GroupPosts.Where(post => post.GroupId == groupId).ToList();
-
-            return posts.Select(post => GroupPostMapper.GroupPostToGroupPostDTO(post)).ToList();
+            return this._groupRepository.GetGroupPosts(groupId);
         }
         //TODO 
-        public async Task<EntityEntry<Membership>> UpdateMembership(MembershipDTO membershipDTO)
+        public Membership UpdateMembership(MembershipDTO membershipDTO)
         {
             Guid userId = membershipDTO.UserId;
             Guid groupId = membershipDTO.GroupId;
 
-            if(this._groupRepository.CheckUserInGroup(groupId, userId) == false)
+            Membership membership = MembershipMapper.MembershipDTOToMembership(membershipDTO);
+            try
             {
-                throw new Exception("User doesn't belong to this group");
-
+                return this._groupRepository.UpdateMembership(membership);
+            }
+            catch (Exception error)
+            {
+                throw new Exception("Error", error);
             }
 
-            Membership membership = MembershipMapper.MembershipDTOToMembership(membershipDTO);
-            var updateResult = context.Memberships.Update(membership);
-            await context.SaveChangesAsync();
-            return updateResult;
         }
         //TODO
-        public async Task<EntityEntry<JoinRequest>> AddNewRequestToJoinGroup(JoinRequestDTO joinRequestDTO)
+        public JoinRequest AddNewRequestToJoinGroup(JoinRequestDTO joinRequestDTO)
         {
             JoinRequest joinRequest = JoinRequestMapper.JoinRequestDTOToJoinRequest(joinRequestDTO);
-            var addResult = context.JoinRequests.Add(joinRequest);
-            await context.SaveChangesAsync();
-            return addResult;
+            return this._groupRepository.CreateJoinRequest(joinRequest);
         }
 
-        public async void AcceptRequestToJoinGroup(JoinRequestDTO joinRequestDTO)
+        public void AcceptRequestToJoinGroup(JoinRequestDTO joinRequestDTO)
         {
             JoinRequest joinRequest = JoinRequestMapper.JoinRequestDTOToJoinRequest(joinRequestDTO);
             try
@@ -143,7 +143,7 @@ namespace GroupsApp.Services
                 this._groupRepository.AcceptRequestToJoinGroup(joinRequest);
             }catch(Exception error)
             {
-                throw new Exception(error);
+                throw new Exception("Error", error);
             }
         }
 
@@ -151,11 +151,11 @@ namespace GroupsApp.Services
         {
             try
             {
-                this._groupRepository.RejectRequestToJoinGroup(joinRequestId)
+                this._groupRepository.RejectRequestToJoinGroup(joinRequestId);
             }
             catch(Exception error)
             {
-                throw new Exception(error);
+                throw new Exception("Error", error);
             }
         }
         //TODO
@@ -185,7 +185,7 @@ namespace GroupsApp.Services
         public List<User> GetGroupMembers(Guid groupId)
         {
             // Get the Group from the GroupRepository
-            var members = this._groupRepository.GetGroupMembers(Guid groupId);
+            var members = this._groupRepository.GetGroupMembers( groupId);
 
             return members;
         }
@@ -204,25 +204,30 @@ namespace GroupsApp.Services
         public List<Group> GetAllGroupsUserBelongsTo(Guid groupMemberId)
         {
             // Get the GroupMember from the GroupMemberRepository
-            this._groupRepository.GetAllGroupsUserBelongsTo(groupMemberId);
+            return this._groupRepository.GetAllGroupsUserBelongsTo(groupMemberId);
         }
 
         public Group GetGroupById(Guid groupId)
         {
             try
             {
-                var group = this._groupRepository.GetGroupById(groupId)
+                return this._groupRepository.GetGroupById(groupId);
             }catch(Exception error)
             {
-                throw new Exception(error);
+                throw new Exception("Error", error);
             }
-       
-            return group;
+     
         }
 
         public List<GroupDTO> GetAllGroups()
         {
-            return this._groupRepository.GetAllGroups();
+            var groups = this._groupRepository.GetAllGroups();
+            var groupDTOs = new List<GroupDTO>();
+            foreach(var group in groups)
+            {
+                groupDTOs.Add(GroupMapper.GroupToGroupDTO(group));
+            }
+            return groupDTOs;
         }
     }
 }

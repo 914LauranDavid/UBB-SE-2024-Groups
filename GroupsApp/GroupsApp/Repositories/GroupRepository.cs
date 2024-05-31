@@ -1,5 +1,9 @@
-﻿using GroupsApp.Data;
+﻿using BulldozerServer.Mapper;
+using GroupsApp.Data;
+using GroupsApp.Mapper;
 using GroupsApp.Models;
+using GroupsApp.Payload.DTO;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 
 namespace GroupsApp.Repositories
 {
@@ -30,6 +34,17 @@ namespace GroupsApp.Repositories
                 throw new Exception("Group not found");
             }
             _context.Groups.Remove(group);
+            _context.SaveChanges();
+        }
+
+        public void DeleteGroupById(Guid groupId)
+        {
+            Group? foundGroup = _context.Groups.Find(groupId);
+            if (foundGroup == null)
+            {
+                throw new Exception("Group not found");
+            }
+            _context.Groups.Remove(foundGroup);
             _context.SaveChanges();
         }
 
@@ -97,7 +112,8 @@ namespace GroupsApp.Repositories
             _context.SaveChanges();
         }
 
-        public void List<User> GeGroupMembers(Guid groupId){
+        public List<User> GetGroupMembers(Guid groupId)
+        {
             var members = _context.Users.Join(
              _context.Memberships,
              user => user.UserId,
@@ -106,7 +122,7 @@ namespace GroupsApp.Repositories
          .Where(joined => joined.Membership.GroupId == groupId)
          .Select(joined => joined.User)
          .ToList();
-            return members
+            return members;
         }
         
         public bool IsUserInGroup(Guid groupId, Guid groupMemberId)
@@ -143,7 +159,37 @@ namespace GroupsApp.Repositories
         {
             Membership addedMembership = _context.Memberships.Add(membership).Entity;
             _context.SaveChanges();
-            return addedMembership
+            return addedMembership;
+        }
+
+        public List<GroupPostDTO> GetGroupPosts(Guid groupId)
+        {
+            var posts = _context.GroupPosts.Where(post => post.GroupId == groupId).ToList();
+            return posts.Select(post => GroupPostMapper.GroupPostToGroupPostDTO(post)).ToList();
+        }
+
+        public Membership UpdateMembership(Membership membership)
+        {
+            if(this.CheckUserInGroup(membership.GroupId, membership.UserId) == false)
+            {
+                throw new Exception("User doesn't belong to this group");
+
+            }
+            var updatedMembership = _context.Memberships.Update(membership).Entity;
+            _context.SaveChanges();
+            return updatedMembership;
+        }
+
+        public JoinRequest AddNewRequestToJoinGroup(JoinRequest joinRequest)
+        {
+            JoinRequest addedJoinRequest = _context.JoinRequests.Add(joinRequest).Entity;
+            _context.SaveChanges();
+            return addedJoinRequest;
+        }
+
+        public JoinRequest CreateJoinRequest(JoinRequest joinRequest)
+        {
+            throw new NotImplementedException();
         }
     }
 }
