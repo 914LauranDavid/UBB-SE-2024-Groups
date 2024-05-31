@@ -12,8 +12,9 @@
         public float Score { get => score; set => score = value; }
         public string ReviewDescription { get => reviewDescription; set => reviewDescription = value; }
 
+        public User Reviewer { get; set; }
+
         public Event Event { get; set; }
-        public User User { get; set; }
 
         public EventReview(Guid userGUID, Guid eventGUID, float score, string reviewDescription)
         {

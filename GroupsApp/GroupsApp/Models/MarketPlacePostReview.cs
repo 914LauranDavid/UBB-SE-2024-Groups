@@ -1,4 +1,5 @@
-﻿using System;
+﻿using GroupsApp.Models.MarketplacePosts;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -49,5 +50,8 @@ namespace GroupsApp.Models
         public string Content { get => content; set => content = value; }
         public int Rating { get => rating; set => rating = value; }
         public DateOnly PostTime { get => postTime; }
+
+        public MarketplacePost MarketplacePost { get; set; }
+        public User Reviewer { get; set; }
     }
 }

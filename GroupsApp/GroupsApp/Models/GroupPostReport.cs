@@ -46,5 +46,9 @@ namespace GroupsApp.Models
         public Guid PostId { get => postId; }
         public string ReasonForReporting { get => reasonForReporting; set => reasonForReporting = value; }
         public DateTime DateOfReport { get => dateOfReport; set => dateOfReport = value; }
+
+        public User Reporter { get; set; }
+
+        public GroupPost ReportedPost { get; set; }
     }
 }

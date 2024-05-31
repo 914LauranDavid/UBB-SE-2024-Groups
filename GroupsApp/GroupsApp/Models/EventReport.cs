@@ -12,8 +12,8 @@ namespace GroupsApp.Models
         public Guid EventId { get => eventId; set => eventId = value; }
         public ReportType ReportTypeValue { get => reportTypeValue; set => reportTypeValue = value; }
 
+        public User Reporter { get; set; }
         public Event Event { get; set; }
-        public User User { get; set; }
 
         public EventReport(DataRow row)
         {
@@ -26,7 +26,7 @@ namespace GroupsApp.Models
         {
             this.userId = userGUID;
             this.EventId = eventGUID;
-            this.reportTypeValue = reportType;
+            this.reportTypeValue = reportType;                                             
         }
 
         public EventReport(Guid userGUID, Guid eventGUID)
