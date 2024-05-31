@@ -6,10 +6,11 @@ using GroupsApp.Payload.DTO;
 using GroupsApp.Payloads.DTO;
 
 
-namespace GroupsApp.Controllers
+namespace GroupsApp.WPF_Controllers
 {
-    [Route("/[controller]")]
-    public class UserController : Controller
+    [ApiController]
+    [Route("/api/[controller]")]
+    public class UserController : ControllerBase
     {
         private readonly IUserService userService;
 

@@ -5,10 +5,11 @@ using GroupsApp.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Hosting;
 
-namespace BulldozerServer.Controllers
+namespace GroupsApp.WPF_Controllers
 {
-    [Route("/[controller]")]
-    public class MarketPlacePostController : Controller
+    [ApiController]
+    [Route("/api/[controller]")]
+    public class MarketPlacePostController : ControllerBase
     {
         private IPostService postService;
 

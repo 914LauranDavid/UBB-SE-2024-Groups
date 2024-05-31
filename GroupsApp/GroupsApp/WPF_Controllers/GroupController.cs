@@ -4,10 +4,11 @@ using GroupsApp.Payload.DTO;
 using GroupsApp.Services;
 using Microsoft.AspNetCore.Mvc;
 
-namespace GroupsApp.Controllers
+namespace GroupsApp.WPF_Controllers
 {
-    [Route("/group")]
-    public class GroupController : Controller
+    [ApiController]
+    [Route("api/[controller]")]
+    public class GroupController : ControllerBase
     {
         private readonly IGroupService groupService;
 
