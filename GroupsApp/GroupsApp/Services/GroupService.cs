@@ -19,7 +19,8 @@ namespace GroupsApp.Services
     public class GroupService : IGroupService
     {
         private GroupsAppContext context;
-        private readonly GroupRepository _groupRepository;
+        private readonly IGroupRepository _groupRepository;
+        private readonly IMembershipRepository _membershipRepository;
 
         public GroupService(GroupRepository groupRepository)
         {

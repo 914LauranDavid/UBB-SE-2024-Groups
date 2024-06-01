@@ -10,7 +10,6 @@ using GroupsApp.Models;
 using GroupsApp.Payload.DTO;
 using GroupsApp.Payloads.DTO;
 using GroupsApp.Repositories;
-using GroupsApp.Repository;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
@@ -19,13 +18,13 @@ namespace GroupsApp.Services
 {
     public class UserService : IUserService
     {
-        private UserRepository _userRepository;
-        private MarketplacePostRepository _marketplacePostRepository;
-        private CartRepository _cartRepository;
-        private UsersFavoritePostsRepository _usersFavoritePostsRepository;
-        private GroupRepository _groupRepository;
+        private IUserRepository _userRepository;
+        private IMarketplacePostRepository _marketplacePostRepository;
+        private ICartRepository _cartRepository;
+        private IUsersFavouritePostsRepository _usersFavoritePostsRepository;
+        private IGroupRepository _groupRepository;
 
-        public UserService(UserRepository userRepository, MarketplacePostRepository marketplacePostRepository, CartRepository cartRepository, UsersFavoritePostsRepository usersFavoritePostsRepository, GroupRepository groupRepository)
+        public UserService(UserRepository userRepository, MarketplacePostRepository marketplacePostRepository, CartRepository cartRepository, UsersFavouritePostsRepository usersFavoritePostsRepository, GroupRepository groupRepository)
         {
             _userRepository = userRepository;
             _marketplacePostRepository = marketplacePostRepository;

@@ -1,5 +1,7 @@
 ﻿using GroupsApp.Data;
 using GroupsApp.Models;
+using GroupsApp.Repositories;
+using GroupsApp.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
@@ -20,6 +22,30 @@ namespace GroupsApp
             builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
                 .AddEntityFrameworkStores<GroupsAppContext>();
             builder.Services.AddControllersWithViews();
+            builder.Services.AddScoped<IGroupRepository, GroupRepository>();
+            builder.Services.AddScoped<IUserRepository, UserRepository>();
+            builder.Services.AddScoped<IEventRepository, EventRepository>();
+            builder.Services.AddScoped<IUserService, UserService>();
+            builder.Services.AddScoped<IEventService, EventService>();
+            builder.Services.AddScoped<IGroupService, GroupService>();
+            builder.Services.AddScoped<IUserEventRepository, UserEventRepository>();
+            builder.Services.AddScoped<ICartRepository, CartRepository>();
+            builder.Services.AddScoped<IAuctionPostRepository, AuctionPostRepository>();
+            builder.Services.AddScoped<IMarketplacePostRepository, MarketplacePostRepository>();
+            builder.Services.AddScoped<ICommentRepository, CommentRepository>();
+            builder.Services.AddScoped<IUsersFavouritePostsRepository, UsersFavouritePostsRepository>();
+            builder.Services.AddScoped<IDonationPostRepository, DonationPostRepository>();
+            builder.Services.AddScoped<IEventReportRepository, EventReportRepository>();
+            builder.Services.AddScoped<IEventReviewRepository, EventReviewRepository>();
+            builder.Services.AddScoped<IFixedPricePostRepository, FixedPricePostRepository>();
+            builder.Services.AddScoped<IGroupPostReportRepository, GroupPostReportRepository>();
+            builder.Services.AddScoped<IJoinRequestRepository, JoinRequestRepository>();
+            builder.Services.AddScoped<IMembershipRepository, MembershipRepository>();
+            builder.Services.AddScoped<InterestStatusRepository>();
+            builder.Services.AddScoped<IPollAnswerRepository, PollAnswerRepository>();
+            builder.Services.AddScoped<IPollRepository, PollRepository>();
+            builder.Services.AddScoped<IPollOptionRepository, PollOptionRepository>();
+
 
             var app = builder.Build();
 

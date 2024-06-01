@@ -9,5 +9,7 @@ namespace GroupsApp.Repositories
         public Event UpdateEvent(Event marketplaceEvent);
         public Event? GetEventById(Guid id);
         public List<Event> GetAllEvents();
+        public void DeleteEventById(Guid eventId);
+
     }
 }

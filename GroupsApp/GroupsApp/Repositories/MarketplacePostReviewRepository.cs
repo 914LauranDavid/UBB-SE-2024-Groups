@@ -3,33 +3,34 @@ using GroupsApp.Models;
 
 namespace GroupsApp.Repositories
 {
-    public class ReviewRepository(GroupsAppContext context)
+    public class MarketplacePostReviewRepository(GroupsAppContext context): IMarketplacePostReviewRepository
     {
+        /*
         private readonly GroupsAppContext _context = context;
 
-        /*
-        public Review AddReview(Review review)
+        
+        public MarketplacePostReview AddReview(MarketplacePostReview review)
         {
-            Review savedReview = _context.Reviews.Add(review).Entity;
+            MarketplacePostReview savedReview = _context.MarketplacePostReviews.Add(review).Entity;
             _context.SaveChanges();
             return savedReview;
         }
 
-        public Review? GetReviewById(Guid reviewId)
+        public MarketplacePostReview? GetReviewById(Guid reviewId)
         {
-            return _context.Reviews.Find(reviewId);
+            return _context.MarketplacePostReviews.Find(reviewId);
         }
 
-        public Review UpdateReview(Review review)
+        public MarketplacePostReview UpdateReview(MarketplacePostReview review)
         {
-            Review? foundReview = _context.Reviews.Find(review.ReviewId);
+            MarketplacePostReview? foundReview = _context.MarketplacePostReviews.Find(review.ReviewId);
             if (foundReview != null)
             {
                 throw new Exception("Review not found");
             }
             foundReview.Content = review.Content;
             foundReview.Rating = review.Rating;
-            Review updatedReview = _context.Reviews.Update(review).Entity;
+            MarketplacePostReview updatedReview = _context.MarketplacePostReviews.Update(review).Entity;
             _context.SaveChanges();
             return updatedReview;
         }

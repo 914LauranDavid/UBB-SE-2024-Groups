@@ -23,7 +23,12 @@ namespace GroupsApp.Services
 {
     public class EventService : IEventService
     {
-        private readonly EventRepository _eventRepository;
+        private readonly IEventRepository _eventRepository;
+
+        public EventService(IEventRepository eventRepository)
+        {
+            this._eventRepository = eventRepository;
+        }
 
         public void DeleteEventById(Guid id)
         {

@@ -3,7 +3,7 @@ using GroupsApp.Models;
 
 namespace GroupsApp.Repositories
 {
-    public class PollOptionRepository(GroupsAppContext context)
+    public class PollOptionRepository(GroupsAppContext context): IPollOptionRepository
     {
         private readonly GroupsAppContext _context = context;
 

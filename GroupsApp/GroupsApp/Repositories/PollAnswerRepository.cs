@@ -3,8 +3,8 @@ using GroupsApp.Models;
 
 namespace GroupsApp.Repositories
 {
-    public class PollAnswerRepository(GroupsAppContext context)
-{
+    public class PollAnswerRepository(GroupsAppContext context) : IPollAnswerRepository
+    {
         private readonly GroupsAppContext _context = context;
 
         public PollAnswer AddPollAnswer(PollAnswer pollAnswer)
