@@ -1,0 +1,33 @@
+﻿@model List<GroupsApp.Models.MarketplacePostDTO>
+
+@{
+    ViewData["Title"] = "User Cart";
+}
+
+<h1>User Cart</h1>
+
+@if (Model == null || !Model.Any())
+{
+    <p>@ViewBag.Message</p>
+}
+else
+{
+    @foreach (var post in Model)
+    {
+        
+        <h2>@post.Title</h2>
+        // add author
+        <h3>@post.Description</h3>
+        <h4>@post.Price</h4>
+        <div>
+            <img src="@post.MediaContent" />
+        </div>
+        // button needs userId from the cart
+        <div>
+
+            @Html.ActionLink("Delete", "Delete", new { userId = post. })
+        </div>
+        
+        
+    }
+}

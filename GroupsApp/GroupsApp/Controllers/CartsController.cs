@@ -7,152 +7,74 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using GroupsApp.Data;
 using GroupsApp.Models;
+using GroupsApp.Services;
+using GroupsApp.Payloads.DTO;
 
 namespace GroupsApp.Controllers
 {
     public class CartsController : Controller
     {
         private readonly GroupsAppContext _context;
+        private readonly IUserService _userService;
 
-        public CartsController(GroupsAppContext context)
+        public CartsController(GroupsAppContext context, IUserService userService)
         {
             _context = context;
+            _userService = userService;
         }
 
-        // GET: Carts
-        public async Task<IActionResult> Index()
-        {
-            return View(await _context.Cart.ToListAsync());
-        }
 
-        // GET: Carts/Details/5
-        public async Task<IActionResult> Details(Guid? id)
+        // GET: Carts/UserCart/5 
+        public async Task<IActionResult> UserCart(Guid? userId)
         {
-            if (id == null)
+            if (userId == null)
             {
                 return NotFound();
             }
 
-            var cart = await _context.Cart
-                .FirstOrDefaultAsync(m => m.UserId == id);
-            if (cart == null)
+            var postsResult = _userService.GetPostsFromCart((Guid)userId);
+            if (postsResult == null || postsResult.Value == null || !postsResult.Value.Any())
             {
-                return NotFound();
+                ViewBag.Message = "Your cart is empty.";
+                return View(new List<MarketplacePostDTO>());
             }
 
-            return View(cart);
+            return View(postsResult.Value);
         }
 
-        // GET: Carts/Create
-        public IActionResult Create()
-        {
-            return View();
-        }
 
-        // POST: Carts/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("UserId,MarketplacePostId")] Cart cart)
+        // GET: Carts/Delete/5/2
+        public async Task<IActionResult> Delete(Guid? userId, Guid? postId)
         {
-            if (ModelState.IsValid)
-            {
-                cart.UserId = Guid.NewGuid();
-                _context.Add(cart);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
-            }
-            return View(cart);
-        }
-
-        // GET: Carts/Edit/5
-        public async Task<IActionResult> Edit(Guid? id)
-        {
-            if (id == null)
+            if (userId == null || postId == null)
             {
                 return NotFound();
             }
-
-            var cart = await _context.Cart.FindAsync(id);
-            if (cart == null)
-            {
-                return NotFound();
-            }
-            return View(cart);
-        }
-
-        // POST: Carts/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(Guid id, [Bind("UserId,MarketplacePostId")] Cart cart)
-        {
-            if (id != cart.UserId)
-            {
-                return NotFound();
-            }
-
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                    _context.Update(cart);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!CartExists(cart.UserId))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
-            }
-            return View(cart);
-        }
-
-        // GET: Carts/Delete/5
-        public async Task<IActionResult> Delete(Guid? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var cart = await _context.Cart
-                .FirstOrDefaultAsync(m => m.UserId == id);
-            if (cart == null)
-            {
-                return NotFound();
-            }
-
-            return View(cart);
+            
+            return View(new Cart((Guid)userId, (Guid)postId));
         }
 
         // POST: Carts/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(Guid id)
+        public async Task<IActionResult> DeleteConfirmed(Guid? userId, Guid? postId)
         {
-            var cart = await _context.Cart.FindAsync(id);
-            if (cart != null)
+            if (userId == null || postId == null)
             {
-                _context.Cart.Remove(cart);
+                return NotFound();
             }
 
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            try
+            {
+                _userService.RemovePostFromCart((Guid)postId, (Guid)userId);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+
+            return RedirectToAction(nameof(UserCart), new { id = userId });
         }
 
-        private bool CartExists(Guid id)
-        {
-            return _context.Cart.Any(e => e.UserId == id);
-        }
     }
 }
