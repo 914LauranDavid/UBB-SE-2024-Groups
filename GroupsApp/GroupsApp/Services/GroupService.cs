@@ -152,7 +152,7 @@ namespace GroupsApp.Services
         {
             try
             {
-                this._groupRepository.RejectRequestToJoinGroup(joinRequestId);
+                // this._groupRepository.RejectRequestToJoinGroup(joinRequestId);
             }
             catch(Exception error)
             {
@@ -193,19 +193,22 @@ namespace GroupsApp.Services
 
         public bool IsUserInGroup(Guid groupId, Guid groupMemberId)
         {
-            return this._groupRepository.IsUserInGroup(groupId, groupMemberId);
+            return true;
+            //return this._groupRepository.IsUserInGroup(groupId, groupMemberId);
         }
 
         public List<JoinRequest> GetRequestsToJoinFromGroup(Guid groupId)
         {
+            return new List<JoinRequest>();
             // Get the Group from the GroupRepository
-            return this._groupRepository.GetRequestsToJoinFromGroup(groupId);
+            //return this._groupRepository.GetRequestsToJoinFromGroup(groupId);
         }
 
         public List<Group> GetAllGroupsUserBelongsTo(Guid groupMemberId)
         {
+            return new List<Group>();
             // Get the GroupMember from the GroupMemberRepository
-            return this._groupRepository.GetAllGroupsUserBelongsTo(groupMemberId);
+            // return this._groupRepository.GetAllGroupsUserBelongsTo(groupMemberId);
         }
 
         public Group GetGroupById(Guid groupId)

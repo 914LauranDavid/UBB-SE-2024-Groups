@@ -1,0 +1,65 @@
+﻿@model IEnumerable<GroupsApp.Models.GroupPost>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Description)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.MediaContent)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.IsPinned)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.AdminOnly)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Author)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Group)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Description)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.MediaContent)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.IsPinned)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.AdminOnly)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Author.UserId)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Group.GroupId)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.GroupPostId">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.GroupPostId">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.GroupPostId">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
