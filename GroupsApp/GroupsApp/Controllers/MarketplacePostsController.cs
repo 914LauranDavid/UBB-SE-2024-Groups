@@ -15,15 +15,12 @@ namespace GroupsApp.Controllers
 {
     public class MarketplacePostsController : Controller
     {
-        private readonly GroupsAppContext _context;
         private readonly IPostService postService;
         private readonly IGroupService groupService;
         private readonly IUserService userService;
 
-        public MarketplacePostsController(GroupsAppContext context, IPostService postService, IGroupService groupService,
-            IUserService userService)
+        public MarketplacePostsController(IPostService postService, IGroupService groupService, IUserService userService)
         {
-            _context = context;
             this.postService = postService;
             this.groupService = groupService;
             this.userService = userService;
@@ -32,8 +29,6 @@ namespace GroupsApp.Controllers
         // GET: MarketplacePosts
         public async Task<IActionResult> Index()
         {
-            //var groupsAppContext = _context.MarketplacePosts.Include(m => m.Author).Include(m => m.Group);
-            //return View(await groupsAppContext.ToListAsync());
             return View(postService.GetMarketplacePosts());
         }
 
@@ -47,10 +42,6 @@ namespace GroupsApp.Controllers
 
             var marketplacePost = postService.GetMarketplacePostById(id.Value);
 
-            //var marketplacePost = await _context.MarketplacePosts
-            //    .Include(m => m.Author)
-            //    .Include(m => m.Group)
-            //    .FirstOrDefaultAsync(m => m.MarketplacePostId == id);
             if (marketplacePost == null)
             {
                 return NotFound();
@@ -62,8 +53,12 @@ namespace GroupsApp.Controllers
         // GET: MarketplacePosts/Create
         public IActionResult Create()
         {
-            ViewData["AuthorId"] = new SelectList(_context.Users, "UserId", "UserId");
-            ViewData["GroupId"] = new SelectList(_context.Groups, "GroupId", "GroupId");
+            var users = userService.GetUsers().Value;
+            var groups = groupService.GetAllGroups();
+
+            ViewData["AuthorId"] = new SelectList(users, "UserId", "UserId");
+            ViewData["GroupId"] = new SelectList(groups, "GroupId", "GroupId");
+
             return View();
         }
 
@@ -80,8 +75,6 @@ namespace GroupsApp.Controllers
 
             postService.AddMarketplacePost(MarketplacePostMapper.MapMarketplacePostToMarketplacePostDTO(marketplacePost));  // TODO avoid this
 
-            //_context.Add(marketplacePost);
-            //await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
@@ -93,10 +86,8 @@ namespace GroupsApp.Controllers
                 return NotFound();
             }
 
-            var marketplacePost = await _context.MarketplacePosts
-                .Include(m => m.Author)
-                .Include(m => m.Group)
-                .FirstOrDefaultAsync(m => m.MarketplacePostId == id);
+            var marketplacePost = postService.GetMarketplacePostById(id.Value);
+
             if (marketplacePost == null)
             {
                 return NotFound();
@@ -110,19 +101,18 @@ namespace GroupsApp.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(Guid id)
         {
-            var marketplacePost = await _context.MarketplacePosts.FindAsync(id);
+            var marketplacePost = postService.GetMarketplacePostById(id);
             if (marketplacePost != null)
             {
-                _context.MarketplacePosts.Remove(marketplacePost);
+                postService.RemoveMarketplacePost(MarketplacePostMapper.MapMarketplacePostToMarketplacePostDTO(marketplacePost));
             }
 
-            await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
         private bool MarketplacePostExists(Guid id)
         {
-            return _context.MarketplacePosts.Any(e => e.MarketplacePostId == id);
+            return postService.GetMarketplacePostById(id) != null;
         }
     }
 }

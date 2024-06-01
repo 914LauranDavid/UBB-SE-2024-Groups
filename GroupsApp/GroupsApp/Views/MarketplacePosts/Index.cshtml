@@ -4,10 +4,10 @@
     ViewData["Title"] = "Index";
 }
 
-<h1>Index</h1>
+<h1>Welcome to the Marketplace!</h1>
 
 <p>
-    <a asp-action="Create">Create New</a>
+    <a asp-action="Create">Add product</a>
 </p>
 <table class="table">
     <thead>
@@ -19,7 +19,6 @@
                 @Html.DisplayNameFor(model => model.Description)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.MediaContent)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Location)
