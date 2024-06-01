@@ -23,7 +23,7 @@ namespace GroupsApp
                 .AddEntityFrameworkStores<GroupsAppContext>();
             builder.Services.AddControllersWithViews();
             builder.Services.AddScoped<IGroupRepository, GroupRepository>();
-            //builder.Services.AddScoped<IUserRepository, UserRepository>();
+            builder.Services.AddScoped<IUserRepository, UserRepository>();
             builder.Services.AddScoped<IEventRepository, EventRepository>();
             //builder.Services.AddScoped<IUserService, UserService>();
             builder.Services.AddScoped<IEventService, EventService>();

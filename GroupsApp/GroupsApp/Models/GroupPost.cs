@@ -38,7 +38,7 @@ namespace GroupsApp.Models
         }
 
         [Key]
-        public Guid GroupPostId { get => groupPostId; }
+        public Guid GroupPostId { get => groupPostId; set => groupPostId = value; }
         public Guid? AuthorId => authorId;
 
         public Guid GroupId => groupId;

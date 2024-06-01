@@ -7,23 +7,30 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using GroupsApp.Data;
 using GroupsApp.Models;
+using GroupsApp.Services;
 
 namespace GroupsApp.Controllers
 {
     public class GroupPostsController : Controller
     {
         private readonly GroupsAppContext _context;
+        private readonly IGroupService _groupService;
+        private Guid _currentGroupId;
 
-        public GroupPostsController(GroupsAppContext context)
+        public GroupPostsController(GroupsAppContext context, IGroupService groupService, Guid currentGroupId)
         {
             _context = context;
+            this._groupService = groupService;
+            this._currentGroupId = currentGroupId;
         }
 
         // GET: GroupPosts
         public async Task<IActionResult> Index()
         {
-            var groupsAppContext = _context.GroupPosts.Include(g => g.Author).Include(g => g.Group);
-            return View(await groupsAppContext.ToListAsync());
+            //var groupsAppContext = _context.GroupPosts.Include(g => g.Author).Include(g => g.Group);
+            //return View(await groupsAppContext.ToListAsync());
+            var groupPosts = this._groupService.GetGroupPosts(_currentGroupId);
+            return View(groupPosts);
         }
 
         // GET: GroupPosts/Details/5
