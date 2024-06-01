@@ -1,0 +1,62 @@
+﻿@model IEnumerable<GroupsApp.Models.Poll>
+
+@{
+    ViewData["Title"] = "Polls";
+}
+
+<h1>Polls</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Description)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.EndDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.IsPinned)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.IsVisible)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.IsMultipleChoice)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.IsAnonymous)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Description)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.EndDate)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.IsPinned)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.IsVisible)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.IsMultipleChoice)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.IsAnonymous)
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
