@@ -61,7 +61,7 @@ namespace GroupsApp.Models
             this.isAnonymous = isAnonymous;
         }
         [Key]
-        public Guid PollId { get => pollId; }
+        public Guid PollId { get => pollId; set => pollId = value; }
         public Guid GroupId { get => groupId; }
         public string Description { get => description; set => description = value; }
         public DateOnly CreationDate { get => creationDate; }

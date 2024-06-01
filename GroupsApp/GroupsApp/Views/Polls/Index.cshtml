@@ -60,11 +60,6 @@
             <td>
                 @Html.DisplayFor(modelItem => item.Group.GroupId)
             </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.PollId">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.PollId">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.PollId">Delete</a>
-            </td>
         </tr>
 }
     </tbody>

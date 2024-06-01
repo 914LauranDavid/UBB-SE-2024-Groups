@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using GroupsApp.Data;
 using GroupsApp.Models;
+using System.Text.RegularExpressions;
 
 namespace GroupsApp.Controllers
 {
@@ -42,7 +43,6 @@ namespace GroupsApp.Controllers
         // GET: Polls/Create
         public IActionResult Create()
         {
-            ViewData["GroupId"] = new SelectList(_context.Groups, "GroupId", "GroupId");
             return View();
         }
 
@@ -51,16 +51,19 @@ namespace GroupsApp.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("PollId,GroupId,Description,EndDate,IsPinned,IsVisible,IsMultipleChoice,IsAnonymous")] Poll poll)
+        public async Task<IActionResult> Create([Bind("GroupId,Description,EndDate,IsPinned,IsVisible,IsMultipleChoice,IsAnonymous")] Poll poll)
         {
             if (ModelState.IsValid)
             {
                 poll.PollId = Guid.NewGuid();
-                _context.Add(poll);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+
+                // add poll
+                _pollService.AddNewPoll(PollMapper.MapPollToPollDTO(poll));
+
+                return RedirectToAction(nameof(GroupPolls), new { groupId = poll.GroupId });
+
             }
-            ViewData["GroupId"] = new SelectList(_context.Groups, "GroupId", "GroupId", poll.GroupId);
+
             return View(poll);
         }
 
