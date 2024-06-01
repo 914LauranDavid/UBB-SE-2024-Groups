@@ -22,7 +22,7 @@ namespace GroupsApp.Services
         private readonly IGroupRepository _groupRepository;
         private readonly IMembershipRepository _membershipRepository;
 
-        public GroupService(GroupRepository groupRepository)
+        public GroupService(IGroupRepository groupRepository)
         {
             this._groupRepository = groupRepository;
         }
@@ -152,7 +152,7 @@ namespace GroupsApp.Services
         {
             try
             {
-                this._groupRepository.RejectRequestToJoinGroup(joinRequestId);
+                //this._groupRepository.RejectRequestToJoinGroup(joinRequestId);
             }
             catch(Exception error)
             {
@@ -193,19 +193,22 @@ namespace GroupsApp.Services
 
         public bool IsUserInGroup(Guid groupId, Guid groupMemberId)
         {
-            return this._groupRepository.IsUserInGroup(groupId, groupMemberId);
+            //return this._groupRepository.IsUserInGroup(groupId, groupMemberId);
+            return false;
         }
 
         public List<JoinRequest> GetRequestsToJoinFromGroup(Guid groupId)
         {
             // Get the Group from the GroupRepository
-            return this._groupRepository.GetRequestsToJoinFromGroup(groupId);
+            //return this._groupRepository.GetRequestsToJoinFromGroup(groupId);
+            return null;
         }
 
         public List<Group> GetAllGroupsUserBelongsTo(Guid groupMemberId)
         {
             // Get the GroupMember from the GroupMemberRepository
-            return this._groupRepository.GetAllGroupsUserBelongsTo(groupMemberId);
+            //return this._groupRepository.GetAllGroupsUserBelongsTo(groupMemberId);
+            return null;
         }
 
         public Group GetGroupById(Guid groupId)
@@ -217,7 +220,6 @@ namespace GroupsApp.Services
             {
                 throw new Exception("Error", error);
             }
-     
         }
 
         public List<GroupDTO> GetAllGroups()

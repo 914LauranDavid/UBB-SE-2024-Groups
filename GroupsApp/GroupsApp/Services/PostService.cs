@@ -20,9 +20,9 @@ namespace GroupsApp.Services
 {
     public class PostService : IPostService
     {
-        private readonly MarketplacePostRepository _marketplacePostRepository;
+        private readonly IMarketplacePostRepository _marketplacePostRepository;
 
-        public PostService(MarketplacePostRepository marketplacePostRepository)
+        public PostService(IMarketplacePostRepository marketplacePostRepository)
         {
             _marketplacePostRepository = marketplacePostRepository;
         }
