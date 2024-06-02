@@ -87,7 +87,7 @@ namespace GroupsApp.Controllers
             var authorDictionary = new Dictionary<Guid, string>();
             foreach (var post in posts)
             {
-                var authorResult = _userService.GetUserById(post.AuthorId);
+                ActionResult<User> authorResult = _userService.GetUserById((Guid)post.AuthorId);
                 if (authorResult != null && authorResult.Value != null)
                 {
                     authorDictionary[post.MarketplacePostId] = authorResult.Value.Username;

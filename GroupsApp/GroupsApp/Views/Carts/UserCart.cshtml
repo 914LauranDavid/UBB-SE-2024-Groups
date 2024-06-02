@@ -1,4 +1,4 @@
-﻿@model List<GroupsApp.Models.MarketplacePostDTO>
+﻿@model List<GroupsApp.Payloads.DTO.MarketplacePostDTO>
 
 @{
     ViewData["Title"] = "User Cart";
@@ -16,9 +16,8 @@ else
     {
         
         <h2>@post.Title</h2>
-        <h3>@(authorDictionary != null && authorDictionary.ContainsKey(post.MarketplacePostId) ? authorDictionary[post.MarketplacePostId] : "Unknown Author")</h3>
+        <h3>@(ViewBag.AuthorDictionary != null && ViewBag.AuthorDictionary.ContainsKey(post.MarketplacePostId) ? ViewBag.AuthorDictionary[post.MarketplacePostId] : "Unknown Author")</h3>
         <h3>@post.Description</h3>
-        <h4>@post.Price</h4>
         <div>
             <img src="@post.MediaContent" />
         </div>
