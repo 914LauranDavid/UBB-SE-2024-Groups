@@ -22,7 +22,7 @@ namespace GroupsApp.Services
         private readonly IGroupRepository _groupRepository;
         private readonly IMembershipRepository _membershipRepository;
 
-        public GroupService(GroupRepository groupRepository)
+        public GroupService(IGroupRepository groupRepository)
         {
             this._groupRepository = groupRepository;
         }
@@ -150,14 +150,16 @@ namespace GroupsApp.Services
 
         public async void RejectRequestToJoinGroup(Guid joinRequestId)
         {
-            try
-            {
-                this._groupRepository.RejectRequestToJoinGroup(joinRequestId);
-            }
-            catch(Exception error)
-            {
-                throw new Exception("Error", error);
-            }
+            // TODO RejectRequestToJoinGroup in GroupRepository
+
+            //try
+            //{
+            //    this._groupRepository.RejectRequestToJoinGroup(joinRequestId);
+            //}
+            //catch(Exception error)
+            //{
+            //    throw new Exception("Error", error);
+            //}
         }
         //TODO
         public void CreateNewPostOnGroupChat(Guid groupId, Guid groupMemberId, string postContent, string postImage)
@@ -193,19 +195,31 @@ namespace GroupsApp.Services
 
         public bool IsUserInGroup(Guid groupId, Guid groupMemberId)
         {
-            return this._groupRepository.IsUserInGroup(groupId, groupMemberId);
+            return true;
+
+            // TODO IsUserInGroup in GroupRepository
+
+            //return this._groupRepository.IsUserInGroup(groupId, groupMemberId);
         }
 
         public List<JoinRequest> GetRequestsToJoinFromGroup(Guid groupId)
         {
+            return new List<JoinRequest>();
+
+            // TODO GetRequestsToJoinFromGroup in GroupRepository
+
             // Get the Group from the GroupRepository
-            return this._groupRepository.GetRequestsToJoinFromGroup(groupId);
+            //return this._groupRepository.GetRequestsToJoinFromGroup(groupId);
         }
 
         public List<Group> GetAllGroupsUserBelongsTo(Guid groupMemberId)
         {
+            return new List<Group>();
+
+            // TODO GetAllGroupsUserBelongsTo in GroupRepository
+
             // Get the GroupMember from the GroupMemberRepository
-            return this._groupRepository.GetAllGroupsUserBelongsTo(groupMemberId);
+            //return this._groupRepository.GetAllGroupsUserBelongsTo(groupMemberId);
         }
 
         public Group GetGroupById(Guid groupId)

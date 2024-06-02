@@ -25,9 +25,6 @@ namespace GroupsApp
             builder.Services.AddScoped<IGroupRepository, GroupRepository>();
             builder.Services.AddScoped<IUserRepository, UserRepository>();
             builder.Services.AddScoped<IEventRepository, EventRepository>();
-            builder.Services.AddScoped<IUserService, UserService>();
-            builder.Services.AddScoped<IEventService, EventService>();
-            builder.Services.AddScoped<IGroupService, GroupService>();
             builder.Services.AddScoped<IUserEventRepository, UserEventRepository>();
             builder.Services.AddScoped<ICartRepository, CartRepository>();
             builder.Services.AddScoped<IAuctionPostRepository, AuctionPostRepository>();
@@ -41,10 +38,14 @@ namespace GroupsApp
             builder.Services.AddScoped<IGroupPostReportRepository, GroupPostReportRepository>();
             builder.Services.AddScoped<IJoinRequestRepository, JoinRequestRepository>();
             builder.Services.AddScoped<IMembershipRepository, MembershipRepository>();
+            builder.Services.AddScoped<ICartRepository, CartRepository>();
             builder.Services.AddScoped<InterestStatusRepository>();
             builder.Services.AddScoped<IPollAnswerRepository, PollAnswerRepository>();
             builder.Services.AddScoped<IPollRepository, PollRepository>();
             builder.Services.AddScoped<IPollOptionRepository, PollOptionRepository>();
+            builder.Services.AddScoped<IUserService, UserService>();
+            builder.Services.AddScoped<IEventService, EventService>();
+            builder.Services.AddScoped<IGroupService, GroupService>();
 
 
             var app = builder.Build();
