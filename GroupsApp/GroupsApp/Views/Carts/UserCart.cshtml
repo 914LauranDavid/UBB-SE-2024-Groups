@@ -25,7 +25,7 @@ else
         // button needs userId from the cart
         <div>
 
-            @Html.ActionLink("Delete", "Delete", new { userId = post. })
+            @Html.ActionLink("Delete", "Delete", new { cartOwnerId = ViewBag.CartOwnerId, idOfPostToRemove = @post.MarketplacePostId })
         </div>
         
         

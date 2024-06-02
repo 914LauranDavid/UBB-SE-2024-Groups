@@ -25,14 +25,16 @@ namespace GroupsApp.Controllers
 
 
         // GET: Carts/UserCart/5 
-        public async Task<IActionResult> UserCart(Guid? userId)
+        public async Task<IActionResult> UserCart(Guid? cartOwnerId)
         {
-            if (userId == null)
+            if (cartOwnerId == null)
             {
                 return NotFound();
             }
 
-            var postsResult = _userService.GetPostsFromCart((Guid)userId);
+            ViewBag.CartOwnerId = cartOwnerId;
+
+            var postsResult = _userService.GetPostsFromCart((Guid)cartOwnerId);
             if (postsResult == null || postsResult.Value == null || !postsResult.Value.Any())
             {
                 ViewBag.Message = "Your cart is empty.";
@@ -44,36 +46,36 @@ namespace GroupsApp.Controllers
 
 
         // GET: Carts/Delete/5/2
-        public async Task<IActionResult> Delete(Guid? userId, Guid? postId)
+        public async Task<IActionResult> Delete(Guid? cartOwnerId, Guid? idOfPostToRemove)
         {
-            if (userId == null || postId == null)
+            if (cartOwnerId == null || idOfPostToRemove == null)
             {
                 return NotFound();
             }
             
-            return View(new Cart((Guid)userId, (Guid)postId));
+            return View(new Cart((Guid)cartOwnerId, (Guid)idOfPostToRemove));
         }
 
         // POST: Carts/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(Guid? userId, Guid? postId)
+        public async Task<IActionResult> DeleteConfirmed(Guid? cartOwnerId, Guid? idOfPostToRemove)
         {
-            if (userId == null || postId == null)
+            if (cartOwnerId == null || idOfPostToRemove == null)
             {
                 return NotFound();
             }
 
             try
             {
-                _userService.RemovePostFromCart((Guid)postId, (Guid)userId);
+                _userService.RemovePostFromCart((Guid)idOfPostToRemove, (Guid)cartOwnerId);
             }
             catch (Exception ex)
             {
                 return BadRequest(ex.Message);
             }
 
-            return RedirectToAction(nameof(UserCart), new { id = userId });
+            return RedirectToAction(nameof(UserCart), new { cartOwnerId = cartOwnerId });
         }
 
     }
