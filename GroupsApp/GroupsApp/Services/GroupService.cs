@@ -231,7 +231,6 @@ namespace GroupsApp.Services
             {
                 throw new Exception("Error", error);
             }
-     
         }
 
         public List<GroupDTO> GetAllGroups()

@@ -24,7 +24,7 @@ namespace GroupsApp.Services
         private IUsersFavouritePostsRepository _usersFavoritePostsRepository;
         private IGroupRepository _groupRepository;
 
-        public UserService(IUserRepository userRepository, IMarketplacePostRepository marketplacePostRepository, ICartRepository cartRepository, 
+        public UserService(IUserRepository userRepository, IMarketplacePostRepository marketplacePostRepository, ICartRepository cartRepository,
             IUsersFavouritePostsRepository usersFavoritePostsRepository, IGroupRepository groupRepository)
         {
             _userRepository = userRepository;
