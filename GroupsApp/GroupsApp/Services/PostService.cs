@@ -20,9 +20,9 @@ namespace GroupsApp.Services
 {
     public class PostService : IPostService
     {
-        private readonly MarketplacePostRepository _marketplacePostRepository;
+        private readonly IMarketplacePostRepository _marketplacePostRepository;
 
-        public PostService(MarketplacePostRepository marketplacePostRepository)
+        public PostService(IMarketplacePostRepository marketplacePostRepository)
         {
             _marketplacePostRepository = marketplacePostRepository;
         }
@@ -41,12 +41,12 @@ namespace GroupsApp.Services
         public  void RemoveMarketplacePost(MarketplacePostDTO marketplacePostDTO)
         {
             var marketplacePost = MarketplacePostMapper.MapMarketplacePostDTOToMarketplacePost(marketplacePostDTO);
-            var postToDelete = _marketplacePostRepository.GetMarketplacePostById(marketplacePost.MarketplacePostId);
+            var postToDelete = _marketplacePostRepository.GetMarketplacePostById(marketplacePostDTO.MarketplacePostId);
             if (postToDelete == null)
             {
                 throw new Exception("Post doesn't exist!");
             }
-             _marketplacePostRepository.DeleteMarketplacePost(marketplacePost.MarketplacePostId);
+             _marketplacePostRepository.DeleteMarketplacePost(marketplacePostDTO.MarketplacePostId);
             // await _marketplacePostRepository.SaveChangesAsync();
         }
         public MarketplacePost GetMarketplacePostById(Guid id)
