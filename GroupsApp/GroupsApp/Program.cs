@@ -46,6 +46,9 @@ namespace GroupsApp
             builder.Services.AddScoped<IPollAnswerRepository, PollAnswerRepository>();
             builder.Services.AddScoped<IPollRepository, PollRepository>();
             builder.Services.AddScoped<IPollOptionRepository, PollOptionRepository>();
+            builder.Services.AddScoped<IUserService, UserService>();
+            builder.Services.AddScoped<IEventService, EventService>();
+            builder.Services.AddScoped<IGroupService, GroupService>();
 
 
             var app = builder.Build();
