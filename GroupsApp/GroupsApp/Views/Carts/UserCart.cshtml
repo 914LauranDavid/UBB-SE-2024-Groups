@@ -16,18 +16,16 @@ else
     {
         
         <h2>@post.Title</h2>
-        // add author
+        <h3>@(authorDictionary != null && authorDictionary.ContainsKey(post.MarketplacePostId) ? authorDictionary[post.MarketplacePostId] : "Unknown Author")</h3>
         <h3>@post.Description</h3>
         <h4>@post.Price</h4>
         <div>
             <img src="@post.MediaContent" />
         </div>
-        // button needs userId from the cart
         <div>
 
             @Html.ActionLink("Delete", "Delete", new { cartOwnerId = ViewBag.CartOwnerId, idOfPostToRemove = @post.MarketplacePostId })
         </div>
-        
         
     }
 }

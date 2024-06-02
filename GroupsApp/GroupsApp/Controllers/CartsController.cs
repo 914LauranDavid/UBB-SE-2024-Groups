@@ -17,6 +17,8 @@ namespace GroupsApp.Controllers
         private readonly GroupsAppContext _context;
         private readonly IUserService _userService;
 
+        const string UNKNOWN_AUTHOR = "Unknown Author";
+
         public CartsController(GroupsAppContext context, IUserService userService)
         {
             _context = context;
@@ -38,9 +40,11 @@ namespace GroupsApp.Controllers
             if (postsResult == null || postsResult.Value == null || !postsResult.Value.Any())
             {
                 ViewBag.Message = "Your cart is empty.";
+                ViewBag.AuthorDictionary = new Dictionary<Guid, string>();
                 return View(new List<MarketplacePostDTO>());
             }
 
+            ViewBag.AuthorDictionary = GetAuthorDictionary(postsResult.Value);
             return View(postsResult.Value);
         }
 
@@ -78,5 +82,23 @@ namespace GroupsApp.Controllers
             return RedirectToAction(nameof(UserCart), new { cartOwnerId = cartOwnerId });
         }
 
+        private Dictionary<Guid, string> GetAuthorDictionary(IEnumerable<MarketplacePostDTO> posts)
+        {
+            var authorDictionary = new Dictionary<Guid, string>();
+            foreach (var post in posts)
+            {
+                var authorResult = _userService.GetUserById(post.AuthorId);
+                if (authorResult != null && authorResult.Value != null)
+                {
+                    authorDictionary[post.MarketplacePostId] = authorResult.Value.Username;
+                }
+                else
+                {
+                    authorDictionary[post.MarketplacePostId] = UNKNOWN_AUTHOR;
+                }
+            }
+
+            return authorDictionary;
+        }
     }
 }
