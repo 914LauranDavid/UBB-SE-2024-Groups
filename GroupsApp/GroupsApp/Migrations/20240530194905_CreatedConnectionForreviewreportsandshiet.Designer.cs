@@ -4,6 +4,7 @@ using GroupsApp.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace GroupsApp.Migrations
 {
     [DbContext(typeof(GroupsAppContext))]
-    partial class GroupsAppContextModelSnapshot : ModelSnapshot
+    [Migration("20240530194905_CreatedConnectionForreviewreportsandshiet")]
+    partial class CreatedConnectionForreviewreportsandshiet
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -22,64 +25,19 @@ namespace GroupsApp.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("EventUser", b =>
-                {
-                    b.Property<Guid>("EventsEventId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("UsersUserId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("EventsEventId", "UsersUserId");
-
-                    b.HasIndex("UsersUserId");
-
-                    b.ToTable("EventUser");
-                });
-
             modelBuilder.Entity("GroupsApp.Models.Cart", b =>
                 {
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<Guid>("MarketplacePostId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("MarketplacePostId1")
+                    b.Property<Guid>("UserId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("UserId1")
-                        .HasColumnType("uniqueidentifier");
+                    b.HasKey("MarketplacePostId", "UserId");
 
-                    b.HasKey("UserId", "MarketplacePostId");
-
-                    b.HasIndex("MarketplacePostId");
-
-                    b.HasIndex("MarketplacePostId1");
-
-                    b.HasIndex("UserId1");
+                    b.HasIndex("UserId");
 
                     b.ToTable("Cart");
-                });
-
-            modelBuilder.Entity("GroupsApp.Models.Comment", b =>
-                {
-                    b.Property<Guid>("CommentId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid?>("CommentId1")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Content")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("CommentId");
-
-                    b.HasIndex("CommentId1");
-
-                    b.ToTable("Comments");
                 });
 
             modelBuilder.Entity("GroupsApp.Models.Event", b =>
@@ -319,17 +277,6 @@ namespace GroupsApp.Migrations
                     b.ToTable("GroupPostReports");
                 });
 
-            modelBuilder.Entity("GroupsApp.Models.InterestStatus", b =>
-                {
-                    b.Property<Guid>("InterestStatusId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("InterestStatusId");
-
-                    b.ToTable("InterestStatuses");
-                });
-
             modelBuilder.Entity("GroupsApp.Models.JoinRequest", b =>
                 {
                     b.Property<Guid>("JoinRequestId")
@@ -351,7 +298,7 @@ namespace GroupsApp.Migrations
                     b.ToTable("JoinRequests");
                 });
 
-            modelBuilder.Entity("GroupsApp.Models.MarketplacePostReview", b =>
+            modelBuilder.Entity("GroupsApp.Models.MarketPlacePostReview", b =>
                 {
                     b.Property<Guid>("ReviewId")
                         .ValueGeneratedOnAdd()
@@ -376,7 +323,7 @@ namespace GroupsApp.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("MarketplacePostReviews");
+                    b.ToTable("MarketPlacePostReviews");
                 });
 
             modelBuilder.Entity("GroupsApp.Models.MarketplacePosts.MarketplacePost", b =>
@@ -589,15 +536,15 @@ namespace GroupsApp.Migrations
 
             modelBuilder.Entity("GroupsApp.Models.UsersFavoritePosts", b =>
                 {
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<Guid>("MarketplacePostId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.HasKey("UserId", "MarketplacePostId");
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
 
-                    b.HasIndex("MarketplacePostId");
+                    b.HasKey("MarketplacePostId", "UserId");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("UsersFavoritePosts");
                 });
@@ -649,21 +596,6 @@ namespace GroupsApp.Migrations
                     b.HasDiscriminator().HasValue("Auction");
                 });
 
-            modelBuilder.Entity("EventUser", b =>
-                {
-                    b.HasOne("GroupsApp.Models.Event", null)
-                        .WithMany()
-                        .HasForeignKey("EventsEventId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("GroupsApp.Models.User", null)
-                        .WithMany()
-                        .HasForeignKey("UsersUserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
             modelBuilder.Entity("GroupsApp.Models.Cart", b =>
                 {
                     b.HasOne("GroupsApp.Models.MarketplacePosts.MarketplacePost", null)
@@ -672,34 +604,11 @@ namespace GroupsApp.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("GroupsApp.Models.MarketplacePosts.MarketplacePost", "MarketplacePost")
-                        .WithMany()
-                        .HasForeignKey("MarketplacePostId1")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("GroupsApp.Models.User", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
-
-                    b.HasOne("GroupsApp.Models.User", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId1")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("MarketplacePost");
-
-                    b.Navigation("User");
-                });
-
-            modelBuilder.Entity("GroupsApp.Models.Comment", b =>
-                {
-                    b.HasOne("GroupsApp.Models.Comment", null)
-                        .WithMany("Replies")
-                        .HasForeignKey("CommentId1");
                 });
 
             modelBuilder.Entity("GroupsApp.Models.Event", b =>
@@ -847,7 +756,7 @@ namespace GroupsApp.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("GroupsApp.Models.MarketplacePostReview", b =>
+            modelBuilder.Entity("GroupsApp.Models.MarketPlacePostReview", b =>
                 {
                     b.HasOne("GroupsApp.Models.MarketplacePosts.MarketplacePost", "MarketplacePost")
                         .WithMany("Reviews")
@@ -945,21 +854,17 @@ namespace GroupsApp.Migrations
 
             modelBuilder.Entity("GroupsApp.Models.UserEvent", b =>
                 {
-                    b.HasOne("GroupsApp.Models.Event", "Event")
+                    b.HasOne("GroupsApp.Models.Event", null)
                         .WithMany()
                         .HasForeignKey("EventId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("GroupsApp.Models.User", "User")
+                    b.HasOne("GroupsApp.Models.User", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("Event");
-
-                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("GroupsApp.Models.UsersFavoritePosts", b =>
@@ -975,11 +880,6 @@ namespace GroupsApp.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
-                });
-
-            modelBuilder.Entity("GroupsApp.Models.Comment", b =>
-                {
-                    b.Navigation("Replies");
                 });
 
             modelBuilder.Entity("GroupsApp.Models.Event", b =>

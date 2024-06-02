@@ -1,5 +1,7 @@
 ﻿using GroupsApp.Data;
 using GroupsApp.Models;
+using GroupsApp.Repositories;
+using GroupsApp.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
@@ -14,15 +16,37 @@ namespace GroupsApp
             builder.Services.AddDbContext<GroupsAppContext>(options =>
                 options.UseSqlServer(builder.Configuration.GetConnectionString("GroupsAppContext") ?? throw new InvalidOperationException("Connection string 'GroupsAppContext' not found.")));
 
-            // Add services to the container.
-            var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
-            builder.Services.AddDbContext<ApplicationDbContext>(options =>
-                options.UseSqlServer(connectionString));
+
             builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
             builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
-                .AddEntityFrameworkStores<ApplicationDbContext>();
+                .AddEntityFrameworkStores<GroupsAppContext>();
             builder.Services.AddControllersWithViews();
+            builder.Services.AddScoped<IGroupRepository, GroupRepository>();
+            builder.Services.AddScoped<IUserRepository, UserRepository>();
+            builder.Services.AddScoped<IEventRepository, EventRepository>();
+            builder.Services.AddScoped<IUserEventRepository, UserEventRepository>();
+            builder.Services.AddScoped<ICartRepository, CartRepository>();
+            builder.Services.AddScoped<IAuctionPostRepository, AuctionPostRepository>();
+            builder.Services.AddScoped<IMarketplacePostRepository, MarketplacePostRepository>();
+            builder.Services.AddScoped<ICommentRepository, CommentRepository>();
+            builder.Services.AddScoped<IUsersFavouritePostsRepository, UsersFavouritePostsRepository>();
+            builder.Services.AddScoped<IDonationPostRepository, DonationPostRepository>();
+            builder.Services.AddScoped<IEventReportRepository, EventReportRepository>();
+            builder.Services.AddScoped<IEventReviewRepository, EventReviewRepository>();
+            builder.Services.AddScoped<IFixedPricePostRepository, FixedPricePostRepository>();
+            builder.Services.AddScoped<IGroupPostReportRepository, GroupPostReportRepository>();
+            builder.Services.AddScoped<IJoinRequestRepository, JoinRequestRepository>();
+            builder.Services.AddScoped<IMembershipRepository, MembershipRepository>();
+            builder.Services.AddScoped<ICartRepository, CartRepository>();
+            builder.Services.AddScoped<InterestStatusRepository>();
+            builder.Services.AddScoped<IPollAnswerRepository, PollAnswerRepository>();
+            builder.Services.AddScoped<IPollRepository, PollRepository>();
+            builder.Services.AddScoped<IPollOptionRepository, PollOptionRepository>();
+            builder.Services.AddScoped<IUserService, UserService>();
+            builder.Services.AddScoped<IEventService, EventService>();
+            builder.Services.AddScoped<IGroupService, GroupService>();
+
 
             var app = builder.Build();
 
@@ -30,7 +54,7 @@ namespace GroupsApp
             {
                 var services = scope.ServiceProvider;
 
-                SeedData.Initialize(services);
+                //SeedData.Initialize(services);
             }
 
             // Configure the HTTP request pipeline.
@@ -51,7 +75,6 @@ namespace GroupsApp
             app.UseRouting();
 
             app.UseAuthorization();
-
             app.MapControllerRoute(
                 name: "default",
                 pattern: "{controller=Home}/{action=Index}/{id?}");
