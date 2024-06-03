@@ -23,6 +23,7 @@ namespace GroupsApp
                 .AddEntityFrameworkStores<GroupsAppContext>();
             builder.Services.AddControllersWithViews();
             builder.Services.AddScoped<IGroupRepository, GroupRepository>();
+            builder.Services.AddScoped<IGroupPostReposiory, GroupPostRepository>();
             builder.Services.AddScoped<IUserRepository, UserRepository>();
             builder.Services.AddScoped<IMarketplacePostRepository, MarketplacePostRepository>();
             builder.Services.AddScoped<ICartRepository, CartRepository>();

@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using GroupsApp.Data;
 using GroupsApp.Models;
 using GroupsApp.Services;
+using GroupsApp.Mapper;
 
 namespace GroupsApp.Controllers
 {
@@ -15,13 +16,13 @@ namespace GroupsApp.Controllers
     {
         private readonly IGroupService _groupService;
         private readonly IUserService _userService;
-        private Guid _currentGroupId;
+        private Guid _currentGroupId = new Guid("a8fc999f-43fc-4370-a3ff-564998fe032d");  // TODO: NOT OK
 
-        public GroupPostsController(IGroupService groupService, IUserService userService,Guid currentGroupId)
+        public GroupPostsController(IGroupService groupService, IUserService userService)
         {
             this._groupService = groupService;
             this._userService = userService;
-            this._currentGroupId = currentGroupId;
+            Console.WriteLine("Group Posts Controller constructor");
         }
 
         // GET: GroupPosts
@@ -47,14 +48,16 @@ namespace GroupsApp.Controllers
                 return NotFound();
             }
 
-            return View(groupPost);
+            return View(GroupPostMapper.GroupPostDTOToGroupPost(groupPost));
         }
 
         // GET: GroupPosts/Create
         public IActionResult Create()
         {
+            Console.WriteLine("GPC Create enter");
             ViewData["AuthorId"] = new SelectList(this._userService.GetUsers().Value, "UserId", "UserId");
             ViewData["GroupId"] = new SelectList(this._groupService.GetAllGroups(), "GroupId", "GroupId");
+            Console.WriteLine("GPC Create exit");
             return View();
         }
 
@@ -65,15 +68,11 @@ namespace GroupsApp.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("GroupPostId,AuthorId,GroupId,Description,MediaContent,IsPinned,AdminOnly")] GroupPost groupPost)
         {
-            if (ModelState.IsValid)
-            {
-                groupPost.GroupPostId = Guid.NewGuid();
-                this._groupService.AddGroupPost(groupPost);
-                return RedirectToAction(nameof(Index));
-            }
-            ViewData["AuthorId"] = new SelectList(this._userService.GetUsers().Value, "UserId", "UserId", groupPost.AuthorId);
-            ViewData["GroupId"] = new SelectList(this._groupService.GetAllGroups(), "GroupId", "GroupId", groupPost.GroupId);
-            return View(groupPost);
+            groupPost.GroupPostId = Guid.NewGuid();
+            groupPost.AuthorId = Guid.Parse("20084852-bf05-4972-9703-590310e3f309");
+            groupPost.GroupId = _currentGroupId;
+            this._groupService.AddGroupPost(GroupPostMapper.GroupPostToGroupPostDTO(groupPost));
+            return RedirectToAction(nameof(Index));
         }
 
         // GET: GroupPosts/Edit/5
@@ -91,7 +90,7 @@ namespace GroupsApp.Controllers
             }
             ViewData["AuthorId"] = new SelectList(this._userService.GetUsers().Value, "UserId", "UserId", groupPost.AuthorId);
             ViewData["GroupId"] = new SelectList(this._groupService.GetAllGroups(), "GroupId", "GroupId", groupPost.GroupId);
-            return View(groupPost);
+            return View(GroupPostMapper.GroupPostDTOToGroupPost(groupPost));
         }
 
         // POST: GroupPosts/Edit/5
@@ -105,29 +104,23 @@ namespace GroupsApp.Controllers
             {
                 return NotFound();
             }
-
-            if (ModelState.IsValid)
+            
+            try
             {
-                try
-                {
-                    this._groupService.UpdateGroupPost(groupPost);
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!GroupPostExists(groupPost.GroupPostId))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
+                this._groupService.UpdateGroupPost(GroupPostMapper.GroupPostToGroupPostDTO(groupPost));
             }
-            ViewData["AuthorId"] = new SelectList(this._userService.GetUsers().Value, "UserId", "UserId", groupPost.AuthorId);
-            ViewData["GroupId"] = new SelectList(this._groupService.GetAllGroups(), "GroupId", "GroupId", groupPost.GroupId);
-            return View(groupPost);
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!GroupPostExists(groupPost.GroupPostId))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+            }
+            return RedirectToAction(nameof(Index));
         }
 
         // GET: GroupPosts/Delete/5
@@ -144,7 +137,7 @@ namespace GroupsApp.Controllers
                 return NotFound();
             }
 
-            return View(groupPost);
+            return View(GroupPostMapper.GroupPostDTOToGroupPost(groupPost));
         }
 
         // POST: GroupPosts/Delete/5

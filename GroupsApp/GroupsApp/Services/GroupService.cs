@@ -23,9 +23,10 @@ namespace GroupsApp.Services
         private readonly IMembershipRepository _membershipRepository;
         private readonly IGroupPostReposiory _groupPostRepository;
 
-        public GroupService(IGroupRepository groupRepository)
+        public GroupService(IGroupRepository groupRepository, IGroupPostReposiory groupPostReposiory)
         {
             this._groupRepository = groupRepository;
+            this._groupPostRepository = groupPostReposiory;
         }
 
         //TODO
@@ -258,15 +259,17 @@ namespace GroupsApp.Services
             throw new Exception("Group Post not found");
     }
 
-        public void AddGroupPost(GroupPost groupPost)
+        public void AddGroupPost(GroupPostDTO groupPostDTO)
         {
+            var groupPost = GroupPostMapper.GroupPostDTOToGroupPost(groupPostDTO);
             this._groupPostRepository.AddGroupPost(groupPost);
             return;
             
         }
 
-        public void UpdateGroupPost(GroupPost groupPost)
+        public void UpdateGroupPost(GroupPostDTO groupPostDTO)
         {
+            var groupPost = GroupPostMapper.GroupPostDTOToGroupPost(groupPostDTO);
             this._groupPostRepository.UpdateGroupPost(groupPost);
             return;
         }
