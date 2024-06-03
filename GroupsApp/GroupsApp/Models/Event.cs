@@ -1,4 +1,6 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.AspNetCore.Mvc;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Data;
 
 namespace GroupsApp.Models
@@ -57,7 +59,7 @@ namespace GroupsApp.Models
 
         public ICollection<EventReport> Reports { get; set; } = new List<EventReport>();
 
-       
+
         public Event(DataRow row)
         {
             eventId = (Guid)row["GUID"];
