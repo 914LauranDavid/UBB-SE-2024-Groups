@@ -1,0 +1,13 @@
+﻿@model GroupsApp.Models.MarketplacePosts.DonationPost
+
+<div class="form-group">
+    <label asp-for="DonationLink" class="control-label"></label>
+    <input asp-for="DonationLink" class="form-control" />
+    <span asp-validation-for="DonationLink" class="text-danger"></span>
+</div>
+
+<div class="form-group">
+    <label asp-for="CurrentDonationAmount" class="control-label"></label>
+    <input asp-for="CurrentDonationAmount" class="form-control" />
+    <span asp-validation-for="CurrentDonationAmount" class="text-danger"></span>
+</div>

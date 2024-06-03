@@ -1,93 +1,112 @@
 ﻿@model IEnumerable<GroupsApp.Models.MarketplacePosts.MarketplacePost>
 
 @{
-    ViewData["Title"] = "Index";
+	ViewData["Title"] = "Index";
 }
 
 <h1>Welcome to the Marketplace!</h1>
 
 <p>
-    <a asp-action="Create">Add product</a>
+	<a asp-action="Create">Add product</a>
 </p>
 <table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Title)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Description)
-            </th>
-            <th>
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Location)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.CreationDate)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.EndDate)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.IsPromoted)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.IsActive)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Type)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Author)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Group)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Title)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Description)
-            </td>
-            <td>
-                <img src="@item.MediaContent" alt="Image" style="max-width: 400px; max-height: 400px;" />
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Location)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.CreationDate)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.EndDate)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.IsPromoted)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.IsActive)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Type)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Author.UserId)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Group.GroupId)
-            </td>
-            <td>
-                <a asp-action="Details" asp-route-id="@item.MarketplacePostId">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.MarketplacePostId">Delete</a>
-            </td>
-        </tr>
-}
-    </tbody>
+	<thead>
+		<tr>
+			<th>
+				@Html.DisplayNameFor(model => model.Title)
+			</th>
+			<th>
+				@Html.DisplayNameFor(model => model.Description)
+			</th>
+			<th>Image</th>
+			<th>
+				@Html.DisplayNameFor(model => model.Location)
+			</th>
+			<th>
+				@Html.DisplayNameFor(model => model.CreationDate)
+			</th>
+			<th>
+				@Html.DisplayNameFor(model => model.EndDate)
+			</th>
+			<th>
+				@Html.DisplayNameFor(model => model.IsPromoted)
+			</th>
+			<th>
+				@Html.DisplayNameFor(model => model.IsActive)
+			</th>
+			<th>
+				@Html.DisplayNameFor(model => model.Type)
+			</th>
+			<th>
+				@Html.DisplayNameFor(model => model.Author.UserId)
+			</th>
+			<th>
+				@Html.DisplayNameFor(model => model.Group.GroupId)
+			</th>
+			<th>Subclass Details</th>
+			<th>Actions</th>
+		</tr>
+	</thead>
+	<tbody>
+		@foreach (var item in Model)
+		{
+			<tr>
+				<td>
+					@Html.DisplayFor(modelItem => item.Title)
+				</td>
+				<td>
+					@Html.DisplayFor(modelItem => item.Description)
+				</td>
+				<td>
+					<img src="@item.MediaContent" alt="Image" style="max-width: 100px; max-height: 100px;" />
+				</td>
+				<td>
+					@Html.DisplayFor(modelItem => item.Location)
+				</td>
+				<td>
+					@Html.DisplayFor(modelItem => item.CreationDate)
+				</td>
+				<td>
+					@Html.DisplayFor(modelItem => item.EndDate)
+				</td>
+				<td>
+					@Html.DisplayFor(modelItem => item.IsPromoted)
+				</td>
+				<td>
+					@Html.DisplayFor(modelItem => item.IsActive)
+				</td>
+				<td>
+					@Html.DisplayFor(modelItem => item.Type)
+				</td>
+				<td>
+					@Html.DisplayFor(modelItem => item.Author.UserId)
+				</td>
+				<td>
+					@Html.DisplayFor(modelItem => item.Group.GroupId)
+				</td>
+				<td>
+					@if (item is GroupsApp.Models.MarketplacePosts.DonationPost donationPost)
+					{
+						<p>Donation Link: @donationPost.DonationLink</p>
+						<!-- Add other donation specific properties here -->
+					}
+					else if (item is GroupsApp.Models.MarketplacePosts.FixedPricePost fixedPricePost)
+					{
+						<p>Price: @fixedPricePost.Price</p>
+						<!-- Add other fixed price specific properties here -->
+					}
+					else if (item is GroupsApp.Models.MarketplacePosts.AuctionPost auctionPost)
+					{
+						<p>Current Bid Price: @auctionPost.CurrentBidPrice</p>
+						<p>Current Price Leader: @auctionPost.CurrentPriceLeader</p>
+						<!-- Add other auction specific properties here -->
+					}
+				</td>
+				<td>
+					<a asp-action="Details" asp-route-id="@item.MarketplacePostId">Details</a> |
+					<a asp-action="Delete" asp-route-id="@item.MarketplacePostId">Delete</a>
+				</td>
+			</tr>
+		}
+	</tbody>
 </table>

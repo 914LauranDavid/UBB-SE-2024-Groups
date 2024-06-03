@@ -1,0 +1,19 @@
+﻿@model GroupsApp.Models.MarketplacePosts.AuctionPost
+
+<div class="form-group">
+    <label asp-for="CurrentPriceLeader" class="control-label"></label>
+    <input asp-for="CurrentPriceLeader" class="form-control" />
+    <span asp-validation-for="CurrentPriceLeader" class="text-danger"></span>
+</div>
+
+<div class="form-group">
+    <label asp-for="CurrentBidPrice" class="control-label"></label>
+    <input asp-for="CurrentBidPrice" class="form-control" />
+    <span asp-validation-for="CurrentBidPrice" class="text-danger"></span>
+</div>
+
+<div class="form-group">
+    <label asp-for="MinimumBidPrice" class="control-label"></label>
+    <input asp-for="MinimumBidPrice" class="form-control" />
+    <span asp-validation-for="MinimumBidPrice" class="text-danger"></span>
+</div>

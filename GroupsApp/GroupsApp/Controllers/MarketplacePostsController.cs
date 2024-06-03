@@ -69,11 +69,65 @@ namespace GroupsApp.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Title,Description,MediaContent,Location,CreationDate,EndDate,IsPromoted,IsActive")] MarketplacePost marketplacePost)
         {
-            marketplacePost.Type = "Donation"; // TODO don't hardcode these
             marketplacePost.GroupId = Guid.Parse("1ae4795d-c170-4b7e-ba40-681b6f9993f5");
             marketplacePost.AuthorId = Guid.Parse("4f02e552-c02b-48d4-8d7c-1162bcdab88c");
 
-            postService.AddMarketplacePost(MarketplacePostMapper.MapMarketplacePostToMarketplacePostDTO(marketplacePost));  // TODO avoid this
+            switch (marketplacePost.Type)
+            {
+                case "Donation":
+                    DonationPost donationPost = new DonationPost
+                    {
+                        Title = marketplacePost.Title,
+                        Description = marketplacePost.Description,
+                        MediaContent = marketplacePost.MediaContent,
+                        Location = marketplacePost.Location,
+                        CreationDate = marketplacePost.CreationDate,
+                        EndDate = marketplacePost.EndDate,
+                        IsPromoted = marketplacePost.IsPromoted,
+                        IsActive = marketplacePost.IsActive,
+                        DonationLink = "random link", // Initialize with default value
+                        CurrentDonationAmount = 0 // Initialize with default value
+                    };
+                    postService.AddMarketplacePost(donationPost);
+                    break;
+                case "FixedPrice":
+                    FixedPricePost fixedPricePost = new FixedPricePost
+                    {
+                        Title = marketplacePost.Title,
+                        Description = marketplacePost.Description,
+                        MediaContent = marketplacePost.MediaContent,
+                        Location = marketplacePost.Location,
+                        CreationDate = marketplacePost.CreationDate,
+                        EndDate = marketplacePost.EndDate,
+                        IsPromoted = marketplacePost.IsPromoted,
+                        IsActive = marketplacePost.IsActive,
+                        Price = 0, // Initialize with default value
+                        IsNegotiable = false, // Initialize with default value
+                        DeliveryType = "" // Initialize with default value
+                    };
+                    postService.AddMarketplacePost(fixedPricePost);
+                    break;
+                case "Auction":
+                    AuctionPost auctionPost = new AuctionPost
+                    {
+                        Title = marketplacePost.Title,
+                        Description = marketplacePost.Description,
+                        MediaContent = marketplacePost.MediaContent,
+                        Location = marketplacePost.Location,
+                        CreationDate = marketplacePost.CreationDate,
+                        EndDate = marketplacePost.EndDate,
+                        IsPromoted = marketplacePost.IsPromoted,
+                        IsActive = marketplacePost.IsActive,
+                        CurrentPriceLeader = Guid.NewGuid(), // Initialize with default value
+                        CurrentBidPrice = 0, // Initialize with default value
+                        MinimumBidPrice = 0 // Initialize with default value
+                    };
+                    postService.AddMarketplacePost(auctionPost);
+                    break;
+                default:
+                    // Handle error case where an invalid post type is selected
+                    return RedirectToAction(nameof(Index));
+            }
 
             return RedirectToAction(nameof(Index));
         }
@@ -109,6 +163,22 @@ namespace GroupsApp.Controllers
 
             return RedirectToAction(nameof(Index));
         }
+
+        public IActionResult GetFields(string type)
+        {
+            switch (type)
+            {
+                case "Donation":
+                    return PartialView("_DonationFields");
+                case "FixedPrice":
+                    return PartialView("_FixedPriceFields");
+                case "Auction":
+                    return PartialView("_AuctionFields");
+                default:
+                    return Content("Invalid post type");
+            }
+        }
+
 
         private bool MarketplacePostExists(Guid id)
         {
