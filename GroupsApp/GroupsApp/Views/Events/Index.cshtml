@@ -9,6 +9,8 @@
 <p>
     <a asp-action="Create">Create New</a>
 </p>
+@Html.ActionLink("PersonalReports", "Index", "EventReports") | 
+@Html.ActionLink("Notifications", "Index", "EventNotifications")
 <table class="table">
     <thead>
         <tr>
@@ -48,7 +50,9 @@
             <th>
                 @Html.DisplayNameFor(model => model.Organizer)
             </th>
-            <th></th>
+            <th>
+                Options
+            </th>
         </tr>
     </thead>
     <tbody>
@@ -93,11 +97,10 @@
             <td>
                 <a asp-action="Edit" asp-route-id="@item.EventId">Edit</a> |
                 <a asp-action="Details" asp-route-id="@item.EventId">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.EventId">Delete</a>
-                @Html.ActionLink("EventReports", "Create", "EventReports", new { @item.EventId ,@item.Organizer.UserId})
+                <a asp-action="Delete" asp-route-id="@item.EventId">Delete</a> |
+                @Html.ActionLink("Report Event", "Create", "EventReports", new { @item.EventId ,@item.Organizer.UserId})
             </td>
         </tr>
 }
     </tbody>
-    @Html.ActionLink("PersonalReports", "Index", "EventReports")
 </table>

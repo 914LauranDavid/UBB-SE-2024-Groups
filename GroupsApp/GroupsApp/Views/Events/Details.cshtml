@@ -87,9 +87,17 @@
         <dd class = "col-sm-10">
             @Html.DisplayFor(model => model.Organizer.Username)
         </dd>
+        <dt class="col-sm-2">
+            Going:
+        </dt>
+        <dd class="col-sm-10">
+            @ViewBag.Going |
+            <a asp-action="Going" asp-route-id="@Model.EventId">Change Going Status</a>
+        </dd>
     </dl>
 </div>
 <div>
+
     <a asp-action="Edit" asp-route-id="@Model?.EventId">Edit</a> |
     <a asp-action="Index">Back to List</a>
 </div>

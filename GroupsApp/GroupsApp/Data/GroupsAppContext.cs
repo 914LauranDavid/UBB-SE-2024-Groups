@@ -52,6 +52,8 @@ namespace GroupsApp.Data
 
         public DbSet<EventReview> EventReviews { get; set; }
 
+        public DbSet<EventNotification> EventNotifications { get; set; }
+
         public DbSet<Comment> Comments { get; set; }
 
         public DbSet<InterestStatus> InterestStatuses { get; set; }

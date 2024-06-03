@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using GroupsApp.Data;
 using GroupsApp.Models;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
+using System.Dynamic;
 
 namespace GroupsApp.Controllers
 {
@@ -38,9 +39,23 @@ namespace GroupsApp.Controllers
             var @event = await _context.Events
                 .Include(e => e.Organizer)
                 .FirstOrDefaultAsync(m => m.EventId == id);
+
+            var @Going = await _context.UserEvents
+                .Include(e => e.Event)
+                .Include(e => e.User)
+                .FirstOrDefaultAsync(m => m.EventId == id && m.UserId == Guid.Parse("00000000-0000-0000-0000-000000000000"));
+
             if (@event == null)
             {
                 return NotFound();
+            }
+            if (@Going == null)
+            {
+                ViewData["Going"] = "Not Going";
+            }
+            else
+            {
+                ViewData["Going"] = @Going.Status;
             }
 
             return View(@event);
@@ -103,12 +118,27 @@ namespace GroupsApp.Controllers
             {
                 return NotFound();
             }
-
+            @event.Organizer = _context.Users.Find(@event.OrganizerId);
+            ModelState["Organizer"].ValidationState = ModelValidationState.Valid;
             if (ModelState.IsValid)
             {
                 try
                 {
                     _context.Update(@event);
+
+
+                    var users = _context.UserEvents.Where(e => e.EventId == @event.EventId && e.Status == "Going").ToList();
+                    foreach (var user in users)
+                    {
+                        var notification = new EventNotification
+                        {
+                            EventNotificationId = Guid.NewGuid(),
+                            EventId = @event.EventId,
+                            UserId = user.UserId,
+                            Message = "Event " + @event.EventName + " has been updated",
+                        };
+                        _context.EventNotifications.Add(notification);
+                    }
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
@@ -122,6 +152,11 @@ namespace GroupsApp.Controllers
                         throw;
                     }
                 }
+
+
+
+
+
                 return RedirectToAction(nameof(Index));
             }
             ViewData["OrganizerId"] = new SelectList(_context.Users, "UserId", "UserId", @event.OrganizerId);
@@ -170,6 +205,45 @@ namespace GroupsApp.Controllers
         private bool EventReportExists(Guid id)
         {
             return _context.EventReports.Any(e => e.UserId == id);
+        }
+
+        // TODO: change to the userId to the logged in userId
+        public async Task<IActionResult> Going(Guid? Id)
+        {
+            if (Id == null)
+            {
+                return NotFound();
+            }
+            Guid userId = Guid.Parse("00000000-0000-0000-0000-000000000000");
+
+            Guid eventId = (Guid)Id;
+
+            var userEvent = _context.UserEvents.FirstOrDefault(e => e.EventId == eventId && e.UserId == userId);
+            if (userEvent == null)
+            {
+                userEvent = new UserEvent
+                {
+                    EventId = eventId,
+                    UserId = userId,
+                    Status = "Going"
+                };
+                userEvent.User = _context.Users.Find(userId);
+                userEvent.Event = _context.Events.Find(eventId);
+                _context.UserEvents.Add(userEvent);
+            }
+            else
+            {
+                if (userEvent.Status == "Going")
+                {
+                    _context.UserEvents.Remove(userEvent);
+                }
+                else
+                {
+                    userEvent.Status = "Going";
+                }
+            }
+            _context.SaveChanges();
+            return RedirectToAction("Index");
         }
     }
 }
