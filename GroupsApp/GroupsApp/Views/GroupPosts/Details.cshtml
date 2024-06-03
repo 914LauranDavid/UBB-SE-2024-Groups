@@ -20,7 +20,7 @@
             @Html.DisplayNameFor(model => model.MediaContent)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.MediaContent)
+            <img src="@Model.MediaContent" alt="Image" style="max-width: 400px; max-height: 400px;" />
         </dd>
         <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.IsPinned)

@@ -13,10 +13,10 @@
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.Description)
+                @Html.DisplayNameFor(model => model.PostContent)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.MediaContent)
+                @Html.DisplayNameFor(model => model.PostImage)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.IsPinned)
@@ -34,10 +34,10 @@
 @foreach (var item in Model) {
         <tr>
             <td>
-                @Html.DisplayFor(modelItem => item.Description)
+                @Html.DisplayFor(modelItem => item.PostContent)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.MediaContent)
+                <img src="@item.PostImage" alt="Image" style="max-width: 400px; max-height: 400px;" />
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.IsPinned)
