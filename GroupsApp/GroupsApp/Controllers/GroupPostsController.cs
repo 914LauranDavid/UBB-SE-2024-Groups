@@ -13,14 +13,14 @@ namespace GroupsApp.Controllers
 {
     public class GroupPostsController : Controller
     {
-        private readonly GroupsAppContext _context;
         private readonly IGroupService _groupService;
+        private readonly IUserService _userService;
         private Guid _currentGroupId;
 
-        public GroupPostsController(GroupsAppContext context, IGroupService groupService, Guid currentGroupId)
+        public GroupPostsController(IGroupService groupService, IUserService userService,Guid currentGroupId)
         {
-            _context = context;
             this._groupService = groupService;
+            this._userService = userService;
             this._currentGroupId = currentGroupId;
         }
 
@@ -41,10 +41,7 @@ namespace GroupsApp.Controllers
                 return NotFound();
             }
 
-            var groupPost = await _context.GroupPosts
-                .Include(g => g.Author)
-                .Include(g => g.Group)
-                .FirstOrDefaultAsync(m => m.GroupPostId == id);
+            var groupPost = this._groupService.GetGroupPostById(_currentGroupId, id.Value);
             if (groupPost == null)
             {
                 return NotFound();
@@ -56,8 +53,8 @@ namespace GroupsApp.Controllers
         // GET: GroupPosts/Create
         public IActionResult Create()
         {
-            ViewData["AuthorId"] = new SelectList(_context.Users, "UserId", "UserId");
-            ViewData["GroupId"] = new SelectList(_context.Groups, "GroupId", "GroupId");
+            ViewData["AuthorId"] = new SelectList(this._userService.GetUsers().Value, "UserId", "UserId");
+            ViewData["GroupId"] = new SelectList(this._groupService.GetAllGroups(), "GroupId", "GroupId");
             return View();
         }
 
@@ -71,12 +68,11 @@ namespace GroupsApp.Controllers
             if (ModelState.IsValid)
             {
                 groupPost.GroupPostId = Guid.NewGuid();
-                _context.Add(groupPost);
-                await _context.SaveChangesAsync();
+                this._groupService.AddGroupPost(groupPost);
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["AuthorId"] = new SelectList(_context.Users, "UserId", "UserId", groupPost.AuthorId);
-            ViewData["GroupId"] = new SelectList(_context.Groups, "GroupId", "GroupId", groupPost.GroupId);
+            ViewData["AuthorId"] = new SelectList(this._userService.GetUsers().Value, "UserId", "UserId", groupPost.AuthorId);
+            ViewData["GroupId"] = new SelectList(this._groupService.GetAllGroups(), "GroupId", "GroupId", groupPost.GroupId);
             return View(groupPost);
         }
 
@@ -87,14 +83,14 @@ namespace GroupsApp.Controllers
             {
                 return NotFound();
             }
-
-            var groupPost = await _context.GroupPosts.FindAsync(id);
+            
+            var groupPost = this._groupService.GetGroupPostById(_currentGroupId, id.Value);
             if (groupPost == null)
             {
                 return NotFound();
             }
-            ViewData["AuthorId"] = new SelectList(_context.Users, "UserId", "UserId", groupPost.AuthorId);
-            ViewData["GroupId"] = new SelectList(_context.Groups, "GroupId", "GroupId", groupPost.GroupId);
+            ViewData["AuthorId"] = new SelectList(this._userService.GetUsers().Value, "UserId", "UserId", groupPost.AuthorId);
+            ViewData["GroupId"] = new SelectList(this._groupService.GetAllGroups(), "GroupId", "GroupId", groupPost.GroupId);
             return View(groupPost);
         }
 
@@ -114,8 +110,7 @@ namespace GroupsApp.Controllers
             {
                 try
                 {
-                    _context.Update(groupPost);
-                    await _context.SaveChangesAsync();
+                    this._groupService.UpdateGroupPost(groupPost);
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -130,8 +125,8 @@ namespace GroupsApp.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["AuthorId"] = new SelectList(_context.Users, "UserId", "UserId", groupPost.AuthorId);
-            ViewData["GroupId"] = new SelectList(_context.Groups, "GroupId", "GroupId", groupPost.GroupId);
+            ViewData["AuthorId"] = new SelectList(this._userService.GetUsers().Value, "UserId", "UserId", groupPost.AuthorId);
+            ViewData["GroupId"] = new SelectList(this._groupService.GetAllGroups(), "GroupId", "GroupId", groupPost.GroupId);
             return View(groupPost);
         }
 
@@ -143,10 +138,7 @@ namespace GroupsApp.Controllers
                 return NotFound();
             }
 
-            var groupPost = await _context.GroupPosts
-                .Include(g => g.Author)
-                .Include(g => g.Group)
-                .FirstOrDefaultAsync(m => m.GroupPostId == id);
+            var groupPost = this._groupService.GetGroupPostById(_currentGroupId, id.Value);
             if (groupPost == null)
             {
                 return NotFound();
@@ -160,19 +152,18 @@ namespace GroupsApp.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(Guid id)
         {
-            var groupPost = await _context.GroupPosts.FindAsync(id);
+            var groupPost = this._groupService.GetGroupPostById(_currentGroupId, id);
             if (groupPost != null)
             {
-                _context.GroupPosts.Remove(groupPost);
+                this._groupService.DeleteGroupPost(id);
             }
 
-            await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
         private bool GroupPostExists(Guid id)
         {
-            return _context.GroupPosts.Any(e => e.GroupPostId == id);
+            return this._groupService.GetGroupPostById(_currentGroupId, id) != null;
         }
     }
 }

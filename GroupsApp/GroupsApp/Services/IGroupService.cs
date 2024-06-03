@@ -28,5 +28,9 @@ namespace GroupsApp.Services
         List<Group> GetAllGroupsUserBelongsTo(Guid groupMemberId);
         Group GetGroupById(Guid groupId);
         List<GroupDTO> GetAllGroups();
+        GroupPostDTO GetGroupPostById(Guid groupId, Guid postId);
+        void AddGroupPost(GroupPost groupPost);
+        void UpdateGroupPost(GroupPost groupPost);
+        void DeleteGroupPost(Guid groupId);
     }
 }
