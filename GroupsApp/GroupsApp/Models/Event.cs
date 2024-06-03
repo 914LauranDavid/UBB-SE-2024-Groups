@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Data;
@@ -20,6 +21,7 @@ namespace GroupsApp.Models
         private string logoURL;
         private int ageLimit;
         private float entryFee;
+        private bool underInvestigation;
 
         [Key]
         public Guid EventId { get => eventId; set => eventId = value; }
@@ -46,6 +48,9 @@ namespace GroupsApp.Models
         public int AgeLimit { get => ageLimit; set => ageLimit = value; }
 
         public float EntryFee { get => entryFee; set => entryFee = value; }
+
+        // [DefaultValue(false)]
+        public bool UnderInvestigation { get => underInvestigation; set => underInvestigation = value; }
 
         public User Organizer { get; set; }
 

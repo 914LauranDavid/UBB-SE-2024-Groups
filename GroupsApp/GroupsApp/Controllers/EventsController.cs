@@ -24,7 +24,7 @@ namespace GroupsApp.Controllers
         public async Task<IActionResult> Index()
         {
             var groupsAppContext = _context.Events.Include(e => e.Organizer);
-            return View(await groupsAppContext.ToListAsync());
+            return View(await groupsAppContext.Where(e => e.UnderInvestigation == false).ToListAsync());
         }
 
         // GET: Events/Details/5
@@ -165,6 +165,11 @@ namespace GroupsApp.Controllers
         private bool EventExists(Guid id)
         {
             return _context.Events.Any(e => e.EventId == id);
+        }
+
+        private bool EventReportExists(Guid id)
+        {
+            return _context.EventReports.Any(e => e.UserId == id);
         }
     }
 }
