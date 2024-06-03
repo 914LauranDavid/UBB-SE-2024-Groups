@@ -654,13 +654,13 @@ namespace GroupsApp.Migrations
                     b.HasOne("GroupsApp.Models.Event", null)
                         .WithMany()
                         .HasForeignKey("EventsEventId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.HasOne("GroupsApp.Models.User", null)
                         .WithMany()
                         .HasForeignKey("UsersUserId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
                 });
 
@@ -669,13 +669,13 @@ namespace GroupsApp.Migrations
                     b.HasOne("GroupsApp.Models.MarketplacePosts.MarketplacePost", null)
                         .WithMany()
                         .HasForeignKey("MarketplacePostId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.HasOne("GroupsApp.Models.MarketplacePosts.MarketplacePost", "MarketplacePost")
                         .WithMany()
                         .HasForeignKey("MarketplacePostId1")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.HasOne("GroupsApp.Models.User", null)
@@ -687,7 +687,7 @@ namespace GroupsApp.Migrations
                     b.HasOne("GroupsApp.Models.User", "User")
                         .WithMany()
                         .HasForeignKey("UserId1")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.Navigation("MarketplacePost");
@@ -707,7 +707,7 @@ namespace GroupsApp.Migrations
                     b.HasOne("GroupsApp.Models.User", "Organizer")
                         .WithMany("OriganizedEvents")
                         .HasForeignKey("OrganizerId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.Navigation("Organizer");
@@ -718,13 +718,13 @@ namespace GroupsApp.Migrations
                     b.HasOne("GroupsApp.Models.Event", "Event")
                         .WithMany("Donations")
                         .HasForeignKey("EventId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.HasOne("GroupsApp.Models.User", "User")
                         .WithMany("EventDonationsMade")
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.Navigation("Event");
@@ -737,7 +737,7 @@ namespace GroupsApp.Migrations
                     b.HasOne("GroupsApp.Models.Event", "Event")
                         .WithMany("Expenses")
                         .HasForeignKey("EventId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.Navigation("Event");
@@ -748,13 +748,13 @@ namespace GroupsApp.Migrations
                     b.HasOne("GroupsApp.Models.Event", "Event")
                         .WithMany("Reports")
                         .HasForeignKey("EventId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.HasOne("GroupsApp.Models.User", "Reporter")
                         .WithMany("EventReportsMade")
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.Navigation("Event");
@@ -767,13 +767,13 @@ namespace GroupsApp.Migrations
                     b.HasOne("GroupsApp.Models.Event", "Event")
                         .WithMany("Reviews")
                         .HasForeignKey("EventId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.HasOne("GroupsApp.Models.User", "Reviewer")
                         .WithMany("EventReviewsMade")
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.Navigation("Event");
@@ -786,7 +786,7 @@ namespace GroupsApp.Migrations
                     b.HasOne("GroupsApp.Models.User", "Owner")
                         .WithMany("OwnedGroups")
                         .HasForeignKey("OwnerId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.Navigation("Owner");
@@ -801,7 +801,7 @@ namespace GroupsApp.Migrations
                     b.HasOne("GroupsApp.Models.Group", "Group")
                         .WithMany("GroupPosts")
                         .HasForeignKey("GroupId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.Navigation("Author");
@@ -814,13 +814,13 @@ namespace GroupsApp.Migrations
                     b.HasOne("GroupsApp.Models.GroupPost", "ReportedPost")
                         .WithMany("Reports")
                         .HasForeignKey("PostId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.HasOne("GroupsApp.Models.User", "Reporter")
                         .WithMany("GroupPostReportsMade")
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.Navigation("ReportedPost");
@@ -833,7 +833,7 @@ namespace GroupsApp.Migrations
                     b.HasOne("GroupsApp.Models.Group", "Group")
                         .WithMany("JoinRequests")
                         .HasForeignKey("GroupId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.HasOne("GroupsApp.Models.User", "User")
@@ -852,13 +852,13 @@ namespace GroupsApp.Migrations
                     b.HasOne("GroupsApp.Models.MarketplacePosts.MarketplacePost", "MarketplacePost")
                         .WithMany("Reviews")
                         .HasForeignKey("MarketplacePostId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.HasOne("GroupsApp.Models.User", "Reviewer")
                         .WithMany("MarketPlacePostReviewsMade")
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.Navigation("MarketplacePost");
@@ -875,7 +875,7 @@ namespace GroupsApp.Migrations
                     b.HasOne("GroupsApp.Models.Group", "Group")
                         .WithMany("MarketplacePosts")
                         .HasForeignKey("GroupId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.Navigation("Author");
@@ -888,7 +888,7 @@ namespace GroupsApp.Migrations
                     b.HasOne("GroupsApp.Models.Group", "Group")
                         .WithMany("Memberships")
                         .HasForeignKey("GroupId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.HasOne("GroupsApp.Models.User", "User")
@@ -907,7 +907,7 @@ namespace GroupsApp.Migrations
                     b.HasOne("GroupsApp.Models.Group", "Group")
                         .WithMany("GroupPolls")
                         .HasForeignKey("GroupId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.Navigation("Group");
@@ -918,7 +918,7 @@ namespace GroupsApp.Migrations
                     b.HasOne("GroupsApp.Models.PollOption", "PollOption")
                         .WithMany("PollAnswers")
                         .HasForeignKey("PollOptionId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.HasOne("GroupsApp.Models.User", "UserThatAnswered")
@@ -937,7 +937,7 @@ namespace GroupsApp.Migrations
                     b.HasOne("GroupsApp.Models.Poll", "Poll")
                         .WithMany("PollOptions")
                         .HasForeignKey("PollId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.Navigation("Poll");
@@ -948,13 +948,13 @@ namespace GroupsApp.Migrations
                     b.HasOne("GroupsApp.Models.Event", "Event")
                         .WithMany()
                         .HasForeignKey("EventId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.HasOne("GroupsApp.Models.User", "User")
                         .WithMany()
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.Navigation("Event");
@@ -967,7 +967,7 @@ namespace GroupsApp.Migrations
                     b.HasOne("GroupsApp.Models.MarketplacePosts.MarketplacePost", null)
                         .WithMany()
                         .HasForeignKey("MarketplacePostId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.HasOne("GroupsApp.Models.User", null)
