@@ -9,5 +9,7 @@ namespace GroupsApp.Repositories
         public GroupPost? GetGroupPostById(Guid id);
         public List<GroupPost> GetAllGroupPosts();
         public void DeleteGroupPost(Guid id);
+
+        List<GroupPost> DeleteAllPostByUser(Guid userId);
     }
 }

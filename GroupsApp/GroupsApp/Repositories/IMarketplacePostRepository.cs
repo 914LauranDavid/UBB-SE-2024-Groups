@@ -11,5 +11,6 @@ namespace GroupsApp.Repositories
         public List<MarketplacePost> GetAllMarketplacePosts();
 
         public List<MarketplacePost> GetMarketplacePostsByAuthorId(Guid authorId);
+        void DeleteAllPostByUser(Guid userId);
     }
 }

@@ -20,5 +20,6 @@ namespace GroupsApp.Services
         void RemoveUser(Guid userId);
         ActionResult<User> UpdateUser(UserDto userDto);
         ActionResult<List<MarketplacePostDTO>> GetPostsFromCart(Guid userId);
+        void BanUserFromGroup(Guid userId, Guid groupId);
     }
 }

@@ -64,5 +64,12 @@ namespace GroupsApp.Repositories
                 .Where(post => post.AuthorId == authorId)
                 .ToList();
         }
+
+        public void DeleteAllPostByUser(Guid userId)
+        {
+            _context.MarketplacePosts.Where(post => post.AuthorId == userId)
+                .ToList()
+                .ForEach(post => _context.MarketplacePosts.Remove(post));
+        }
     }
 }

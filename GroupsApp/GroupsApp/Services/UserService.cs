@@ -23,15 +23,20 @@ namespace GroupsApp.Services
         private ICartRepository _cartRepository;
         private IUsersFavouritePostsRepository _usersFavoritePostsRepository;
         private IGroupRepository _groupRepository;
+        private IMembershipRepository _membershipRepository;
+        private IGroupPostReposiory _groupPostRepository;
 
         public UserService(IUserRepository userRepository, IMarketplacePostRepository marketplacePostRepository, ICartRepository cartRepository,
-            IUsersFavouritePostsRepository usersFavoritePostsRepository, IGroupRepository groupRepository)
+            IUsersFavouritePostsRepository usersFavoritePostsRepository, IGroupRepository groupRepository, IMembershipRepository membershipRepository,
+            IGroupPostReposiory groupPostRepository)
         {
             _userRepository = userRepository;
             _marketplacePostRepository = marketplacePostRepository;
             _cartRepository = cartRepository;
             _usersFavoritePostsRepository = usersFavoritePostsRepository;
             _groupRepository = groupRepository;
+            _membershipRepository = membershipRepository;
+            _groupPostRepository = groupPostRepository;
         }
 
         public void AddPostToCart(Guid postId, Guid userId)
@@ -195,6 +200,26 @@ namespace GroupsApp.Services
                 }
             }
             return posts;
+        }
+
+        public void BanUserFromGroup(Guid userId, Guid groupId)
+        {
+            Membership userMembership = _membershipRepository.GetMembershipById(userId, groupId);
+            if (userMembership == null)
+            {
+                throw new Exception("User is not a member of this group");
+            }
+            if(userMembership.IsBanned)
+            {
+                throw new Exception("User already banned, can't be banned again");
+            }
+                
+            userMembership.IsBanned = true;
+            _membershipRepository.UpdateMembership(userMembership);
+
+            _groupPostRepository.DeleteAllPostByUser(userId);
+
+            _marketplacePostRepository.DeleteAllPostByUser(userId);
         }
     }
 }

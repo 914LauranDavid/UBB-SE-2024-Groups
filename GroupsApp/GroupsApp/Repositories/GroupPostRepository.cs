@@ -1,5 +1,7 @@
 ﻿using GroupsApp.Data;
 using GroupsApp.Models;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Conventions;
 
 namespace GroupsApp.Repositories
 {
@@ -48,5 +50,16 @@ namespace GroupsApp.Repositories
             else throw new Exception("Group post not found");
         }
 
+
+        public List<GroupPost> DeleteAllPostByUser(Guid userId) { 
+            List<GroupPost> usersPosts = _context.GroupPosts.Where(gp => gp.AuthorId == userId).ToList();
+
+            foreach (GroupPost gp in usersPosts) {
+                _context.GroupPosts.Remove(gp);
+            }
+            _context.SaveChanges();
+
+            return usersPosts;
+        }
     }
 }
