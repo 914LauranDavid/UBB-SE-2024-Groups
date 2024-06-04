@@ -21,10 +21,12 @@ namespace GroupsApp.Services
         private GroupsAppContext context;
         private readonly IGroupRepository _groupRepository;
         private readonly IMembershipRepository _membershipRepository;
+        private readonly IGroupPostReposiory _groupPostRepository;
 
-        public GroupService(GroupRepository groupRepository)
+        public GroupService(IGroupRepository groupRepository, IGroupPostReposiory groupPostReposiory)
         {
             this._groupRepository = groupRepository;
+            this._groupPostRepository = groupPostReposiory;
         }
 
         //TODO
@@ -150,14 +152,16 @@ namespace GroupsApp.Services
 
         public async void RejectRequestToJoinGroup(Guid joinRequestId)
         {
-            try
-            {
-                this._groupRepository.RejectRequestToJoinGroup(joinRequestId);
-            }
-            catch(Exception error)
-            {
-                throw new Exception("Error", error);
-            }
+            // TODO RejectRequestToJoinGroup in GroupRepository
+
+            //try
+            //{
+            //    this._groupRepository.RejectRequestToJoinGroup(joinRequestId);
+            //}
+            //catch(Exception error)
+            //{
+            //    throw new Exception("Error", error);
+            //}
         }
         //TODO
         public void CreateNewPostOnGroupChat(Guid groupId, Guid groupMemberId, string postContent, string postImage)
@@ -193,19 +197,31 @@ namespace GroupsApp.Services
 
         public bool IsUserInGroup(Guid groupId, Guid groupMemberId)
         {
-            return this._groupRepository.IsUserInGroup(groupId, groupMemberId);
+            return true;
+
+            // TODO IsUserInGroup in GroupRepository
+
+            //return this._groupRepository.IsUserInGroup(groupId, groupMemberId);
         }
 
         public List<JoinRequest> GetRequestsToJoinFromGroup(Guid groupId)
         {
+            return new List<JoinRequest>();
+
+            // TODO GetRequestsToJoinFromGroup in GroupRepository
+
             // Get the Group from the GroupRepository
-            return this._groupRepository.GetRequestsToJoinFromGroup(groupId);
+            //return this._groupRepository.GetRequestsToJoinFromGroup(groupId);
         }
 
         public List<Group> GetAllGroupsUserBelongsTo(Guid groupMemberId)
         {
+            return new List<Group>();
+
+            // TODO GetAllGroupsUserBelongsTo in GroupRepository
+
             // Get the GroupMember from the GroupMemberRepository
-            return this._groupRepository.GetAllGroupsUserBelongsTo(groupMemberId);
+            //return this._groupRepository.GetAllGroupsUserBelongsTo(groupMemberId);
         }
 
         public Group GetGroupById(Guid groupId)
@@ -217,7 +233,6 @@ namespace GroupsApp.Services
             {
                 throw new Exception("Error", error);
             }
-     
         }
 
         public List<GroupDTO> GetAllGroups()
@@ -229,6 +244,40 @@ namespace GroupsApp.Services
                 groupDTOs.Add(GroupMapper.GroupToGroupDTO(group));
             }
             return groupDTOs;
+        }
+
+        public GroupPostDTO GetGroupPostById(Guid groupId, Guid postId)
+        {
+            List<GroupPostDTO> groupPosts = this._groupRepository.GetGroupPosts(groupId);
+            foreach (var post in groupPosts)
+            {
+                if (post.GroupPostId == postId)
+                {
+                    return post;
+                }
+            }
+            throw new Exception("Group Post not found");
+    }
+
+        public void AddGroupPost(GroupPostDTO groupPostDTO)
+        {
+            var groupPost = GroupPostMapper.GroupPostDTOToGroupPost(groupPostDTO);
+            this._groupPostRepository.AddGroupPost(groupPost);
+            return;
+            
+        }
+
+        public void UpdateGroupPost(GroupPostDTO groupPostDTO)
+        {
+            var groupPost = GroupPostMapper.GroupPostDTOToGroupPost(groupPostDTO);
+            this._groupPostRepository.UpdateGroupPost(groupPost);
+            return;
+        }
+
+        public void DeleteGroupPost(Guid groupId)
+        {
+            this._groupPostRepository.DeleteGroupPost(groupId);
+            return;
         }
     }
 }
