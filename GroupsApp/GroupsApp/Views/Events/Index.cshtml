@@ -92,13 +92,13 @@
                 @Html.DisplayFor(modelItem => item.EntryFee)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Organizer.Username)
+                @Html.DisplayFor(modelItem => item.Organizer.UserName)
             </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.EventId">Edit</a> |
                 <a asp-action="Details" asp-route-id="@item.EventId">Details</a> |
                 <a asp-action="Delete" asp-route-id="@item.EventId">Delete</a> |
-                @Html.ActionLink("Report Event", "Create", "EventReports", new { @item.EventId ,@item.Organizer.UserId})
+                @Html.ActionLink("Report Event", "Create", "EventReports", new { @item.EventId ,@item.Organizer.Id})
             </td>
         </tr>
 }

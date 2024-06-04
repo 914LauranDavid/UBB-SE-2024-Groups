@@ -96,7 +96,7 @@ namespace GroupsApp.Controllers
                 ActionResult<User> authorResult = _userService.GetUserById((Guid)post.AuthorId);
                 if (authorResult != null && authorResult.Value != null)
                 {
-                    authorDictionary[post.MarketplacePostId] = authorResult.Value.Username;
+                    authorDictionary[post.MarketplacePostId] = authorResult.Value.UserName;
                 }
                 else
                 {
