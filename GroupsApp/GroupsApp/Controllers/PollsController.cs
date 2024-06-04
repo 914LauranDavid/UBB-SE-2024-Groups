@@ -26,8 +26,9 @@ namespace GroupsApp.Controllers
 
 
         // GET: Polls/GroupPolls/5
-        public async Task<IActionResult> GroupPolls(Guid? groupId)
+        public async Task<IActionResult> GroupPolls(Guid? id)
         {
+            Guid? groupId = id;
             if (groupId == null)
             {
                 return NotFound();
