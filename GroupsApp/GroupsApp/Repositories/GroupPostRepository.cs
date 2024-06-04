@@ -1,5 +1,6 @@
 ﻿using GroupsApp.Data;
 using GroupsApp.Models;
+using GroupsApp.Payload.DTO;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Conventions;
 
@@ -60,6 +61,16 @@ namespace GroupsApp.Repositories
             _context.SaveChanges();
 
             return usersPosts;
+        }
+
+        public GroupPost UpdateGroupPost(Guid groupId, GroupPost groupPost)
+        {
+            throw new NotImplementedException();
+        }
+
+        public ICollection<GroupPostDTO> GetTaggedGroupPosts(Guid groupId, List<Tag> tags)
+        {
+            throw new NotImplementedException();
         }
     }
 }

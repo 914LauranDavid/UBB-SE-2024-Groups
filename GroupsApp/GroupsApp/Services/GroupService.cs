@@ -22,6 +22,7 @@ namespace GroupsApp.Services
         private readonly IGroupRepository _groupRepository;
         private readonly IMembershipRepository _membershipRepository;
         private readonly IGroupPostReposiory _groupPostRepository;
+        private readonly ITagsRepository _tagsRepository;
 
         public GroupService(IGroupRepository groupRepository, IGroupPostReposiory groupPostReposiory)
         {
@@ -110,9 +111,13 @@ namespace GroupsApp.Services
 
         }
 
-        public ICollection<GroupPostDTO> GetGroupPosts(Guid groupId)
+        public ICollection<GroupPostDTO> GetGroupPosts(Guid groupId, List<Tag> tags)
         {
-            return this._groupRepository.GetGroupPosts(groupId);
+            if(tags.Count == 0)
+                return this._groupRepository.GetGroupPosts(groupId);
+
+            return this._groupPostRepository.GetTaggedGroupPosts(groupId, tags);
+
         }
         //TODO 
         public Membership UpdateMembership(MembershipDTO membershipDTO)
@@ -283,6 +288,23 @@ namespace GroupsApp.Services
         public void DeleteGroupPost(Guid groupId)
         {
             this._groupPostRepository.DeleteGroupPost(groupId);
+            return;
+        }
+
+        public void AddGroupPost(GroupPostDTO groupPostDto, List<Tag> tags)
+        {
+            var groupPost = GroupPostMapper.GroupPostDTOToGroupPost(groupPostDto);
+            this._groupPostRepository.AddGroupPost(groupPost);
+
+            this._tagsRepository.AddTagsToPost(groupPost, tags);
+        }
+
+        public void UpdateGroupPost(GroupPostDTO groupPostDTO, List<Tag> tags)
+        {
+            var groupPost = GroupPostMapper.GroupPostDTOToGroupPost(groupPostDTO);
+            this._groupPostRepository.UpdateGroupPost(groupPost);
+
+            this
             return;
         }
     }

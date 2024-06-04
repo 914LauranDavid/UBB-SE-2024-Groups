@@ -33,5 +33,6 @@ namespace GroupsApp.Services
         void AddGroupPost(GroupPostDTO groupPost);
         void UpdateGroupPost(GroupPostDTO groupPost);
         void DeleteGroupPost(Guid groupId);
+        ICollection<GroupPostDTO> GetGroupPosts(Guid groupId, List<Tag> tags);
     }
 }
