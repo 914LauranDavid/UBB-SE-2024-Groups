@@ -7,7 +7,10 @@
 <h1>Welcome to the Marketplace!</h1>
 
 <p>
-	<a asp-action="Create">Add product</a>
+	@* <a asp-action="Create">Add product</a> *@
+	<a asp-action="CreateDonationPost">Add donation product</a><br/> 
+	<a asp-action="CreateFixedPricePost">Add fixed price product</a><br />
+	<a asp-action="CreateAuctionPost">Start auction</a>
 </p>
 <table class="table">
 	<thead>
@@ -37,12 +40,6 @@
 			<th>
 				@Html.DisplayNameFor(model => model.Type)
 			</th>
-			<th>
-				@Html.DisplayNameFor(model => model.Author.UserId)
-			</th>
-			<th>
-				@Html.DisplayNameFor(model => model.Group.GroupId)
-			</th>
 			<th>Subclass Details</th>
 			<th>Actions</th>
 		</tr>
@@ -58,7 +55,7 @@
 					@Html.DisplayFor(modelItem => item.Description)
 				</td>
 				<td>
-					<img src="@item.MediaContent" alt="Image" style="max-width: 100px; max-height: 100px;" />
+					<img src="@item.MediaContent" alt="Image" style="max-width: 400px; max-height: 400px;" />
 				</td>
 				<td>
 					@Html.DisplayFor(modelItem => item.Location)
@@ -79,27 +76,18 @@
 					@Html.DisplayFor(modelItem => item.Type)
 				</td>
 				<td>
-					@Html.DisplayFor(modelItem => item.Author.UserId)
-				</td>
-				<td>
-					@Html.DisplayFor(modelItem => item.Group.GroupId)
-				</td>
-				<td>
 					@if (item is GroupsApp.Models.MarketplacePosts.DonationPost donationPost)
 					{
 						<p>Donation Link: @donationPost.DonationLink</p>
-						<!-- Add other donation specific properties here -->
-					}
-					else if (item is GroupsApp.Models.MarketplacePosts.FixedPricePost fixedPricePost)
-					{
-						<p>Price: @fixedPricePost.Price</p>
-						<!-- Add other fixed price specific properties here -->
 					}
 					else if (item is GroupsApp.Models.MarketplacePosts.AuctionPost auctionPost)
 					{
 						<p>Current Bid Price: @auctionPost.CurrentBidPrice</p>
-						<p>Current Price Leader: @auctionPost.CurrentPriceLeader</p>
-						<!-- Add other auction specific properties here -->
+						<p>Minimum Bid Price: @auctionPost.MinimumBidPrice</p>
+					}
+					else if (item is GroupsApp.Models.MarketplacePosts.FixedPricePost fixedPricePost)
+					{
+						<p>Price: @fixedPricePost.Price</p>
 					}
 				</td>
 				<td>

@@ -61,6 +61,40 @@ namespace GroupsApp.Controllers
 
             return View();
         }
+        
+        // GET: MarketplacePosts/CreateDonationPost
+        public IActionResult CreateDonationPost()
+        {
+            var users = userService.GetUsers().Value;
+            var groups = groupService.GetAllGroups();
+
+            ViewData["AuthorId"] = new SelectList(users, "UserId", "UserId");
+            ViewData["GroupId"] = new SelectList(groups, "GroupId", "GroupId");
+
+            return View();
+        }
+
+        public IActionResult CreateFixedPricePost()
+        {
+            var users = userService.GetUsers().Value;
+            var groups = groupService.GetAllGroups();
+
+            ViewData["AuthorId"] = new SelectList(users, "UserId", "UserId");
+            ViewData["GroupId"] = new SelectList(groups, "GroupId", "GroupId");
+
+            return View();
+        }
+        
+        public IActionResult CreateAuctionPost()
+        {
+            var users = userService.GetUsers().Value;
+            var groups = groupService.GetAllGroups();
+
+            ViewData["AuthorId"] = new SelectList(users, "UserId", "UserId");
+            ViewData["GroupId"] = new SelectList(groups, "GroupId", "GroupId");
+
+            return View();
+        }
 
         // POST: MarketplacePosts/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
@@ -69,68 +103,63 @@ namespace GroupsApp.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Title,Description,MediaContent,Location,CreationDate,EndDate,IsPromoted,IsActive")] MarketplacePost marketplacePost)
         {
+            marketplacePost.Type = "Donation"; // TODO don't hardcode these
             marketplacePost.GroupId = Guid.Parse("1ae4795d-c170-4b7e-ba40-681b6f9993f5");
             marketplacePost.AuthorId = Guid.Parse("4f02e552-c02b-48d4-8d7c-1162bcdab88c");
 
-            switch (marketplacePost.Type)
-            {
-                case "Donation":
-                    DonationPost donationPost = new DonationPost
-                    {
-                        Title = marketplacePost.Title,
-                        Description = marketplacePost.Description,
-                        MediaContent = marketplacePost.MediaContent,
-                        Location = marketplacePost.Location,
-                        CreationDate = marketplacePost.CreationDate,
-                        EndDate = marketplacePost.EndDate,
-                        IsPromoted = marketplacePost.IsPromoted,
-                        IsActive = marketplacePost.IsActive,
-                        DonationLink = "random link", // Initialize with default value
-                        CurrentDonationAmount = 0 // Initialize with default value
-                    };
-                    postService.AddMarketplacePost(donationPost);
-                    break;
-                case "FixedPrice":
-                    FixedPricePost fixedPricePost = new FixedPricePost
-                    {
-                        Title = marketplacePost.Title,
-                        Description = marketplacePost.Description,
-                        MediaContent = marketplacePost.MediaContent,
-                        Location = marketplacePost.Location,
-                        CreationDate = marketplacePost.CreationDate,
-                        EndDate = marketplacePost.EndDate,
-                        IsPromoted = marketplacePost.IsPromoted,
-                        IsActive = marketplacePost.IsActive,
-                        Price = 0, // Initialize with default value
-                        IsNegotiable = false, // Initialize with default value
-                        DeliveryType = "" // Initialize with default value
-                    };
-                    postService.AddMarketplacePost(fixedPricePost);
-                    break;
-                case "Auction":
-                    AuctionPost auctionPost = new AuctionPost
-                    {
-                        Title = marketplacePost.Title,
-                        Description = marketplacePost.Description,
-                        MediaContent = marketplacePost.MediaContent,
-                        Location = marketplacePost.Location,
-                        CreationDate = marketplacePost.CreationDate,
-                        EndDate = marketplacePost.EndDate,
-                        IsPromoted = marketplacePost.IsPromoted,
-                        IsActive = marketplacePost.IsActive,
-                        CurrentPriceLeader = Guid.NewGuid(), // Initialize with default value
-                        CurrentBidPrice = 0, // Initialize with default value
-                        MinimumBidPrice = 0 // Initialize with default value
-                    };
-                    postService.AddMarketplacePost(auctionPost);
-                    break;
-                default:
-                    // Handle error case where an invalid post type is selected
-                    return RedirectToAction(nameof(Index));
-            }
+            postService.AddMarketplacePost(MarketplacePostMapper.MapMarketplacePostToMarketplacePostDTO(marketplacePost));  // TODO avoid this
 
             return RedirectToAction(nameof(Index));
         }
+
+        // POST: MarketplacePosts/CreateDonationPost
+        // To protect from overposting attacks, enable the specific properties you want to bind to.
+        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> CreateDonationPost
+            ([Bind("Title,Description,MediaContent,Location,CreationDate,EndDate,IsPromoted,IsActive,DonationLink")]
+        DonationPost donationPost)
+        {
+            donationPost.Type = "Donation"; 
+            donationPost.GroupId = Guid.Parse("1ae4795d-c170-4b7e-ba40-681b6f9993f5");
+            donationPost.AuthorId = Guid.Parse("4f02e552-c02b-48d4-8d7c-1162bcdab88c");
+
+            postService.AddMarketplacePost(donationPost);
+
+            return RedirectToAction(nameof(Index));
+        }
+        
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> CreateFixedPricePost
+            ([Bind("Title,Description,MediaContent,Location,CreationDate,EndDate,IsPromoted,IsActive,Price")]
+        FixedPricePost fixedPricePost)
+        {
+            fixedPricePost.Type = Constants.FIXED_PRICE_POST_TYPE;
+            fixedPricePost.GroupId = Guid.Parse("1ae4795d-c170-4b7e-ba40-681b6f9993f5");
+            fixedPricePost.AuthorId = Guid.Parse("4f02e552-c02b-48d4-8d7c-1162bcdab88c");
+
+            postService.AddMarketplacePost(fixedPricePost);
+
+            return RedirectToAction(nameof(Index));
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> CreateAuctionPost
+            ([Bind("Title,Description,MediaContent,Location,CreationDate,EndDate,IsPromoted,IsActive,MinimumBidPrice")]
+        AuctionPost auctionPost)
+        {
+            auctionPost.Type = Constants.AUCTION_POST_TYPE;
+            auctionPost.GroupId = Guid.Parse("1ae4795d-c170-4b7e-ba40-681b6f9993f5");
+            auctionPost.AuthorId = Guid.Parse("4f02e552-c02b-48d4-8d7c-1162bcdab88c");
+
+            postService.AddMarketplacePost(auctionPost);
+
+            return RedirectToAction(nameof(Index));
+        }
+
 
         // GET: MarketplacePosts/Delete/5
         public async Task<IActionResult> Delete(Guid? id)
