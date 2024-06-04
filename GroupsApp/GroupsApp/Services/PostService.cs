@@ -38,6 +38,12 @@ namespace GroupsApp.Services
             // _marketplacePostRepository.SaveChanges();
             return MarketplacePostMapper.MapMarketplacePostToMarketplacePostDTO(context);
         }
+        public MarketplacePost AddMarketplacePost(MarketplacePost marketplacePost)
+        {
+            return _marketplacePostRepository.AddMarketplacePost(marketplacePost);
+            // _marketplacePostRepository.SaveChanges();
+        }
+        
         public  void RemoveMarketplacePost(MarketplacePostDTO marketplacePostDTO)
         {
             var marketplacePost = MarketplacePostMapper.MapMarketplacePostDTOToMarketplacePost(marketplacePostDTO);

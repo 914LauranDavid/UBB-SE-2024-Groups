@@ -30,6 +30,7 @@ namespace GroupsApp.Repositories
 
         public MarketplacePost? GetMarketplacePostById(Guid id)
         {
+            //Console.WriteLine(_context.MarketplacePosts);
             return _context.MarketplacePosts.Find(id);
         }
 
@@ -60,6 +61,10 @@ namespace GroupsApp.Repositories
 
         public List<MarketplacePost> GetMarketplacePostsByAuthorId(Guid authorId)
         {
+            Console.WriteLine(authorId);
+            Console.WriteLine(_context.MarketplacePosts
+                .Where(post => post.AuthorId == authorId)
+                .ToList());
             return _context.MarketplacePosts
                 .Where(post => post.AuthorId == authorId)
                 .ToList();

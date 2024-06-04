@@ -27,9 +27,10 @@ namespace GroupsApp.Models
 
         public GroupPost()
         {
-            this.groupPostId = Guid.NewGuid();
-            this.authorId = Guid.NewGuid();
-            this.groupId = Guid.NewGuid();
+            this.groupPostId = Guid.NewGuid(); 
+            // TODO: this should not be generated here?
+            //this.authorId = Guid.NewGuid();
+            //this.groupId = Guid.NewGuid();
             this.description = Constants.EMPTY_STRING;
             this.mediaContent = Constants.EMPTY_STRING;
             this.creationDate = DateTime.Now;
@@ -38,16 +39,16 @@ namespace GroupsApp.Models
         }
 
         [Key]
-        public Guid GroupPostId { get => groupPostId; }
-        public Guid? AuthorId => authorId;
+        public Guid GroupPostId { get => groupPostId; set => groupPostId = value; }
+        public Guid? AuthorId { get => authorId; set => authorId = value; }
 
-        public Guid GroupId => groupId;
+        public Guid GroupId { get => groupId; set => groupId = value; }
 
         public string Description { get => description; set => description = value; }
 
         public string? MediaContent { get => mediaContent; set => mediaContent = value; }
 
-        public DateTime CreationDate => CreationDate;
+        public DateTime CreationDate { get => creationDate; }
 
         public bool IsPinned { get => isPinned; set => isPinned = value; }
 
