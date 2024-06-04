@@ -26,7 +26,7 @@ namespace GroupsApp.Controllers
         public async Task<IActionResult> Index()
         {
             //return View(postService.GetMarketplacePosts());
-            var favoritePosts = this.userService.GetFavoritePosts(Guid.Parse("2fda6ef7-ca09-4c63-9c25-dd4e31f67374"));
+            var favoritePosts = this.userService.GetFavoritePosts(Guid.Parse("4f02e552-c02b-48d4-8d7c-1162bcdab88c"));
             Console.WriteLine(favoritePosts);
             return View(favoritePosts.Value);
         }
