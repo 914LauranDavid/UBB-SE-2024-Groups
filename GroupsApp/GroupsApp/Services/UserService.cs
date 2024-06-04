@@ -157,7 +157,9 @@ namespace GroupsApp.Services
             {
                 throw new Exception("Post not found");
             }
-            foundUser.FavoritePosts.Remove(foundPost);
+            //foundUser.FavoritePosts.Remove(foundPost);
+            UsersFavoritePosts usersFavoritePosts = new UsersFavoritePosts { UserId = userId, MarketplacePostId = postId };
+            _usersFavoritePostsRepository.DeleteUsersFavoritePosts(usersFavoritePosts);
         }
 
         public void RemoveUser(Guid userId)

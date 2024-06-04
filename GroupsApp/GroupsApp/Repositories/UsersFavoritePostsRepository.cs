@@ -34,7 +34,7 @@ namespace GroupsApp.Repositories
         }*/
 
         public void DeleteUsersFavoritePosts(UsersFavoritePosts usersFavoritePosts) {
-            UsersFavoritePosts? foundUsersFavoritePosts = _context.UsersFavoritePosts.Find(usersFavoritePosts.UserId, usersFavoritePosts.MarketplacePostId);
+            UsersFavoritePosts foundUsersFavoritePosts = _context.UsersFavoritePosts.Find(usersFavoritePosts.UserId, usersFavoritePosts.MarketplacePostId);
             if (foundUsersFavoritePosts == null)
             {
                 throw new Exception("UsersFavoritePosts not found");

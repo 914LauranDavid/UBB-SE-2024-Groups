@@ -16,6 +16,7 @@
                 @Html.DisplayNameFor(model => model.Description)
             </th>
             <th></th>
+            <th></th>
         </tr>
     </thead>
     <tbody>
@@ -29,6 +30,9 @@
                     @Html.DisplayFor(modelItem => item.Description)
                 </td>
                 <td><img src="@item.MediaContent" alt="Image" style="max-width: 400px; max-height: 400px;" /></td>
+                <td>
+                    <a asp-action="Delete" asp-route-userId="@item.AuthorId" asp-route-postId="@item.MarketplacePostId">Delete</a>
+                </td>
             </tr>
         }
     </tbody>
