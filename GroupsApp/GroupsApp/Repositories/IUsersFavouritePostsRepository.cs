@@ -7,8 +7,9 @@ namespace GroupsApp.Repositories
     public interface IUsersFavouritePostsRepository
     {
         UsersFavoritePosts AddUsersFavoritePosts(UsersFavoritePosts usersFavoritePosts);
-        UsersFavoritePosts? GetUsersFavoritePostsById(Guid id);
+        public UsersFavoritePosts GetUsersFavoritePostsById(Guid id);
         void DeleteUsersFavoritePosts(UsersFavoritePosts usersFavoritePosts);
-        List<UsersFavoritePosts> GetAllUsersFavouritePosts();
+        public List<UsersFavoritePosts> GetAllUsersFavouritePosts();
+        public List<Guid> GetMarketplacePostIdsByUserId(Guid userId);
     }
 }

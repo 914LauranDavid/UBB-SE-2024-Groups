@@ -72,7 +72,6 @@ namespace GroupsApp.Services
             var addedUser = _userRepository.AddUser(UserMapper.MapUserDtoToUser(userDto));
             return UserMapper.MapUserToUserDto(addedUser);
         }
-
         public ActionResult<List<MarketplacePostDTO>> GetFavoritePosts(Guid userId)
         {
             var foundUser = _userRepository.GetUserById(userId);
@@ -80,8 +79,18 @@ namespace GroupsApp.Services
             {
                 throw new Exception("User not found");
             }
-            var favoritePosts = _marketplacePostRepository.GetMarketplacePostsByAuthorId(userId).ToList();
-            return favoritePosts.Select(post => MarketplacePostMapper.MapMarketplacePostToMarketplacePostDTO(post)).ToList();
+            List<Guid> postIds = _usersFavoritePostsRepository.GetMarketplacePostIdsByUserId(userId);
+        
+            List<MarketplacePostDTO> posts = new List<MarketplacePostDTO>();
+            foreach (Guid id in postIds)
+            {
+                var post = _marketplacePostRepository.GetMarketplacePostById(id);
+                if (post != null)
+                {
+                    posts.Add(MarketplacePostMapper.MapMarketplacePostToMarketplacePostDTO(post));
+                }
+            }
+            return posts;
         }
 
         public ActionResult<User> GetUserById(Guid id)
@@ -126,6 +135,8 @@ namespace GroupsApp.Services
             {
                 throw new Exception("User not found");
             }
+
+           
             var foundPost = _marketplacePostRepository.GetMarketplacePostById(postId);
             if (foundPost == null)
             {
@@ -146,7 +157,6 @@ namespace GroupsApp.Services
             {
                 throw new Exception("Post not found");
             }
-            Console.WriteLine(foundUser.FavoritePosts.ToList());
             foundUser.FavoritePosts.Remove(foundPost);
         }
 

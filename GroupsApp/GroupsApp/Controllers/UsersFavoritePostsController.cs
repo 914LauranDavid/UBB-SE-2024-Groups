@@ -27,6 +27,7 @@ namespace GroupsApp.Controllers
         {
             //return View(postService.GetMarketplacePosts());
             var favoritePosts = this.userService.GetFavoritePosts(Guid.Parse("2fda6ef7-ca09-4c63-9c25-dd4e31f67374"));
+            Console.WriteLine(favoritePosts);
             return View(favoritePosts.Value);
         }
 

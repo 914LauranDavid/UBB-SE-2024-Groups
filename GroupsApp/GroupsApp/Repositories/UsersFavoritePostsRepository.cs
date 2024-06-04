@@ -15,9 +15,9 @@ namespace GroupsApp.Repositories
         }
 
         //Find by userId, Idk if there are different ones for different marketplaces -Gugu
-        public UsersFavoritePosts? GetUsersFavoritePostsById(Guid id)
+        public UsersFavoritePosts GetUsersFavoritePostsById(Guid userId)
         {
-            return _context.UsersFavoritePosts.Find(id);
+            return _context.UsersFavoritePosts.Find(userId);
         }
 
         //Irrelevant
@@ -45,7 +45,15 @@ namespace GroupsApp.Repositories
 
         public List<UsersFavoritePosts> GetAllUsersFavouritePosts()
         {
-            return [.. _context.UsersFavoritePosts];
+            return _context.UsersFavoritePosts.ToList();
+        }
+
+        public List<Guid> GetMarketplacePostIdsByUserId(Guid userId)
+        {
+            return _context.UsersFavoritePosts
+                .Where(cart => cart.UserId == userId)
+                .Select(cart => cart.MarketplacePostId)
+                .ToList();
         }
     }
 }

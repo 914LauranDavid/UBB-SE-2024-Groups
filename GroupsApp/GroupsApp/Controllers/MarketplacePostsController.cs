@@ -10,6 +10,7 @@ using GroupsApp.Models.MarketplacePosts;
 using GroupsApp.Services;
 using GroupsApp.Models;
 using GroupsApp.Mapper;
+using System.Security.Claims;
 
 namespace GroupsApp.Controllers
 {
@@ -62,6 +63,22 @@ namespace GroupsApp.Controllers
             return View();
         }
 
+        [HttpPost]
+        public IActionResult AddToFavorites(Guid id)
+        {
+            var userId = Guid.Parse("2fda6ef7-ca09-4c63-9c25-dd4e31f67374");
+
+            try
+            {
+                userService.AddPostToFavorites(id, userId);
+                return Ok(new { success = true });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { success = false, message = ex.Message });
+            }
+        }
+
         // POST: MarketplacePosts/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
@@ -70,8 +87,8 @@ namespace GroupsApp.Controllers
         public async Task<IActionResult> Create([Bind("Title,Description,MediaContent,Location,CreationDate,EndDate,IsPromoted,IsActive")] MarketplacePost marketplacePost)
         {
             marketplacePost.Type = "Donation"; // TODO don't hardcode these
-            marketplacePost.GroupId = Guid.Parse("1ae4795d-c170-4b7e-ba40-681b6f9993f5");
-            marketplacePost.AuthorId = Guid.Parse("4f02e552-c02b-48d4-8d7c-1162bcdab88c");
+            marketplacePost.GroupId = Guid.Parse("9f7061d4-a193-4e63-87f1-8fc4c2251aed");
+            marketplacePost.AuthorId = Guid.Parse("2fda6ef7-ca09-4c63-9c25-dd4e31f67374");
 
             postService.AddMarketplacePost(MarketplacePostMapper.MapMarketplacePostToMarketplacePostDTO(marketplacePost));  // TODO avoid this
 
