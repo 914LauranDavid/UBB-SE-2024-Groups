@@ -12,7 +12,7 @@ namespace GroupsApp.Data
 {
     public class GroupsAppContext : IdentityDbContext<User, IdentityRole<Guid>, Guid>
     {
-        public GroupsAppContext (DbContextOptions<GroupsAppContext> options)
+        public GroupsAppContext(DbContextOptions<GroupsAppContext> options)
             : base(options)
         {
         }
@@ -53,6 +53,8 @@ namespace GroupsApp.Data
         public DbSet<EventReport> EventReports { get; set; }
 
         public DbSet<EventReview> EventReviews { get; set; }
+
+        public DbSet<EventNotification> EventNotifications { get; set; }
 
         public DbSet<Comment> Comments { get; set; }
 
@@ -194,14 +196,15 @@ namespace GroupsApp.Data
             modelBuilder.Entity<Event>()
                 .HasOne(e => e.Organizer)
                 .WithMany(u => u.OriganizedEvents)
-                .HasForeignKey(e => e.OrganizerId);
+                .HasForeignKey(e => e.OrganizerId)
+                .OnDelete(DeleteBehavior.NoAction);
 
             //modelBuilder.Entity<User>()
             //    .HasMany(u => u.Events)
             //    .WithMany(e => e.Users)
             //    .UsingEntity<UserEvent>();
 
-            modelBuilder.Entity<EventReport>().HasKey(er => new { er.UserId, er.EventId});
+            modelBuilder.Entity<EventReport>().HasKey(er => new { er.UserId, er.EventId });
 
             modelBuilder.Entity<EventReview>().HasKey(er => new { er.UserId, er.EventId });
 
@@ -222,27 +225,32 @@ namespace GroupsApp.Data
             modelBuilder.Entity<EventDonation>()
                 .HasOne(ed => ed.Event)
                 .WithMany(e => e.Donations)
-                .HasForeignKey(ed => ed.EventId);
+                .HasForeignKey(ed => ed.EventId)
+                .OnDelete(DeleteBehavior.NoAction);
 
             modelBuilder.Entity<EventDonation>()
                 .HasOne(ed => ed.User)
                 .WithMany(u => u.EventDonationsMade)
-                .HasForeignKey(ed => ed.UserId);
+                .HasForeignKey(ed => ed.UserId)
+                .OnDelete(DeleteBehavior.NoAction);
 
             modelBuilder.Entity<EventExpense>()
                 .HasOne(ee => ee.Event)
                 .WithMany(e => e.Expenses)
-                .HasForeignKey(ee => ee.EventId);
+                .HasForeignKey(ee => ee.EventId)
+                .OnDelete(DeleteBehavior.NoAction);
 
             modelBuilder.Entity<EventReview>()
                 .HasOne(er => er.Event)
                 .WithMany(e => e.Reviews)
-                .HasForeignKey(er => er.EventId);
+                .HasForeignKey(er => er.EventId)
+                .OnDelete(DeleteBehavior.NoAction);
 
             modelBuilder.Entity<EventReview>()
                 .HasOne(er => er.Reviewer)
                 .WithMany(u => u.EventReviewsMade)
-                .HasForeignKey(er => er.UserId);
+                .HasForeignKey(er => er.UserId)
+                .OnDelete(DeleteBehavior.NoAction);
 
             modelBuilder.Entity<GroupPostReport>()
                 .HasOne(GroupPostReport => GroupPostReport.Reporter)
@@ -257,17 +265,22 @@ namespace GroupsApp.Data
             modelBuilder.Entity<EventReport>()
                 .HasOne(er => er.Reporter)
                 .WithMany(u => u.EventReportsMade)
-                .HasForeignKey(er => er.UserId);
+                .HasForeignKey(er => er.UserId)
+                .OnDelete(DeleteBehavior.NoAction);
 
             modelBuilder.Entity<EventReport>()
                 .HasOne(er => er.Event)
                 .WithMany(e => e.Reports)
-                .HasForeignKey(er => er.EventId);
+                .HasForeignKey(er => er.EventId)
+                .OnDelete(DeleteBehavior.NoAction);
 
+            // fix foreign key constraints on delete cascade
+            // not optiomal but i dont care any more
             foreach (var relationship in modelBuilder.Model.GetEntityTypes().SelectMany(e => e.GetForeignKeys()))
             {
                 relationship.DeleteBehavior = DeleteBehavior.NoAction;
             }
+            //
         }
         #endregion
     }

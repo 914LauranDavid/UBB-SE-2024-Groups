@@ -9,12 +9,12 @@ namespace GroupsApp.Controllers
 {
     [Authorize]
     [Route("/event")]
-    public class EventController : Controller
+    public class old_EventController_old : Controller
     {
-        
+
         private readonly IEventService eventService;
 
-        public EventController(IEventService eventService)
+        public old_EventController_old(IEventService eventService)
         {
             this.eventService = eventService;
         }
@@ -45,8 +45,9 @@ namespace GroupsApp.Controllers
             try
             {
                 return Ok(eventService.GetEventById(eventId));
-                
-            }catch (Exception ex)
+
+            }
+            catch (Exception ex)
             {
                 return NotFound(ex.Message);
             }

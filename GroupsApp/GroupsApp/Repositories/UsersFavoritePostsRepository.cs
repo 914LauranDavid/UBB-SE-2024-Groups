@@ -15,9 +15,9 @@ namespace GroupsApp.Repositories
         }
 
         //Find by userId, Idk if there are different ones for different marketplaces -Gugu
-        public UsersFavoritePosts? GetUsersFavoritePostsById(Guid id)
+        public UsersFavoritePosts GetUsersFavoritePostsById(Guid userId)
         {
-            return _context.UsersFavoritePosts.Find(id);
+            return _context.UsersFavoritePosts.Find(userId);
         }
 
         //Irrelevant
@@ -34,7 +34,7 @@ namespace GroupsApp.Repositories
         }*/
 
         public void DeleteUsersFavoritePosts(UsersFavoritePosts usersFavoritePosts) {
-            UsersFavoritePosts? foundUsersFavoritePosts = _context.UsersFavoritePosts.Find(usersFavoritePosts.UserId, usersFavoritePosts.MarketplacePostId);
+            UsersFavoritePosts foundUsersFavoritePosts = _context.UsersFavoritePosts.Find(usersFavoritePosts.UserId, usersFavoritePosts.MarketplacePostId);
             if (foundUsersFavoritePosts == null)
             {
                 throw new Exception("UsersFavoritePosts not found");
@@ -45,7 +45,15 @@ namespace GroupsApp.Repositories
 
         public List<UsersFavoritePosts> GetAllUsersFavouritePosts()
         {
-            return [.. _context.UsersFavoritePosts];
+            return _context.UsersFavoritePosts.ToList();
+        }
+
+        public List<Guid> GetMarketplacePostIdsByUserId(Guid userId)
+        {
+            return _context.UsersFavoritePosts
+                .Where(cart => cart.UserId == userId)
+                .Select(cart => cart.MarketplacePostId)
+                .ToList();
         }
     }
 }

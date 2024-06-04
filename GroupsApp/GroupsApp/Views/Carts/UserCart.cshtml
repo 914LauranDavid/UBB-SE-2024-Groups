@@ -1,0 +1,30 @@
+﻿@model List<GroupsApp.Payloads.DTO.MarketplacePostDTO>
+
+@{
+    ViewData["Title"] = "User Cart";
+}
+
+<h1>User Cart</h1>
+
+@if (Model == null || !Model.Any())
+{
+    <p>@ViewBag.Message</p>
+}
+else
+{
+    @foreach (var post in Model)
+    {
+        
+        <h2>@post.Title</h2>
+        <h3>@(ViewBag.AuthorDictionary != null && ViewBag.AuthorDictionary.ContainsKey(post.MarketplacePostId) ? ViewBag.AuthorDictionary[post.MarketplacePostId] : "Unknown Author")</h3>
+        <h3>@post.Description</h3>
+        <div>
+            <img src="@post.MediaContent" />
+        </div>
+        <div>
+
+            @Html.ActionLink("Delete", "Delete", new { cartOwnerId = ViewBag.CartOwnerId, idOfPostToRemove = @post.MarketplacePostId })
+        </div>
+        
+    }
+}
