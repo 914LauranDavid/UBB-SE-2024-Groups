@@ -1,14 +1,16 @@
-﻿using GroupsApp.Models;
+﻿using GroupsApp.Mapper;
+using GroupsApp.Models;
 using GroupsApp.Models.MarketplacePosts;
 using GroupsApp.Payload.DTO;
 using GroupsApp.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
 
 namespace GroupsApp.Controllers
 {
     [Authorize]
-    [Route("/group")]
     public class GroupController : Controller
     {
         private readonly IGroupService groupService;
@@ -17,7 +19,7 @@ namespace GroupsApp.Controllers
         {
             this.groupService = groupService;
         }
-
+        /*
         [HttpPost]
         public IActionResult CreateGroup([FromBody] GroupDTO groupDTO)
         {
@@ -235,11 +237,146 @@ namespace GroupsApp.Controllers
             }
         }
 
-        [HttpGet]
+        /*[HttpGet]
         public IActionResult GetGroups()
         {
             var groups =  groupService.GetAllGroups();
             return View(groups);
+        }*/
+
+        // GET: Groups
+        public async Task<IActionResult> Index()
+        {
+            var groups = groupService.GetAllGroupsNonDTO();
+            return View(groups);
+        }
+
+        // GET: Groups/Details/5
+        public async Task<IActionResult> Details(Guid? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var @group = groupService.GetGroupById(id.Value);
+            if (@group == null)
+            {
+                return NotFound();
+            }
+
+            return View(@group);
+        }
+
+        // GET: Groups/Create
+        public IActionResult Create()
+        {
+            ViewData["OwnerId"] = new SelectList(groupService.GetAllGroups(), "UserId", "UserId");
+            return View();
+        }
+
+        // POST: Groups/Create
+        // To protect from overposting attacks, enable the specific properties you want to bind to.
+        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Create([Bind("GroupId,OwnerId,GroupName,Description,CreatedDate,IsPublic,AllowanceOfPostage")] Group @group)
+        {
+            if (ModelState.IsValid)
+            {
+                @group.GroupId = Guid.NewGuid();
+                groupService.CreateGroup(GroupMapper.GroupToGroupDTO(@group));
+                return RedirectToAction(nameof(Index));
+            }
+            return View(@group);
+        }
+
+        // GET: Groups/Edit/5
+        public async Task<IActionResult> Edit(Guid? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var @group = groupService.GetGroupById(id.Value);
+            if (@group == null)
+            {
+                return NotFound();
+            }
+            ViewData["OwnerId"] = new SelectList(groupService.GetAllGroups(), "UserId", "UserId", @group.OwnerId);
+            return View(@group);
+        }
+
+        // POST: Groups/Edit/5
+        // To protect from overposting attacks, enable the specific properties you want to bind to.
+        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(Guid id, [Bind("GroupId,OwnerId,GroupName,Description,CreatedDate,IsPublic,AllowanceOfPostage")] Group @group)
+        {
+            if (id != @group.GroupId)
+            {
+                return NotFound();
+            }
+
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    groupService.UpdateGroup(GroupMapper.GroupToGroupDTO(@group));
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    if (!GroupExists(@group.GroupId))
+                    {
+                        return NotFound();
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
+                return RedirectToAction(nameof(Index));
+            }
+            ViewData["OwnerId"] = new SelectList(groupService.GetAllGroups(), "UserId", "UserId", @group.OwnerId);
+            return View(@group);
+        }
+
+        // GET: Groups/Delete/5
+        public async Task<IActionResult> Delete(Guid? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var @group = groupService.GetGroupById(id.Value);
+            if (@group == null)
+            {
+                return NotFound();
+            }
+
+            return View(@group);
+        }
+
+        // POST: Groups/Delete/5
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteConfirmed(Guid id)
+        {
+            var group = groupService.GetGroupById(id);
+            if (group != null)
+            {
+                groupService.DeleteGroupPost(id);
+            }
+
+            return RedirectToAction(nameof(Index));
+        }
+
+        private bool GroupExists(Guid id)
+        {
+            return groupService.GetGroupById(id) != null;
         }
     }
 }
