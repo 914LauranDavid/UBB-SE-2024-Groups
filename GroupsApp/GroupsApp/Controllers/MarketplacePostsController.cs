@@ -71,11 +71,11 @@ namespace GroupsApp.Controllers
             try
             {
                 userService.AddPostToFavorites(id, userId);
-                return Ok(new { success = true });
+                return RedirectToAction("Index", "UsersFavoritePosts");
             }
             catch (Exception ex)
             {
-                return BadRequest(new { success = false, message = ex.Message });
+                return RedirectToAction("Index", "MarketplacePosts");
             }
         }
 
