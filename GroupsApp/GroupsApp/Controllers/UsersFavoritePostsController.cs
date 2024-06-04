@@ -64,17 +64,17 @@ namespace GroupsApp.Controllers
         // POST: UsersFavoritePosts/Delete/5/2
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(Guid userId, Guid postId)
+        public async Task<IActionResult> DeleteConfirmed(Guid userId, Guid marketPlacePostId)
         {
             Console.WriteLine(userId);
-            Console.WriteLine(postId);
+            Console.WriteLine(marketPlacePostId);
             var usersFavoritePosts = userService.GetFavoritePosts(userId);
             if (usersFavoritePosts != null)
             {
-                userService.RemovePostFromFavorites(postId, userId);
+                userService.RemovePostFromFavorites(marketPlacePostId, userId);
             }
 
-            return RedirectToAction(nameof(userId));
+            return RedirectToAction(nameof(Index));
         }
     }
 }

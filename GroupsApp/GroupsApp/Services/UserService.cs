@@ -146,6 +146,7 @@ namespace GroupsApp.Services
             {
                 throw new Exception("Post not found");
             }
+            Console.WriteLine(foundUser.FavoritePosts.ToList());
             foundUser.FavoritePosts.Remove(foundPost);
         }
 

@@ -71,7 +71,7 @@
                 </td>
                 <td>
                     <a asp-action="Details" asp-route-id="@item.MarketplacePostId">Details</a> |
-                    <a asp-action="Delete" asp-route-id="@item.MarketplacePostId">Delete</a>
+                    <a asp-action="Delete" asp-route-userId="@item.AuthorId" asp-route-postid="@item.MarketplacePostId">Delete</a>
                 </td>
             </tr>
         }
