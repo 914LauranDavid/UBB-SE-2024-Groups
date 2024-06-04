@@ -1,7 +1,7 @@
-﻿@model IEnumerable<GroupsApp.Models.MarketplacePosts.MarketplacePost>
+@model IEnumerable<GroupsApp.Models.MarketplacePosts.MarketplacePost>
 
 @{
-	ViewData["Title"] = "Index";
+    ViewData["Title"] = "Index";
 }
 
 <h1>Welcome to the Marketplace!</h1>
@@ -92,7 +92,11 @@
 				</td>
 				<td>
 					<a asp-action="Details" asp-route-id="@item.MarketplacePostId">Details</a> |
-					<a asp-action="Delete" asp-route-id="@item.MarketplacePostId">Delete</a>
+					<a asp-action="Delete" asp-route-id="@item.MarketplacePostId">Delete</a> |
+					<form asp-action="AddToFavorites" method="post" style="display:inline;">
+						<input type="hidden" name="id" value="@item.MarketplacePostId" />
+						<button type="submit">&#x2764;&#xfe0f;</button>
+					</form>
 				</td>
 			</tr>
 		}

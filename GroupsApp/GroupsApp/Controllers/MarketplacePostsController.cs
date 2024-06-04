@@ -10,6 +10,7 @@ using GroupsApp.Models.MarketplacePosts;
 using GroupsApp.Services;
 using GroupsApp.Models;
 using GroupsApp.Mapper;
+using System.Security.Claims;
 
 namespace GroupsApp.Controllers
 {
@@ -96,20 +97,20 @@ namespace GroupsApp.Controllers
             return View();
         }
 
-        // POST: MarketplacePosts/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Title,Description,MediaContent,Location,CreationDate,EndDate,IsPromoted,IsActive")] MarketplacePost marketplacePost)
+        public IActionResult AddToFavorites(Guid id)
         {
-            marketplacePost.Type = "Donation"; // TODO don't hardcode these
-            marketplacePost.GroupId = Guid.Parse("1ae4795d-c170-4b7e-ba40-681b6f9993f5");
-            marketplacePost.AuthorId = Guid.Parse("4f02e552-c02b-48d4-8d7c-1162bcdab88c");
+            var userId = Guid.Parse("4f02e552-c02b-48d4-8d7c-1162bcdab88c");
 
-            postService.AddMarketplacePost(MarketplacePostMapper.MapMarketplacePostToMarketplacePostDTO(marketplacePost));  // TODO avoid this
-
-            return RedirectToAction(nameof(Index));
+            try
+            {
+                userService.AddPostToFavorites(id, userId);
+                return RedirectToAction("Index", "UsersFavoritePosts");
+            }
+            catch (Exception ex)
+            {
+                return RedirectToAction("Index", "MarketplacePosts");
+            }
         }
 
         // POST: MarketplacePosts/CreateDonationPost
