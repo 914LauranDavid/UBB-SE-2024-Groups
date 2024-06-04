@@ -19,7 +19,6 @@ namespace GroupsApp.Services
         void RejectRequestToJoinGroup(Guid joinRequestId);
 
         void CreateNewPostOnGroupChat(Guid groupId, Guid groupMemberId, string postContent, string postImage);
-        ICollection<GroupPostDTO> GetGroupPosts(Guid groupId);
 
         List<User> GetGroupMembers(Guid groupId);
         bool IsUserInGroup(Guid groupId, Guid groupMemberId);
@@ -31,7 +30,11 @@ namespace GroupsApp.Services
         List<Group> GetAllGroupsNonDTO();
         GroupPostDTO GetGroupPostById(Guid groupId, Guid postId);
         void AddGroupPost(GroupPostDTO groupPost);
+
+        void AddGroupPost(GroupPostDTO groupPost, List<Tag> tags);
         void UpdateGroupPost(GroupPostDTO groupPost);
+
+        void UpdateGroupPost(GroupPostDTO groupPost, List<Tag> tags);
         void DeleteGroupPost(Guid groupId);
         ICollection<GroupPostDTO> GetGroupPosts(Guid groupId, List<Tag> tags);
     }

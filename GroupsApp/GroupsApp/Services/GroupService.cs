@@ -111,9 +111,9 @@ namespace GroupsApp.Services
 
         }
 
-        public ICollection<GroupPostDTO> GetGroupPosts(Guid groupId, List<Tag> tags)
+        public ICollection<GroupPostDTO> GetGroupPosts(Guid groupId, List<Tag>? tags = null)
         {
-            if(tags.Count == 0)
+            if (tags == null || tags.Count == 0)
                 return this._groupRepository.GetGroupPosts(groupId);
 
             return this._groupPostRepository.GetTaggedGroupPosts(groupId, tags);
@@ -304,8 +304,14 @@ namespace GroupsApp.Services
             var groupPost = GroupPostMapper.GroupPostDTOToGroupPost(groupPostDTO);
             this._groupPostRepository.UpdateGroupPost(groupPost);
 
-            this
+            this._tagsRepository.UpdatePostTags(groupPost, tags);
             return;
         }
+
+        public List<Tag> GetTags()
+        {
+            return _tagsRepository.GetAllTags();
+        }
+
     }
 }

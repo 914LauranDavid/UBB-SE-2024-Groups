@@ -1,4 +1,5 @@
 ﻿using GroupsApp.Data;
+using GroupsApp.Mapper;
 using GroupsApp.Models;
 using GroupsApp.Payload.DTO;
 using Microsoft.EntityFrameworkCore;
@@ -63,14 +64,18 @@ namespace GroupsApp.Repositories
             return usersPosts;
         }
 
+        public List<GroupPostDTO> GetTaggedGroupPosts(Guid groupId, List<Tag> tags)
+        {
+            return _context.GroupPosts.Where(gp => gp.GroupId == groupId &&
+                tags.All(t => gp.Tags.Contains(t))).
+                Select(gp => GroupPostMapper.GroupPostToGroupPostDTO(gp)).
+                ToList();
+        }
+
         public GroupPost UpdateGroupPost(Guid groupId, GroupPost groupPost)
         {
             throw new NotImplementedException();
         }
 
-        public ICollection<GroupPostDTO> GetTaggedGroupPosts(Guid groupId, List<Tag> tags)
-        {
-            throw new NotImplementedException();
-        }
     }
 }

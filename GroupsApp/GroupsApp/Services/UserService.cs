@@ -221,5 +221,20 @@ namespace GroupsApp.Services
 
             _marketplacePostRepository.DeleteAllPostByUser(userId);
         }
+
+        public void UnbanUserFromGroup(Guid userId, Guid groupId)
+        { 
+            Membership membership = _membershipRepository.GetMembershipById(userId, groupId);
+            if (membership == null)
+            {
+                throw new Exception("User is not a member of this group");
+            }
+            if (!membership.IsBanned)
+            {
+                throw new Exception("User is not banned");
+            }
+            membership.IsBanned = false;
+            _membershipRepository.UpdateMembership(membership);
+        }
     }
 }
