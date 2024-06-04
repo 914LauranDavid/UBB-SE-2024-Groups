@@ -50,6 +50,21 @@ namespace GroupsApp.Controllers
             return View(marketplacePost);
         }
 
+        public async Task<IActionResult> AddToCart(Guid? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+            // create a cart (user id, post id)
+            // call post service to call cart repo to add cart to cart
+            Guid authorId = Guid.Parse("20084852-bf05-4972-9703-590310e3f309");
+            Cart postToAdd = new Cart(authorId, id.Value);
+
+            postService.AddPostToCart(postToAdd);
+            return RedirectToAction(nameof(Index));
+        }
+
         // GET: MarketplacePosts/Create
         public IActionResult Create()
         {

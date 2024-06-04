@@ -1,5 +1,7 @@
-﻿using GroupsApp.Models.MarketplacePosts;
+﻿using GroupsApp.Models;
+using GroupsApp.Models.MarketplacePosts;
 using GroupsApp.Payloads.DTO;
+using GroupsApp.Repositories;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 
@@ -12,5 +14,6 @@ namespace GroupsApp.Services
         MarketplacePost GetMarketplacePostById(Guid id);
         IEnumerable<MarketplacePost> GetMarketplacePosts();
         void RemoveMarketplacePost(MarketplacePostDTO marketplacePostDTO);
+        Cart AddPostToCart(Cart cart);
     }
 }

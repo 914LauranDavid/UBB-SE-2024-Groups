@@ -15,16 +15,19 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.Extensions.Hosting;
+using GroupsApp.Models;
 
 namespace GroupsApp.Services
 {
     public class PostService : IPostService
     {
         private readonly IMarketplacePostRepository _marketplacePostRepository;
+        private readonly ICartRepository _cartRepository;
 
-        public PostService(IMarketplacePostRepository marketplacePostRepository)
+        public PostService(IMarketplacePostRepository marketplacePostRepository, ICartRepository cartRepository)
         {
             _marketplacePostRepository = marketplacePostRepository;
+            _cartRepository = cartRepository;
         }
         public IEnumerable<MarketplacePost> GetMarketplacePosts()
         {
@@ -63,6 +66,10 @@ namespace GroupsApp.Services
                 throw new Exception("Post doesn't exist!");
             }
             return postToDelete;
+        }
+        public Cart AddPostToCart(Cart cart)
+        {
+            return _cartRepository.AddCart(cart);
         }
     }
 }
