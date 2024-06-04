@@ -11,9 +11,11 @@ using GroupsApp.Services;
 using GroupsApp.Models;
 using GroupsApp.Mapper;
 using System.Security.Claims;
+using Microsoft.AspNetCore.Authorization;
 
 namespace GroupsApp.Controllers
 {
+    [Authorize]
     public class MarketplacePostsController : Controller
     {
         private readonly IPostService postService;

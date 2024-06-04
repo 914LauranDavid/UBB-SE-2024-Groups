@@ -2,13 +2,15 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using GroupsApp.Models;
 using GroupsApp.Models.MarketplacePosts;
+using Microsoft.AspNetCore.Identity;
 
 namespace GroupsApp.Data
 {
-    public class GroupsAppContext : DbContext
+    public class GroupsAppContext : IdentityDbContext<User, IdentityRole<Guid>, Guid>
     {
         public GroupsAppContext(DbContextOptions<GroupsAppContext> options)
             : base(options)
@@ -62,7 +64,9 @@ namespace GroupsApp.Data
         #region Required
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<User>().HasKey(u => u.UserId);
+            base.OnModelCreating(modelBuilder);
+
+            modelBuilder.Entity<User>().HasKey(u => u.Id);
             modelBuilder.Entity<Group>().HasKey(g => g.GroupId);
             modelBuilder.Entity<EventExpense>().HasKey(ee => ee.EventExpenseId);
             modelBuilder.Entity<EventDonation>().HasKey(ed => ed.EventDonationId);

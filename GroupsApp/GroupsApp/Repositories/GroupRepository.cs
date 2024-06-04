@@ -115,7 +115,7 @@ namespace GroupsApp.Repositories
         {
             var members = _context.Users.Join(
              _context.Memberships,
-             user => user.UserId,
+             user => user.Id,
              membership => membership.UserId,
              (user, membership) => new { User = user, Membership = membership })
          .Where(joined => joined.Membership.GroupId == groupId)

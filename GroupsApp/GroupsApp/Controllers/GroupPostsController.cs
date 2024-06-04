@@ -9,9 +9,11 @@ using GroupsApp.Data;
 using GroupsApp.Models;
 using GroupsApp.Services;
 using GroupsApp.Mapper;
+using Microsoft.AspNetCore.Authorization;
 
 namespace GroupsApp.Controllers
 {
+    [Authorize]
     public class GroupPostsController : Controller
     {
         private readonly IGroupService _groupService;

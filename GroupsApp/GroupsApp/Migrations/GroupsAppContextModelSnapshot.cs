@@ -27,12 +27,12 @@ namespace GroupsApp.Migrations
                     b.Property<Guid>("EventsEventId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("UsersUserId")
+                    b.Property<Guid>("UsersId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.HasKey("EventsEventId", "UsersUserId");
+                    b.HasKey("EventsEventId", "UsersId");
 
-                    b.HasIndex("UsersUserId");
+                    b.HasIndex("UsersId");
 
                     b.ToTable("EventUser");
                 });
@@ -533,39 +533,80 @@ namespace GroupsApp.Migrations
 
             modelBuilder.Entity("GroupsApp.Models.User", b =>
                 {
-                    b.Property<Guid>("UserId")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<int>("AccessFailedCount")
+                        .HasColumnType("int");
+
                     b.Property<DateOnly>("BirthDay")
                         .HasColumnType("date");
+
+                    b.Property<string>("ConcurrencyStamp")
+                        .IsConcurrencyToken()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Email")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<bool>("EmailConfirmed")
+                        .HasColumnType("bit");
 
                     b.Property<string>("FullName")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<bool>("LockoutEnabled")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTimeOffset?>("LockoutEnd")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<string>("NormalizedEmail")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<string>("NormalizedUserName")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
                     b.Property<string>("Password")
-                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PasswordHash")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("PhoneNumber")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Username")
-                        .IsRequired()
+                    b.Property<bool>("PhoneNumberConfirmed")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("SecurityStamp")
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("UserId");
+                    b.Property<bool>("TwoFactorEnabled")
+                        .HasColumnType("bit");
 
-                    b.ToTable("Users");
+                    b.Property<string>("UserName")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("NormalizedEmail")
+                        .HasDatabaseName("EmailIndex");
+
+                    b.HasIndex("NormalizedUserName")
+                        .IsUnique()
+                        .HasDatabaseName("UserNameIndex")
+                        .HasFilter("[NormalizedUserName] IS NOT NULL");
+
+                    b.ToTable("AspNetUsers", (string)null);
                 });
 
             modelBuilder.Entity("GroupsApp.Models.UserEvent", b =>
@@ -600,6 +641,141 @@ namespace GroupsApp.Migrations
                     b.HasIndex("MarketplacePostId");
 
                     b.ToTable("UsersFavoritePosts");
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole<System.Guid>", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("ConcurrencyStamp")
+                        .IsConcurrencyToken()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<string>("NormalizedName")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("NormalizedName")
+                        .IsUnique()
+                        .HasDatabaseName("RoleNameIndex")
+                        .HasFilter("[NormalizedName] IS NOT NULL");
+
+                    b.ToTable("AspNetRoles", (string)null);
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<System.Guid>", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("ClaimType")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ClaimValue")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid>("RoleId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("RoleId");
+
+                    b.ToTable("AspNetRoleClaims", (string)null);
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<System.Guid>", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("ClaimType")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ClaimValue")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("AspNetUserClaims", (string)null);
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<System.Guid>", b =>
+                {
+                    b.Property<string>("LoginProvider")
+                        .HasMaxLength(128)
+                        .HasColumnType("nvarchar(128)");
+
+                    b.Property<string>("ProviderKey")
+                        .HasMaxLength(128)
+                        .HasColumnType("nvarchar(128)");
+
+                    b.Property<string>("ProviderDisplayName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("LoginProvider", "ProviderKey");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("AspNetUserLogins", (string)null);
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<System.Guid>", b =>
+                {
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("RoleId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("UserId", "RoleId");
+
+                    b.HasIndex("RoleId");
+
+                    b.ToTable("AspNetUserRoles", (string)null);
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<System.Guid>", b =>
+                {
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("LoginProvider")
+                        .HasMaxLength(128)
+                        .HasColumnType("nvarchar(128)");
+
+                    b.Property<string>("Name")
+                        .HasMaxLength(128)
+                        .HasColumnType("nvarchar(128)");
+
+                    b.Property<string>("Value")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("UserId", "LoginProvider", "Name");
+
+                    b.ToTable("AspNetUserTokens", (string)null);
                 });
 
             modelBuilder.Entity("GroupsApp.Models.MarketplacePosts.DonationPost", b =>
@@ -654,13 +830,13 @@ namespace GroupsApp.Migrations
                     b.HasOne("GroupsApp.Models.Event", null)
                         .WithMany()
                         .HasForeignKey("EventsEventId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.HasOne("GroupsApp.Models.User", null)
                         .WithMany()
-                        .HasForeignKey("UsersUserId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .HasForeignKey("UsersId")
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
                 });
 
@@ -669,13 +845,13 @@ namespace GroupsApp.Migrations
                     b.HasOne("GroupsApp.Models.MarketplacePosts.MarketplacePost", null)
                         .WithMany()
                         .HasForeignKey("MarketplacePostId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.HasOne("GroupsApp.Models.MarketplacePosts.MarketplacePost", "MarketplacePost")
                         .WithMany()
                         .HasForeignKey("MarketplacePostId1")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.HasOne("GroupsApp.Models.User", null)
@@ -687,7 +863,7 @@ namespace GroupsApp.Migrations
                     b.HasOne("GroupsApp.Models.User", "User")
                         .WithMany()
                         .HasForeignKey("UserId1")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.Navigation("MarketplacePost");
@@ -699,7 +875,8 @@ namespace GroupsApp.Migrations
                 {
                     b.HasOne("GroupsApp.Models.Comment", null)
                         .WithMany("Replies")
-                        .HasForeignKey("CommentId1");
+                        .HasForeignKey("CommentId1")
+                        .OnDelete(DeleteBehavior.NoAction);
                 });
 
             modelBuilder.Entity("GroupsApp.Models.Event", b =>
@@ -707,7 +884,7 @@ namespace GroupsApp.Migrations
                     b.HasOne("GroupsApp.Models.User", "Organizer")
                         .WithMany("OriganizedEvents")
                         .HasForeignKey("OrganizerId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.Navigation("Organizer");
@@ -718,13 +895,13 @@ namespace GroupsApp.Migrations
                     b.HasOne("GroupsApp.Models.Event", "Event")
                         .WithMany("Donations")
                         .HasForeignKey("EventId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.HasOne("GroupsApp.Models.User", "User")
                         .WithMany("EventDonationsMade")
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.Navigation("Event");
@@ -737,7 +914,7 @@ namespace GroupsApp.Migrations
                     b.HasOne("GroupsApp.Models.Event", "Event")
                         .WithMany("Expenses")
                         .HasForeignKey("EventId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.Navigation("Event");
@@ -748,13 +925,13 @@ namespace GroupsApp.Migrations
                     b.HasOne("GroupsApp.Models.Event", "Event")
                         .WithMany("Reports")
                         .HasForeignKey("EventId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.HasOne("GroupsApp.Models.User", "Reporter")
                         .WithMany("EventReportsMade")
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.Navigation("Event");
@@ -767,13 +944,13 @@ namespace GroupsApp.Migrations
                     b.HasOne("GroupsApp.Models.Event", "Event")
                         .WithMany("Reviews")
                         .HasForeignKey("EventId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.HasOne("GroupsApp.Models.User", "Reviewer")
                         .WithMany("EventReviewsMade")
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.Navigation("Event");
@@ -786,7 +963,7 @@ namespace GroupsApp.Migrations
                     b.HasOne("GroupsApp.Models.User", "Owner")
                         .WithMany("OwnedGroups")
                         .HasForeignKey("OwnerId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.Navigation("Owner");
@@ -796,12 +973,13 @@ namespace GroupsApp.Migrations
                 {
                     b.HasOne("GroupsApp.Models.User", "Author")
                         .WithMany("GroupPosts")
-                        .HasForeignKey("AuthorId");
+                        .HasForeignKey("AuthorId")
+                        .OnDelete(DeleteBehavior.NoAction);
 
                     b.HasOne("GroupsApp.Models.Group", "Group")
                         .WithMany("GroupPosts")
                         .HasForeignKey("GroupId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.Navigation("Author");
@@ -814,13 +992,13 @@ namespace GroupsApp.Migrations
                     b.HasOne("GroupsApp.Models.GroupPost", "ReportedPost")
                         .WithMany("Reports")
                         .HasForeignKey("PostId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.HasOne("GroupsApp.Models.User", "Reporter")
                         .WithMany("GroupPostReportsMade")
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.Navigation("ReportedPost");
@@ -833,7 +1011,7 @@ namespace GroupsApp.Migrations
                     b.HasOne("GroupsApp.Models.Group", "Group")
                         .WithMany("JoinRequests")
                         .HasForeignKey("GroupId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.HasOne("GroupsApp.Models.User", "User")
@@ -852,13 +1030,13 @@ namespace GroupsApp.Migrations
                     b.HasOne("GroupsApp.Models.MarketplacePosts.MarketplacePost", "MarketplacePost")
                         .WithMany("Reviews")
                         .HasForeignKey("MarketplacePostId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.HasOne("GroupsApp.Models.User", "Reviewer")
                         .WithMany("MarketPlacePostReviewsMade")
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.Navigation("MarketplacePost");
@@ -870,12 +1048,13 @@ namespace GroupsApp.Migrations
                 {
                     b.HasOne("GroupsApp.Models.User", "Author")
                         .WithMany("MarketplacePosts")
-                        .HasForeignKey("AuthorId");
+                        .HasForeignKey("AuthorId")
+                        .OnDelete(DeleteBehavior.NoAction);
 
                     b.HasOne("GroupsApp.Models.Group", "Group")
                         .WithMany("MarketplacePosts")
                         .HasForeignKey("GroupId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.Navigation("Author");
@@ -888,7 +1067,7 @@ namespace GroupsApp.Migrations
                     b.HasOne("GroupsApp.Models.Group", "Group")
                         .WithMany("Memberships")
                         .HasForeignKey("GroupId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.HasOne("GroupsApp.Models.User", "User")
@@ -907,7 +1086,7 @@ namespace GroupsApp.Migrations
                     b.HasOne("GroupsApp.Models.Group", "Group")
                         .WithMany("GroupPolls")
                         .HasForeignKey("GroupId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.Navigation("Group");
@@ -918,7 +1097,7 @@ namespace GroupsApp.Migrations
                     b.HasOne("GroupsApp.Models.PollOption", "PollOption")
                         .WithMany("PollAnswers")
                         .HasForeignKey("PollOptionId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.HasOne("GroupsApp.Models.User", "UserThatAnswered")
@@ -937,7 +1116,7 @@ namespace GroupsApp.Migrations
                     b.HasOne("GroupsApp.Models.Poll", "Poll")
                         .WithMany("PollOptions")
                         .HasForeignKey("PollId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.Navigation("Poll");
@@ -948,13 +1127,13 @@ namespace GroupsApp.Migrations
                     b.HasOne("GroupsApp.Models.Event", "Event")
                         .WithMany()
                         .HasForeignKey("EventId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.HasOne("GroupsApp.Models.User", "User")
                         .WithMany()
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.Navigation("Event");
@@ -967,9 +1146,60 @@ namespace GroupsApp.Migrations
                     b.HasOne("GroupsApp.Models.MarketplacePosts.MarketplacePost", null)
                         .WithMany()
                         .HasForeignKey("MarketplacePostId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
+                    b.HasOne("GroupsApp.Models.User", null)
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<System.Guid>", b =>
+                {
+                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole<System.Guid>", null)
+                        .WithMany()
+                        .HasForeignKey("RoleId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<System.Guid>", b =>
+                {
+                    b.HasOne("GroupsApp.Models.User", null)
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<System.Guid>", b =>
+                {
+                    b.HasOne("GroupsApp.Models.User", null)
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<System.Guid>", b =>
+                {
+                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole<System.Guid>", null)
+                        .WithMany()
+                        .HasForeignKey("RoleId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.HasOne("GroupsApp.Models.User", null)
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<System.Guid>", b =>
+                {
                     b.HasOne("GroupsApp.Models.User", null)
                         .WithMany()
                         .HasForeignKey("UserId")

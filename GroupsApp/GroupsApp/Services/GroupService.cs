@@ -246,6 +246,12 @@ namespace GroupsApp.Services
             return groupDTOs;
         }
 
+        public List<Group> GetAllGroupsNonDTO()
+        {
+            var groups = this._groupRepository.GetAllGroups();
+            return groups;
+        }
+
         public GroupPostDTO GetGroupPostById(Guid groupId, Guid postId)
         {
             List<GroupPostDTO> groupPosts = this._groupRepository.GetGroupPosts(groupId);
