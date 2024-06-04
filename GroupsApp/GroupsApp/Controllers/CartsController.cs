@@ -14,15 +14,21 @@ namespace GroupsApp.Controllers
 {
     public class CartsController : Controller
     {
-        private readonly GroupsAppContext _context;
         private readonly IUserService _userService;
 
         const string UNKNOWN_AUTHOR = "Unknown Author";
 
-        public CartsController(GroupsAppContext context, IUserService userService)
+        public CartsController(IUserService userService)
         {
-            _context = context;
             _userService = userService;
+        }
+
+        public async Task<IActionResult> Index()
+        {
+            //var groupsAppContext = _context.GroupPosts.Include(g => g.Author).Include(g => g.Group);
+            //return View(await groupsAppContext.ToListAsync());
+            var groupPosts = this._userService.GetPostsFromCart(Guid.Parse("4f02e552-c02b-48d4-8d7c-1162bcdab88c"));
+            return View(groupPosts.Value);
         }
 
 
