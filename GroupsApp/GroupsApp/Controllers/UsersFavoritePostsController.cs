@@ -14,10 +14,12 @@ namespace GroupsApp.Controllers
     public class UsersFavoritePostsController : Controller
     {
         private readonly IUserService userService;
+        private readonly IPostService postService;
 
-        public UsersFavoritePostsController(IUserService userService)
+        public UsersFavoritePostsController(IUserService userService, IPostService postService)
         {
             this.userService = userService;
+            this.postService = postService;
         }
 
         // GET: UsersFavoritePosts
@@ -28,30 +30,44 @@ namespace GroupsApp.Controllers
             return View(favoritePosts.Value);
         }
 
-        // GET: UsersFavoritePosts/Delete/5
-        public async Task<IActionResult> Delete(Guid id)
+        // GET: MarketplacePosts/Details/5
+        public async Task<IActionResult> Details(Guid? id)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-            var usersFavoritePosts = userService.GetFavoritePosts(id);
+            var marketplacePost = postService.GetMarketplacePostById(id.Value);
 
-            if (usersFavoritePosts == null)
+            if (marketplacePost == null)
             {
                 return NotFound();
             }
 
-            return View(usersFavoritePosts);
+            return View(marketplacePost);
         }
 
-        // POST: UsersFavoritePosts/Delete/5
+        // GET: UsersFavoritePosts/Delete/5/2
+        public async Task<IActionResult> Delete(Guid? userId, Guid? postId)
+        {
+            Console.WriteLine(userId);
+            Console.WriteLine(postId);
+            if (userId == null || postId == null)
+            {
+                return NotFound();
+            }
+
+            return View(new UsersFavoritePosts((Guid)userId, (Guid)postId));
+        }
+
+        // POST: UsersFavoritePosts/Delete/5/2
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(Guid postId, Guid userId)
+        public async Task<IActionResult> DeleteConfirmed(Guid userId, Guid postId)
         {
-
+            Console.WriteLine(userId);
+            Console.WriteLine(postId);
             var usersFavoritePosts = userService.GetFavoritePosts(userId);
             if (usersFavoritePosts != null)
             {
