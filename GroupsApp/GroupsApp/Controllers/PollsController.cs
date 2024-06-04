@@ -8,6 +8,8 @@ using Microsoft.EntityFrameworkCore;
 using GroupsApp.Data;
 using GroupsApp.Models;
 using System.Text.RegularExpressions;
+using GroupsApp.Services;
+using GroupsApp.Mapper;
 
 namespace GroupsApp.Controllers
 {
@@ -66,5 +68,6 @@ namespace GroupsApp.Controllers
 
             return View(poll);
         }
+    }
 
 }
