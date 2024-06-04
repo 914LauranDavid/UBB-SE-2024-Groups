@@ -57,6 +57,10 @@ namespace GroupsApp.Data
 
         public DbSet<InterestStatus> InterestStatuses { get; set; }
 
+        public DbSet<Tag> Tags { get; set; }
+
+        public DbSet<PostTag> PostTags { get; set; }
+
 
         #region Required
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -262,6 +266,16 @@ namespace GroupsApp.Data
                 .HasOne(er => er.Event)
                 .WithMany(e => e.Reports)
                 .HasForeignKey(er => er.EventId);
+
+            modelBuilder.Entity<Tag>().HasKey(Tag => Tag.TagId);
+
+            modelBuilder.Entity<GroupPost>()
+                .HasMany(gp => gp.Tags)
+                .WithMany(t => t.TaggedPosts)
+                .UsingEntity<PostTag>(
+                    l => l.HasOne<Tag>().WithMany().HasForeignKey(e => e.PostTagId),
+                    r => r.HasOne<GroupPost>().WithMany().HasForeignKey(e => e.PostId)
+                );
         }
         #endregion
     }

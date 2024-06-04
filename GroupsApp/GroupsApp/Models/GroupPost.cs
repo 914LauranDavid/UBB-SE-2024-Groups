@@ -59,5 +59,7 @@ namespace GroupsApp.Models
         public Group Group { get; set; }
 
         public ICollection<GroupPostReport> Reports { get; } = new List<GroupPostReport>();
+
+        public ICollection<Tag> Tags { get; set; } = new List<Tag>();
     }
 }
