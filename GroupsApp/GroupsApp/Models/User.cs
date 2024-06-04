@@ -1,10 +1,11 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.Diagnostics.SymbolStore;
 using GroupsApp.Models.MarketplacePosts;
+using Microsoft.AspNetCore.Identity;
 
 namespace GroupsApp.Models
 {
-    public class User
+    public class User : IdentityUser<Guid>
     {
         private Guid userId;
         private string username;

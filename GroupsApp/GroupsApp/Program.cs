@@ -19,7 +19,7 @@ namespace GroupsApp
 
             builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
-            builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
+            builder.Services.AddDefaultIdentity<User>(options => options.SignIn.RequireConfirmedAccount = true)
                 .AddEntityFrameworkStores<GroupsAppContext>();
             builder.Services.AddControllersWithViews();
             builder.Services.AddScoped<IGroupRepository, GroupRepository>();

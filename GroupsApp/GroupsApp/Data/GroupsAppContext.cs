@@ -6,10 +6,11 @@ using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using GroupsApp.Models;
 using GroupsApp.Models.MarketplacePosts;
+using Microsoft.AspNetCore.Identity;
 
 namespace GroupsApp.Data
 {
-    public class GroupsAppContext : IdentityDbContext
+    public class GroupsAppContext : IdentityDbContext<User, IdentityRole<Guid>, Guid>
     {
         public GroupsAppContext (DbContextOptions<GroupsAppContext> options)
             : base(options)
