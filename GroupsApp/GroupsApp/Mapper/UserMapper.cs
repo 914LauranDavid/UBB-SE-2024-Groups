@@ -8,8 +8,8 @@ namespace GroupsApp.Mapper
         public static UserDto MapUserToUserDto(User user)
         {
             UserDto userDto = new UserDto();
-            userDto.UserId = user.UserId;
-            userDto.Username = user.Username;
+            userDto.UserId = user.Id;
+            userDto.Username = user.UserName;
             userDto.FullName = user.FullName;
             userDto.Password = user.Password;
             userDto.Email = user.Email;
@@ -30,8 +30,8 @@ namespace GroupsApp.Mapper
         public static User MapUserDtoToUser(UserDto userDto)
         {
             User user = new User();
-            user.UserId = userDto.UserId;
-            user.Username = userDto.Username;
+            user.Id = userDto.UserId;
+            user.UserName = userDto.Username;
             user.FullName = userDto.FullName;
             user.Password = userDto.Password;
             user.Email = userDto.Email;

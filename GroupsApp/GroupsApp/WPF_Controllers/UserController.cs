@@ -145,7 +145,7 @@ namespace GroupsApp.WPF_Controllers
         }
         private bool UserExists(Guid id)
         {
-            return userService.GetUsers().Value.Any(e => e.UserId == id);
+            return userService.GetUsers().Value.Any(e => e.Id == id);
         }
     }
 }

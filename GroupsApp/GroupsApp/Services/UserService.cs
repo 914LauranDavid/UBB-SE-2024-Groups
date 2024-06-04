@@ -166,7 +166,7 @@ namespace GroupsApp.Services
             {
                 throw new Exception("User not found");
             }
-            foundUser.Username = userDto.Username;
+            foundUser.UserName = userDto.Username;
             foundUser.FullName = userDto.FullName;
             foundUser.Email = userDto.Email;
             foundUser.PhoneNumber = userDto.PhoneNumber;

@@ -22,7 +22,7 @@ namespace GroupsApp.Repositories
 
         public User UpdateUser(User user)
         {
-            User? foundUser = _context.Users.Find(user.UserId);
+            User? foundUser = _context.Users.Find(user.Id);
             if (foundUser == null)
             {
                 throw new Exception("User not found");
@@ -31,7 +31,7 @@ namespace GroupsApp.Repositories
             foundUser.Email = user.Email;
             foundUser.Password = user.Password;
             foundUser.PhoneNumber = user.PhoneNumber;
-            foundUser.Username = user.Username;
+            foundUser.UserName = user.UserName;
             foundUser.BirthDay = user.BirthDay;
             User updatedUser = _context.Users.Update(foundUser).Entity;
             _context.SaveChanges();
@@ -40,7 +40,7 @@ namespace GroupsApp.Repositories
 
         public void DeleteUser(User user)
         {
-            User? foundUser = _context.Users.Find(user.UserId);
+            User? foundUser = _context.Users.Find(user.Id);
             if (foundUser == null)
             {
                 throw new Exception("User not found");

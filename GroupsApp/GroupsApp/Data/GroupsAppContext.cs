@@ -64,7 +64,7 @@ namespace GroupsApp.Data
         {
             base.OnModelCreating(modelBuilder);
 
-            modelBuilder.Entity<User>().HasKey(u => u.UserId);
+            modelBuilder.Entity<User>().HasKey(u => u.Id);
             modelBuilder.Entity<Group>().HasKey(g => g.GroupId);
             modelBuilder.Entity<EventExpense>().HasKey(ee => ee.EventExpenseId);
             modelBuilder.Entity<EventDonation>().HasKey(ed => ed.EventDonationId);
