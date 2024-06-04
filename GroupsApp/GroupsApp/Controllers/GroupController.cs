@@ -2,10 +2,12 @@
 using GroupsApp.Models.MarketplacePosts;
 using GroupsApp.Payload.DTO;
 using GroupsApp.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace GroupsApp.Controllers
 {
+    [Authorize]
     [Route("/group")]
     public class GroupController : Controller
     {
