@@ -15,7 +15,7 @@ namespace GroupsApp.Migrations
                 name: "AspNetRoles",
                 columns: table => new
                 {
-                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Name = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     NormalizedName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     ConcurrencyStamp = table.Column<string>(type: "nvarchar(max)", nullable: true)
@@ -29,16 +29,21 @@ namespace GroupsApp.Migrations
                 name: "AspNetUsers",
                 columns: table => new
                 {
-                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    FullName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Password = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Email = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: false),
+                    PhoneNumber = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    BirthDay = table.Column<DateOnly>(type: "date", nullable: false),
+                    CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     UserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     NormalizedUserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
-                    Email = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     NormalizedEmail = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     EmailConfirmed = table.Column<bool>(type: "bit", nullable: false),
                     PasswordHash = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     SecurityStamp = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     ConcurrencyStamp = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    PhoneNumber = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     PhoneNumberConfirmed = table.Column<bool>(type: "bit", nullable: false),
                     TwoFactorEnabled = table.Column<bool>(type: "bit", nullable: false),
                     LockoutEnd = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: true),
@@ -47,7 +52,7 @@ namespace GroupsApp.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_AspNetUsers", x => x.Id);
+                    table.PrimaryKey("PK_AspNetUsers", x => x.UserId);
                 });
 
             migrationBuilder.CreateTable(
@@ -80,30 +85,12 @@ namespace GroupsApp.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Users",
-                columns: table => new
-                {
-                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Username = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    FullName = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Password = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Email = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    PhoneNumber = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    BirthDay = table.Column<DateOnly>(type: "date", nullable: false),
-                    CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Users", x => x.UserId);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "AspNetRoleClaims",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    RoleId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    RoleId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     ClaimType = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     ClaimValue = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
@@ -114,8 +101,7 @@ namespace GroupsApp.Migrations
                         name: "FK_AspNetRoleClaims_AspNetRoles_RoleId",
                         column: x => x.RoleId,
                         principalTable: "AspNetRoles",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -124,7 +110,7 @@ namespace GroupsApp.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     ClaimType = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     ClaimValue = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
@@ -135,8 +121,7 @@ namespace GroupsApp.Migrations
                         name: "FK_AspNetUserClaims_AspNetUsers_UserId",
                         column: x => x.UserId,
                         principalTable: "AspNetUsers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "UserId");
                 });
 
             migrationBuilder.CreateTable(
@@ -146,7 +131,7 @@ namespace GroupsApp.Migrations
                     LoginProvider = table.Column<string>(type: "nvarchar(128)", maxLength: 128, nullable: false),
                     ProviderKey = table.Column<string>(type: "nvarchar(128)", maxLength: 128, nullable: false),
                     ProviderDisplayName = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false)
+                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -155,16 +140,15 @@ namespace GroupsApp.Migrations
                         name: "FK_AspNetUserLogins_AspNetUsers_UserId",
                         column: x => x.UserId,
                         principalTable: "AspNetUsers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "UserId");
                 });
 
             migrationBuilder.CreateTable(
                 name: "AspNetUserRoles",
                 columns: table => new
                 {
-                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    RoleId = table.Column<string>(type: "nvarchar(450)", nullable: false)
+                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    RoleId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -173,21 +157,19 @@ namespace GroupsApp.Migrations
                         name: "FK_AspNetUserRoles_AspNetRoles_RoleId",
                         column: x => x.RoleId,
                         principalTable: "AspNetRoles",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_AspNetUserRoles_AspNetUsers_UserId",
                         column: x => x.UserId,
                         principalTable: "AspNetUsers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "UserId");
                 });
 
             migrationBuilder.CreateTable(
                 name: "AspNetUserTokens",
                 columns: table => new
                 {
-                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     LoginProvider = table.Column<string>(type: "nvarchar(128)", maxLength: 128, nullable: false),
                     Name = table.Column<string>(type: "nvarchar(128)", maxLength: 128, nullable: false),
                     Value = table.Column<string>(type: "nvarchar(max)", nullable: true)
@@ -199,8 +181,7 @@ namespace GroupsApp.Migrations
                         name: "FK_AspNetUserTokens_AspNetUsers_UserId",
                         column: x => x.UserId,
                         principalTable: "AspNetUsers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "UserId");
                 });
 
             migrationBuilder.CreateTable(
@@ -225,11 +206,10 @@ namespace GroupsApp.Migrations
                 {
                     table.PrimaryKey("PK_Events", x => x.EventId);
                     table.ForeignKey(
-                        name: "FK_Events_Users_OrganizerId",
+                        name: "FK_Events_AspNetUsers_OrganizerId",
                         column: x => x.OrganizerId,
-                        principalTable: "Users",
-                        principalColumn: "UserId",
-                        onDelete: ReferentialAction.NoAction);
+                        principalTable: "AspNetUsers",
+                        principalColumn: "UserId");
                 });
 
             migrationBuilder.CreateTable(
@@ -248,11 +228,10 @@ namespace GroupsApp.Migrations
                 {
                     table.PrimaryKey("PK_Groups", x => x.GroupId);
                     table.ForeignKey(
-                        name: "FK_Groups_Users_OwnerId",
+                        name: "FK_Groups_AspNetUsers_OwnerId",
                         column: x => x.OwnerId,
-                        principalTable: "Users",
-                        principalColumn: "UserId",
-                        onDelete: ReferentialAction.NoAction);
+                        principalTable: "AspNetUsers",
+                        principalColumn: "UserId");
                 });
 
             migrationBuilder.CreateTable(
@@ -268,17 +247,15 @@ namespace GroupsApp.Migrations
                 {
                     table.PrimaryKey("PK_EventDonations", x => x.EventDonationId);
                     table.ForeignKey(
+                        name: "FK_EventDonations_AspNetUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "UserId");
+                    table.ForeignKey(
                         name: "FK_EventDonations_Events_EventId",
                         column: x => x.EventId,
                         principalTable: "Events",
-                        principalColumn: "EventId",
-                        onDelete: ReferentialAction.NoAction);
-                    table.ForeignKey(
-                        name: "FK_EventDonations_Users_UserId",
-                        column: x => x.UserId,
-                        principalTable: "Users",
-                        principalColumn: "UserId",
-                        onDelete: ReferentialAction.NoAction);
+                        principalColumn: "EventId");
                 });
 
             migrationBuilder.CreateTable(
@@ -297,8 +274,7 @@ namespace GroupsApp.Migrations
                         name: "FK_EventExpenses_Events_EventId",
                         column: x => x.EventId,
                         principalTable: "Events",
-                        principalColumn: "EventId",
-                        onDelete: ReferentialAction.NoAction);
+                        principalColumn: "EventId");
                 });
 
             migrationBuilder.CreateTable(
@@ -313,17 +289,15 @@ namespace GroupsApp.Migrations
                 {
                     table.PrimaryKey("PK_EventReports", x => new { x.UserId, x.EventId });
                     table.ForeignKey(
+                        name: "FK_EventReports_AspNetUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "UserId");
+                    table.ForeignKey(
                         name: "FK_EventReports_Events_EventId",
                         column: x => x.EventId,
                         principalTable: "Events",
-                        principalColumn: "EventId",
-                        onDelete: ReferentialAction.NoAction);
-                    table.ForeignKey(
-                        name: "FK_EventReports_Users_UserId",
-                        column: x => x.UserId,
-                        principalTable: "Users",
-                        principalColumn: "UserId",
-                        onDelete: ReferentialAction.NoAction);
+                        principalColumn: "EventId");
                 });
 
             migrationBuilder.CreateTable(
@@ -339,17 +313,15 @@ namespace GroupsApp.Migrations
                 {
                     table.PrimaryKey("PK_EventReviews", x => new { x.UserId, x.EventId });
                     table.ForeignKey(
+                        name: "FK_EventReviews_AspNetUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "UserId");
+                    table.ForeignKey(
                         name: "FK_EventReviews_Events_EventId",
                         column: x => x.EventId,
                         principalTable: "Events",
-                        principalColumn: "EventId",
-                        onDelete: ReferentialAction.NoAction);
-                    table.ForeignKey(
-                        name: "FK_EventReviews_Users_UserId",
-                        column: x => x.UserId,
-                        principalTable: "Users",
-                        principalColumn: "UserId",
-                        onDelete: ReferentialAction.NoAction);
+                        principalColumn: "EventId");
                 });
 
             migrationBuilder.CreateTable(
@@ -363,17 +335,15 @@ namespace GroupsApp.Migrations
                 {
                     table.PrimaryKey("PK_EventUser", x => new { x.EventsEventId, x.UsersUserId });
                     table.ForeignKey(
+                        name: "FK_EventUser_AspNetUsers_UsersUserId",
+                        column: x => x.UsersUserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "UserId");
+                    table.ForeignKey(
                         name: "FK_EventUser_Events_EventsEventId",
                         column: x => x.EventsEventId,
                         principalTable: "Events",
-                        principalColumn: "EventId",
-                        onDelete: ReferentialAction.NoAction);
-                    table.ForeignKey(
-                        name: "FK_EventUser_Users_UsersUserId",
-                        column: x => x.UsersUserId,
-                        principalTable: "Users",
-                        principalColumn: "UserId",
-                        onDelete: ReferentialAction.NoAction);
+                        principalColumn: "EventId");
                 });
 
             migrationBuilder.CreateTable(
@@ -388,17 +358,15 @@ namespace GroupsApp.Migrations
                 {
                     table.PrimaryKey("PK_UserEvents", x => new { x.UserId, x.EventId });
                     table.ForeignKey(
+                        name: "FK_UserEvents_AspNetUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "UserId");
+                    table.ForeignKey(
                         name: "FK_UserEvents_Events_EventId",
                         column: x => x.EventId,
                         principalTable: "Events",
-                        principalColumn: "EventId",
-                        onDelete: ReferentialAction.NoAction);
-                    table.ForeignKey(
-                        name: "FK_UserEvents_Users_UserId",
-                        column: x => x.UserId,
-                        principalTable: "Users",
-                        principalColumn: "UserId",
-                        onDelete: ReferentialAction.NoAction);
+                        principalColumn: "EventId");
                 });
 
             migrationBuilder.CreateTable(
@@ -417,16 +385,15 @@ namespace GroupsApp.Migrations
                 {
                     table.PrimaryKey("PK_GroupPosts", x => x.GroupPostId);
                     table.ForeignKey(
+                        name: "FK_GroupPosts_AspNetUsers_AuthorId",
+                        column: x => x.AuthorId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "UserId");
+                    table.ForeignKey(
                         name: "FK_GroupPosts_Groups_GroupId",
                         column: x => x.GroupId,
                         principalTable: "Groups",
-                        principalColumn: "GroupId",
-                        onDelete: ReferentialAction.NoAction);
-                    table.ForeignKey(
-                        name: "FK_GroupPosts_Users_AuthorId",
-                        column: x => x.AuthorId,
-                        principalTable: "Users",
-                        principalColumn: "UserId");
+                        principalColumn: "GroupId");
                 });
 
             migrationBuilder.CreateTable(
@@ -441,16 +408,15 @@ namespace GroupsApp.Migrations
                 {
                     table.PrimaryKey("PK_JoinRequests", x => x.JoinRequestId);
                     table.ForeignKey(
+                        name: "FK_JoinRequests_AspNetUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "UserId");
+                    table.ForeignKey(
                         name: "FK_JoinRequests_Groups_GroupId",
                         column: x => x.GroupId,
                         principalTable: "Groups",
-                        principalColumn: "GroupId",
-                        onDelete: ReferentialAction.NoAction);
-                    table.ForeignKey(
-                        name: "FK_JoinRequests_Users_UserId",
-                        column: x => x.UserId,
-                        principalTable: "Users",
-                        principalColumn: "UserId");
+                        principalColumn: "GroupId");
                 });
 
             migrationBuilder.CreateTable(
@@ -482,16 +448,15 @@ namespace GroupsApp.Migrations
                 {
                     table.PrimaryKey("PK_MarketplacePosts", x => x.MarketplacePostId);
                     table.ForeignKey(
+                        name: "FK_MarketplacePosts_AspNetUsers_AuthorId",
+                        column: x => x.AuthorId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "UserId");
+                    table.ForeignKey(
                         name: "FK_MarketplacePosts_Groups_GroupId",
                         column: x => x.GroupId,
                         principalTable: "Groups",
-                        principalColumn: "GroupId",
-                        onDelete: ReferentialAction.NoAction);
-                    table.ForeignKey(
-                        name: "FK_MarketplacePosts_Users_AuthorId",
-                        column: x => x.AuthorId,
-                        principalTable: "Users",
-                        principalColumn: "UserId");
+                        principalColumn: "GroupId");
                 });
 
             migrationBuilder.CreateTable(
@@ -508,16 +473,15 @@ namespace GroupsApp.Migrations
                 {
                     table.PrimaryKey("PK_Memberships", x => new { x.GroupId, x.UserId });
                     table.ForeignKey(
+                        name: "FK_Memberships_AspNetUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "UserId");
+                    table.ForeignKey(
                         name: "FK_Memberships_Groups_GroupId",
                         column: x => x.GroupId,
                         principalTable: "Groups",
-                        principalColumn: "GroupId",
-                        onDelete: ReferentialAction.NoAction);
-                    table.ForeignKey(
-                        name: "FK_Memberships_Users_UserId",
-                        column: x => x.UserId,
-                        principalTable: "Users",
-                        principalColumn: "UserId");
+                        principalColumn: "GroupId");
                 });
 
             migrationBuilder.CreateTable(
@@ -540,8 +504,7 @@ namespace GroupsApp.Migrations
                         name: "FK_Polls_Groups_GroupId",
                         column: x => x.GroupId,
                         principalTable: "Groups",
-                        principalColumn: "GroupId",
-                        onDelete: ReferentialAction.NoAction);
+                        principalColumn: "GroupId");
                 });
 
             migrationBuilder.CreateTable(
@@ -558,17 +521,15 @@ namespace GroupsApp.Migrations
                 {
                     table.PrimaryKey("PK_GroupPostReports", x => x.ReportId);
                     table.ForeignKey(
+                        name: "FK_GroupPostReports_AspNetUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "UserId");
+                    table.ForeignKey(
                         name: "FK_GroupPostReports_GroupPosts_PostId",
                         column: x => x.PostId,
                         principalTable: "GroupPosts",
-                        principalColumn: "GroupPostId",
-                        onDelete: ReferentialAction.NoAction);
-                    table.ForeignKey(
-                        name: "FK_GroupPostReports_Users_UserId",
-                        column: x => x.UserId,
-                        principalTable: "Users",
-                        principalColumn: "UserId",
-                        onDelete: ReferentialAction.NoAction);
+                        principalColumn: "GroupPostId");
                 });
 
             migrationBuilder.CreateTable(
@@ -584,28 +545,25 @@ namespace GroupsApp.Migrations
                 {
                     table.PrimaryKey("PK_Cart", x => new { x.UserId, x.MarketplacePostId });
                     table.ForeignKey(
+                        name: "FK_Cart_AspNetUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "UserId");
+                    table.ForeignKey(
+                        name: "FK_Cart_AspNetUsers_UserId1",
+                        column: x => x.UserId1,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "UserId");
+                    table.ForeignKey(
                         name: "FK_Cart_MarketplacePosts_MarketplacePostId",
                         column: x => x.MarketplacePostId,
                         principalTable: "MarketplacePosts",
-                        principalColumn: "MarketplacePostId",
-                        onDelete: ReferentialAction.NoAction);
+                        principalColumn: "MarketplacePostId");
                     table.ForeignKey(
                         name: "FK_Cart_MarketplacePosts_MarketplacePostId1",
                         column: x => x.MarketplacePostId1,
                         principalTable: "MarketplacePosts",
-                        principalColumn: "MarketplacePostId",
-                        onDelete: ReferentialAction.NoAction);
-                    table.ForeignKey(
-                        name: "FK_Cart_Users_UserId",
-                        column: x => x.UserId,
-                        principalTable: "Users",
-                        principalColumn: "UserId");
-                    table.ForeignKey(
-                        name: "FK_Cart_Users_UserId1",
-                        column: x => x.UserId1,
-                        principalTable: "Users",
-                        principalColumn: "UserId",
-                        onDelete: ReferentialAction.NoAction);
+                        principalColumn: "MarketplacePostId");
                 });
 
             migrationBuilder.CreateTable(
@@ -622,17 +580,15 @@ namespace GroupsApp.Migrations
                 {
                     table.PrimaryKey("PK_MarketplacePostReviews", x => x.ReviewId);
                     table.ForeignKey(
+                        name: "FK_MarketplacePostReviews_AspNetUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "UserId");
+                    table.ForeignKey(
                         name: "FK_MarketplacePostReviews_MarketplacePosts_MarketplacePostId",
                         column: x => x.MarketplacePostId,
                         principalTable: "MarketplacePosts",
-                        principalColumn: "MarketplacePostId",
-                        onDelete: ReferentialAction.NoAction);
-                    table.ForeignKey(
-                        name: "FK_MarketplacePostReviews_Users_UserId",
-                        column: x => x.UserId,
-                        principalTable: "Users",
-                        principalColumn: "UserId",
-                        onDelete: ReferentialAction.NoAction);
+                        principalColumn: "MarketplacePostId");
                 });
 
             migrationBuilder.CreateTable(
@@ -646,16 +602,15 @@ namespace GroupsApp.Migrations
                 {
                     table.PrimaryKey("PK_UsersFavoritePosts", x => new { x.UserId, x.MarketplacePostId });
                     table.ForeignKey(
+                        name: "FK_UsersFavoritePosts_AspNetUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "UserId");
+                    table.ForeignKey(
                         name: "FK_UsersFavoritePosts_MarketplacePosts_MarketplacePostId",
                         column: x => x.MarketplacePostId,
                         principalTable: "MarketplacePosts",
-                        principalColumn: "MarketplacePostId",
-                        onDelete: ReferentialAction.NoAction);
-                    table.ForeignKey(
-                        name: "FK_UsersFavoritePosts_Users_UserId",
-                        column: x => x.UserId,
-                        principalTable: "Users",
-                        principalColumn: "UserId");
+                        principalColumn: "MarketplacePostId");
                 });
 
             migrationBuilder.CreateTable(
@@ -673,8 +628,7 @@ namespace GroupsApp.Migrations
                         name: "FK_PollOptions_Polls_PollId",
                         column: x => x.PollId,
                         principalTable: "Polls",
-                        principalColumn: "PollId",
-                        onDelete: ReferentialAction.NoAction);
+                        principalColumn: "PollId");
                 });
 
             migrationBuilder.CreateTable(
@@ -688,16 +642,15 @@ namespace GroupsApp.Migrations
                 {
                     table.PrimaryKey("PK_PollAnswers", x => new { x.PollOptionId, x.UserId });
                     table.ForeignKey(
+                        name: "FK_PollAnswers_AspNetUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "UserId");
+                    table.ForeignKey(
                         name: "FK_PollAnswers_PollOptions_PollOptionId",
                         column: x => x.PollOptionId,
                         principalTable: "PollOptions",
-                        principalColumn: "PollOptionId",
-                        onDelete: ReferentialAction.NoAction);
-                    table.ForeignKey(
-                        name: "FK_PollAnswers_Users_UserId",
-                        column: x => x.UserId,
-                        principalTable: "Users",
-                        principalColumn: "UserId");
+                        principalColumn: "PollOptionId");
                 });
 
             migrationBuilder.CreateIndex(
@@ -947,9 +900,6 @@ namespace GroupsApp.Migrations
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
-                name: "AspNetUsers");
-
-            migrationBuilder.DropTable(
                 name: "GroupPosts");
 
             migrationBuilder.DropTable(
@@ -968,7 +918,7 @@ namespace GroupsApp.Migrations
                 name: "Groups");
 
             migrationBuilder.DropTable(
-                name: "Users");
+                name: "AspNetUsers");
         }
     }
 }

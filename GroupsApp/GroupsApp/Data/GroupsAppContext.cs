@@ -263,6 +263,11 @@ namespace GroupsApp.Data
                 .HasOne(er => er.Event)
                 .WithMany(e => e.Reports)
                 .HasForeignKey(er => er.EventId);
+
+            foreach (var relationship in modelBuilder.Model.GetEntityTypes().SelectMany(e => e.GetForeignKeys()))
+            {
+                relationship.DeleteBehavior = DeleteBehavior.NoAction;
+            }
         }
         #endregion
     }
