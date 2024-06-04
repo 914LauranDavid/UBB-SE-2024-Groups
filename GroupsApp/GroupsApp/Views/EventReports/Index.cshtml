@@ -1,0 +1,48 @@
+﻿@model IEnumerable<GroupsApp.Models.EventReport>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.ReportTypeValue)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Reporter)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Event)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.ReportTypeValue)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Reporter.UserId)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Event.EventId)
+            </td>
+            <td>
+                    @Html.ActionLink("Edit", "Edit", new { EventId = item.EventId, UserId = item.UserId }) |
+                    @Html.ActionLink("Details", "Details", new { EventId = item.EventId, UserId = item.UserId }) |
+                    @Html.ActionLink("Delete", "Delete", new { EventId=item.EventId, UserId=item.UserId })
+            </td>
+        </tr>
+}
+    </tbody>
+    @Html.ActionLink("Events", "Index", "Events")
+</table>
