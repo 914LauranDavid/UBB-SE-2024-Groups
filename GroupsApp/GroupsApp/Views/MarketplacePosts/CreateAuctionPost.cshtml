@@ -1,16 +1,16 @@
-﻿@model GroupsApp.Models.MarketplacePosts.MarketplacePost
+﻿@model GroupsApp.Models.MarketplacePosts.AuctionPost
 
 @{
     ViewData["Title"] = "Create";
 }
 
-<h1>Create</h1>
+<h1>Create an auction</h1>
 
 <h4>MarketplacePost</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="Create">
+        <form asp-action="CreateAuctionPost">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
                 <label asp-for="Title" class="control-label"></label>
@@ -42,6 +42,12 @@
                 <input asp-for="EndDate" class="form-control" />
                 <span asp-validation-for="EndDate" class="text-danger"></span>
             </div>
+            <div class="form-group">
+                <label asp-for="MinimumBidPrice" class="control-label"></label>
+                <input asp-for="MinimumBidPrice" class="form-control" />
+                <span asp-validation-for="MinimumBidPrice" class="text-danger"></span>
+            </div>
+
             <div class="form-group form-check">
                 <label class="form-check-label">
                     <input class="form-check-input" asp-for="IsPromoted" /> @Html.DisplayNameFor(model => model.IsPromoted)

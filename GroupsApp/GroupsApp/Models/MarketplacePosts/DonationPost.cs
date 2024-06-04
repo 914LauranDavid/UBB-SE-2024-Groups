@@ -14,7 +14,7 @@
             : base(marketplacePostId, authorId, groupId, title, description, mediaContent, location, creationDate, endDate, isPromoted, isActive, "Donation")
         {
             this.donationLink = donationLink;
-            this.currentDonationAmount = currentDonationAmount;
+            this.currentDonationAmount = currentDonationAmount; 
         }
 
         public DonationPost() : base()
